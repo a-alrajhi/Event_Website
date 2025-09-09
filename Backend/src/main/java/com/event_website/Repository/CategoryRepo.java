@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * <p>Used primarily by the service layer to interact with the database.
  *
  * @author Abdulrahman
- * @author Omar
+ * @author Omar Alomair
  * @since 09-09-2025
  * @since 1.0
  */

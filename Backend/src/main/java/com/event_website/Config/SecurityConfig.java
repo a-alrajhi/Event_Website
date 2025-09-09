@@ -28,21 +28,31 @@ public class SecurityConfig {
 
   @Autowired private UserDetailsService userDetailsService;
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf()
-        .disable()
-        .cors() // enable cors
-        .and()
-        .authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers("/auth/**", "/auth/user", "/test/**", "/category/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated())
-        .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authenticationProvider(authenticationProvider())
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .cors() // enable cors
+                .and()
+                .authorizeHttpRequests(auth -> auth
+                                .requestMatchers(
+                                        "/auth/**",
+                                        "/auth/user",
+                                        "/test/**",
+                                        "/trainer/all",
+                                        "/trainer/{id}",
+                                        "/classes/all",
+                                        "/classes/**",
+                                        "/api-docs/**",
+                                        "/swagger-ui/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(sess -> sess
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

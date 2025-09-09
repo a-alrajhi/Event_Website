@@ -16,6 +16,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * @author Omar Alomair
+ *
+ * This the filter that checks if the JWT token is present and valid for any authenticated service.
+ *
+ * */
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 

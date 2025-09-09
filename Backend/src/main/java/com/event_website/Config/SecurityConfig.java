@@ -43,6 +43,7 @@ public class SecurityConfig {
                         "/trainer/all",
                         "/trainer/{id}",
                         "/classes/all",
+                        "/Event/**",
                         "/classes/**",
                         "/api-docs/**",
                         "/swagger-ui/**",

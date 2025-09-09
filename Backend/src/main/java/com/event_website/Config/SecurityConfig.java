@@ -46,7 +46,8 @@ public class SecurityConfig {
                                         "/trainer/all",
                                         "/trainer/{id}",
                                         "/classes/all",
-                                        "/classes/**"
+                                        "/Event/**"
+
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

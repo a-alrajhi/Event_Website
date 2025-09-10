@@ -40,6 +40,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class TicketTypeController {
   @Autowired TicketTypeService ttService;
 
+  //  @Autowired
+  //  SlotTicketTypeCapacityService STTCS;
+
+  //  @Autowired
+  //  SlotService ss;
+
+  @GetMapping
+  public ResponseEntity<List<TicketTypeDTO>> getAllTicketTypes(@PathVariable Integer eventId) {
+
+    // 1. get the slot from the service --> returns SLOTS
+
+    // 2. Get all slots id
+
+  }
+
   // GET - Getting all types
   @GetMapping("/all")
   public ResponseEntity<List<TicketTypeDTO>> getAll() {
@@ -64,6 +79,13 @@ public class TicketTypeController {
     } else {
       return ResponseEntity.notFound().build();
     }
+  }
+
+  // GET - tType by Event id
+  @GetMapping("event/{id}")
+  public ResponseEntity<TicketTypeDTO> getTypeByEventId(@PathVariable Integer id) {
+    TicketType tt = ttService.findTypeByEventId(id);
+    return ResponseEntity.ok(TicketTypeDTO.fromEntity(tt));
   }
 
   // POST - Create a ticket type

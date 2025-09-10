@@ -1,5 +1,6 @@
 package com.event_website.Config;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,18 +20,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtFilter jwtAuthFilter;
+    @Autowired private JwtFilter jwtAuthFilter;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    @Autowired private UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,14 +35,17 @@ public class SecurityConfig {
                 .cors() // enable cors
                 .and()
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(
-                                        "/auth/**",
-                                        "/auth/user",
-                                        "/test/**",
-                                        "/trainer/all",
-                                        "/trainer/{id}",
-                                        "/classes/all",
-                                        "/classes/**"
+                        .requestMatchers(
+                                "/auth/**",
+                                "/auth/user",
+                                "/test/**",
+                                "/api/locations/",
+                                "api/locations/{id}",
+                                "/trainer/{id}",
+                                "/classes/all",
+                                "/classes/**",
+                                "/api-docs/**",
+                                "/swagger-ui/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -63,7 +62,8 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:5174", "http://localhost:5173")); // frontend origin
+        config.setAllowedOrigins(
+                List.of("http://localhost:5174", "http://localhost:5173")); // frontend origin
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
@@ -86,9 +86,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+            throws Exception {
         return config.getAuthenticationManager();
     }
-
-
 }

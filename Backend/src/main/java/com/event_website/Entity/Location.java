@@ -29,4 +29,5 @@ public class Location {
     @Column(name = "additional_info", length = Integer.MAX_VALUE)
     private String additionalInfo;
 
+
 }

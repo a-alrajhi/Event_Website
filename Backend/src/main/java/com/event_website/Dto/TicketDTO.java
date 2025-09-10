@@ -26,7 +26,7 @@ public class TicketDTO {
   private Integer id;
   private String ticketCode;
   private Boolean checkedIn;
-  private TicketTypeDTO ticketType;
+  private SlotTicketTypeCapacityDTO slotTicketTypeCapacityDTO;
   private SeatDTO seat;
 
   public static TicketDTO fromEntity(Ticket ticket) {
@@ -34,9 +34,9 @@ public class TicketDTO {
     TicketDTO ticketDTO = new TicketDTO();
     BeanUtils.copyProperties(ticket, ticketDTO);
 
-    if (ticket.getTicketType() != null) {
-      TicketTypeDTO ticketTypeDTO = TicketTypeDTO.fromEntity(ticket.getTicketType());
-      ticketDTO.setTicketType(ticketTypeDTO);
+    if (ticket.getSlotTicketTypeCapacity() != null) {
+      SlotTicketTypeCapacityDTO slotTicketTypeCapacityDTO = SlotTicketTypeCapacityDTO.fromEntity(ticket.getSlotTicketTypeCapacity());
+      ticketDTO.setSlotTicketTypeCapacityDTO(slotTicketTypeCapacityDTO);
     }
 
     if (ticket.getSeat() != null) {

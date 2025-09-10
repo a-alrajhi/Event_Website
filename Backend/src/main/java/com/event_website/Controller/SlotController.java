@@ -2,6 +2,7 @@ package com.event_website.Controller;
 
 import com.event_website.Dto.EventDto;
 import com.event_website.Dto.SlotDTO;
+import com.event_website.Dto.TicketTypeDTO;
 import com.event_website.Entity.Event;
 import com.event_website.Entity.Slot;
 import com.event_website.Entity.TicketType;
@@ -23,8 +24,6 @@ import java.util.List;
 public class SlotController {
     @Autowired
     private SlotService slotService;
-    @Autowired
-    private EventService EventService;
     @Autowired
     private EventService eventService;
 
@@ -94,12 +93,12 @@ public class SlotController {
      * Get all ticket types for a slot
      */
     @GetMapping("/{slotId}/ticket-types")
-    public ResponseEntity<List<TicketType>> getTicketTypesBySlot(@PathVariable Integer slotId) {
-        return ResponseEntity.ok(slotService.findAllTicketTypesPerSlot(slotId));
+    public ResponseEntity<List<TicketTypeDTO>> getTicketTypesBySlot(@PathVariable Integer slotId) {
+        return ResponseEntity.ok(slotService.findAllTicketTypesPerSlot(slotId).stream().map(TicketTypeDTO::fromEntity).toList());
     }
 
     public Slot createSlotFromDTO(SlotDTO dto) {
-        Event event = eventService.findById(dto.getEventId())
+        Event event = eventService.findEventbyId(dto.getEventId())
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id: " + dto.getEventId()));
         Slot slot = new Slot();
         slot.setEvent(event);

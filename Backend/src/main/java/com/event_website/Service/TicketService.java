@@ -1,12 +1,10 @@
 package com.event_website.Service;
 
+import com.event_website.Entity.SlotTicketTypeCapacity;
 import com.event_website.Entity.Ticket;
 import com.event_website.Entity.TicketType;
 import com.event_website.Exception.ResourceNotFoundException;
-import com.event_website.Repository.SeatRepo;
-import com.event_website.Repository.TicketRepo;
-import com.event_website.Repository.TicketTypeRepo;
-import com.event_website.Repository.UserRepo;
+import com.event_website.Repository.*;
 import com.event_website.Request.CreateTicketRequest;
 import com.event_website.Request.UpdateTicketRequest;
 import com.event_website.Utils.TicketCodeGenerator;
@@ -25,6 +23,7 @@ import org.springframework.stereotype.Service;
  * deleteTicket() - checkInTicketByCode()
  *
  * @author Abdulrahman Al Rajhi
+ * @author Omar Alomair
  * @since 09-09-2025
  * @version 1.0
  */
@@ -39,19 +38,21 @@ public class TicketService {
 
   @Autowired private UserRepo userRepo;
 
+  @Autowired private SlotTicketTypeCapacityRepo slotTicketTypeCapacityRepo;
+
   public List<Ticket> getAllTickets() {
     return ticketRepo.findAll();
   }
 
   public Ticket createTicket(CreateTicketRequest req) {
     // getting (fetch) the ticket type
-    TicketType ticketType =
-        ticketTypeRepo
-            .findById(req.getTicketTypeId())
-            .orElseThrow(() -> new ResourceNotFoundException("TicketType not found"));
+    SlotTicketTypeCapacity slotTicketTypeCapacity =
+        slotTicketTypeCapacityRepo
+            .findById(req.getSlotTicketTypeCapacityId())
+            .orElseThrow(() -> new ResourceNotFoundException("Association between slot and ticketType not found"));
 
     Ticket ticket = new Ticket();
-    ticket.setTicketType(ticketType);
+    ticket.setSlotTicketTypeCapacity(slotTicketTypeCapacity);
     String code =
         (ticket.getTicketCode() != null)
             ? ticket.getTicketCode()
@@ -73,11 +74,10 @@ public class TicketService {
             .findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
 
-    if (req.getTicketTypeId() != null) {
-      ticket.setTicketType(
-          ticketTypeRepo
-              .findById(req.getTicketTypeId())
-              .orElseThrow(() -> new ResourceNotFoundException("TicketType not found")));
+    if (req.getSlotTicketTypeCapacityId() != null) {
+      ticket.setSlotTicketTypeCapacity(
+              slotTicketTypeCapacityRepo.findById(req.getSlotTicketTypeCapacityId()).orElseThrow(() -> new ResourceNotFoundException("Association between slot and ticketType not found"))
+      );
     }
 
     if (req.getTicketCode() != null) {

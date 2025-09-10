@@ -1,5 +1,9 @@
 package com.event_website.Dto;
-
+/**
+ * @author Yazeed
+ * DTO class to represent location data, including validation rules
+ * for location attributes.
+ */
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

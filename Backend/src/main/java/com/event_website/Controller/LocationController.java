@@ -1,5 +1,9 @@
 package com.event_website.Controller;
-
+/**
+ * @author Yazeed
+ * This controller manages location-related API requests,
+ * including creating, retrieving, updating, and deleting locations.
+ */
 import com.event_website.Dto.LocationDTO;
 import com.event_website.Service.LocationService;
 import org.springframework.http.HttpStatus;
@@ -11,7 +15,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/locations")
+@RequestMapping("/locations")
 public class LocationController {
 
     private final LocationService locationService;

@@ -1,5 +1,9 @@
 package com.event_website.Service;
-
+/**
+ * @author Yazeed
+ * Service class that manages location-related business logic,
+ * including creation, retrieval, updating, and deletion of locations.
+ */
 import com.event_website.Dto.LocationDTO;
 import com.event_website.Entity.Location;
 import com.event_website.Repository.LocationRepo;

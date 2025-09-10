@@ -19,8 +19,8 @@ public class Ticket {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "ticket_type_id")
-    private TicketType ticketType;
+    @JoinColumn(name = "slot_ticket_type_id")
+    private SlotTicketTypeCapacity slotTicketTypeCapacity;
 
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
@@ -33,5 +33,9 @@ public class Ticket {
     @ColumnDefault("false")
     @Column(name = "checked_in")
     private Boolean checkedIn;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

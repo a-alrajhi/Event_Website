@@ -15,10 +15,18 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @Validated
 @NoArgsConstructor
-public class RegisterRequest extends AuthRequest {
+@Schema(description = "Login request with email and password")
+public class AuthRequest {
     @NotNull
-    @Schema(description = "The user's name")
-    private String name;
-    @Schema(description = "the user's phone number")
-    private String phoneNumber;
+    @Schema(description = "The user's password", example = "secret123")
+    private String password;
+    @NotNull
+    @Email
+    @Schema(description = "The user's email address", example = "user@example.com")
+    private String email;
+
+    @Override
+    public String toString() {
+        return email;
+    }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,14 +42,15 @@ public class SlotService {
     }
 
     public List<Slot> findByDate(LocalDate date){ // returns all slots for a specific date (assuming less than limit)
-        if(Duration.between(LocalDateTime.now(), date).toDays() > DATE_DAYS_LIMIT || (Duration.between(LocalDateTime.now(), date).isNegative())) {
+        long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), date);
+        if (daysBetween > DATE_DAYS_LIMIT || daysBetween < 0) {
             return new ArrayList<>();
         }
         return slotRepo.findByDate(date);
     }
 
     public List<Slot> findAll(int page, int pageSize){ // all, with pagination support
-        if(pageSize < 1 || page < 1){
+        if(pageSize < 1 || page < 0){
             return slotRepo.findAll();
         }
         Pageable pageRequest = PageRequest.of(page, pageSize);
@@ -71,9 +73,5 @@ public class SlotService {
 
     public void delete(int id){
         slotRepo.deleteById(id);
-    }
-
-    public List<TicketType> findAllTicketTypesPerSlot(int slotId){
-        return ticketTypeRepo.findBySlot_Id(slotId);
     }
 }

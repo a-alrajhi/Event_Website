@@ -1,6 +1,7 @@
 package com.event_website.Dto;
 
 
+import com.event_website.Entity.Category;
 import com.event_website.Entity.Event;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class EventDto {
     private Boolean hasAssignedSeating;
     private Integer categoryId;
 
+
     public static EventDto fromEntity(Event event) {
         if (event == null) return null;
 
@@ -31,6 +33,27 @@ public class EventDto {
         dto.setArDescription(event.getArDescription());
         dto.setPhotoUrl(event.getPhotoUrl());
         dto.setHasAssignedSeating(event.getHasAssignedSeating());
+
+        if (event.getCategory() != null) {
+            dto.setCategoryId(event.getCategory().getId());
+        }
         return dto;
     }
-};
+
+
+    public Event toEntity(Category category) {
+        Event event = new Event();
+        event.setId(this.id);
+        event.setName(this.name);
+        event.setArName(this.arName);
+        event.setDescription(this.description);
+        event.setArDescription(this.arDescription);
+        event.setPhotoUrl(this.photoUrl);
+        event.setHasAssignedSeating(this.hasAssignedSeating);
+
+        if (category != null) {
+            event.setCategory(category);
+        }
+        return event;
+    }
+}

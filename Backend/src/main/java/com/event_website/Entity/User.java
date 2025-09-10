@@ -1,6 +1,7 @@
 package com.event_website.Entity;
 
 import com.event_website.Request.RegisterRequest;
+import com.event_website.Request.UpdateUserRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,13 @@ public class User {
         this.phoneNumber = registerRequest.getPhoneNumber();
         this.name = registerRequest.getName();
     }
+    public User(UpdateUserRequest updateUserRequest) {
+        this.email = updateUserRequest.getEmail();
+        this.password = updateUserRequest.getPassword();
+        this.phoneNumber = updateUserRequest.getPhoneNumber();
+        this.name = updateUserRequest.getName();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

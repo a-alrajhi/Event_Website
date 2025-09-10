@@ -2,9 +2,11 @@ package com.event_website.Service;
 
 import com.event_website.Entity.Ticket;
 import com.event_website.Entity.TicketType;
+import com.event_website.Exception.ResourceNotFoundException;
 import com.event_website.Repository.SeatRepo;
 import com.event_website.Repository.TicketRepo;
 import com.event_website.Repository.TicketTypeRepo;
+import com.event_website.Repository.UserRepo;
 import com.event_website.Request.CreateTicketRequest;
 import com.event_website.Request.UpdateTicketRequest;
 import com.event_website.Utils.TicketCodeGenerator;
@@ -35,6 +37,8 @@ public class TicketService {
 
   @Autowired private SeatRepo seatRepo;
 
+  @Autowired private UserRepo userRepo;
+
   public List<Ticket> getAllTickets() {
     return ticketRepo.findAll();
   }
@@ -44,7 +48,7 @@ public class TicketService {
     TicketType ticketType =
         ticketTypeRepo
             .findById(req.getTicketTypeId())
-            .orElseThrow(() -> new RuntimeException("TicketType not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("TicketType not found"));
 
     Ticket ticket = new Ticket();
     ticket.setTicketType(ticketType);
@@ -67,13 +71,13 @@ public class TicketService {
     Ticket ticket =
         ticketRepo
             .findById(id)
-            .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
 
     if (req.getTicketTypeId() != null) {
       ticket.setTicketType(
           ticketTypeRepo
               .findById(req.getTicketTypeId())
-              .orElseThrow(() -> new RuntimeException("TicketType not found")));
+              .orElseThrow(() -> new ResourceNotFoundException("TicketType not found")));
     }
 
     if (req.getTicketCode() != null) {
@@ -83,7 +87,7 @@ public class TicketService {
       ticket.setSeat(
           seatRepo
               .findById(req.getSeatId())
-              .orElseThrow(() -> new RuntimeException("Seat not found")));
+              .orElseThrow(() -> new ResourceNotFoundException("Seat not found")));
     }
 
     return ticketRepo.save(ticket);
@@ -97,11 +101,16 @@ public class TicketService {
     Ticket ticket =
         ticketRepo
             .findByTicketCode(code)
-            .orElseThrow(() -> new RuntimeException("Ticket doesn't exist"));
+            .orElseThrow(() -> new ResourceNotFoundException("Ticket doesn't exist"));
     if (ticket.getCheckedIn() != null && ticket.getCheckedIn()) {
       throw new RuntimeException("Ticket is already checked in");
     }
     ticket.setCheckedIn(true);
     return ticketRepo.save(ticket);
+  }
+
+  public List<Ticket> getUserTickets(Integer id) {
+    userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    return ticketRepo.findByUserId(id);
   }
 }

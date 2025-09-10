@@ -1,6 +1,8 @@
 package com.event_website.Repository;
 
 import com.event_website.Entity.Ticket;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -22,4 +24,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TicketRepo extends JpaRepository<Ticket, Integer> {
   Optional<Ticket> findByTicketCode(String ticketCode);
+  List<Ticket> findByUserId(Integer userId);
 }

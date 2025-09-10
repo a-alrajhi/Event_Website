@@ -34,4 +34,8 @@ public class Ticket {
     @Column(name = "checked_in")
     private Boolean checkedIn;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

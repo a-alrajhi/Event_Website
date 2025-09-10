@@ -1,5 +1,6 @@
 package com.event_website.Entity;
 
+import com.event_website.Dto.SlotDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,9 @@ import java.time.LocalTime;
 @Setter
 @Entity
 @Table(name = "slots")
-public class Slot {
+public class
+
+Slot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -29,8 +32,4 @@ public class Slot {
 
     @Column(name = "end_time")
     private LocalTime endTime;
-
-    @Column(name = "capacity")
-    private Integer capacity;
-
 }

@@ -65,8 +65,9 @@ public class TicketController {
   }
 
   @DeleteMapping("/{id}")
-  public void deleteTicket(@PathVariable Integer id) {
+  public ResponseEntity<TicketDTO> deleteTicket(@PathVariable Integer id) {
     ticketService.deleteTicket(id);
+    return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/check-in/{code}")

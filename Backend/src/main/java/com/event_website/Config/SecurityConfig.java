@@ -56,6 +56,7 @@ public class SecurityConfig {
                         "/classes/**",
                         "/api-docs/**",
                         "/swagger-ui/**",
+                        "/ticket-type/**",
                         "/ticket/**")
                     .permitAll()
                     .anyRequest()

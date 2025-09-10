@@ -1,13 +1,12 @@
 package com.event_website.Entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -29,9 +28,6 @@ public class TicketType {
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-
-    @Column(name = "capacity", nullable = false)
-    private Integer capacity;
 
     @ColumnDefault("false")
     @Column(name = "has_assigned_seating")

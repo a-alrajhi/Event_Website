@@ -94,11 +94,4 @@ public class TicketTypeService {
     }
     ticketTypeRepo.deleteById(id);
   }
-
-  public TicketType findTypeByEventId(Integer eventId) {
-    return ticketTypeRepo
-        .findByEventId(eventId)
-        .orElseThrow(
-            () -> new RuntimeException("Ticket Type with event id " + eventId + " not found"));
-  }
 }

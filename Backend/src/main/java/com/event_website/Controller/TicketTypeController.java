@@ -1,9 +1,13 @@
 package com.event_website.Controller;
 
 import com.event_website.Dto.TicketTypeDTO;
+import com.event_website.Entity.Slot;
+import com.event_website.Entity.SlotTicketTypeCapacity;
 import com.event_website.Entity.TicketType;
 import com.event_website.Request.CreateTicketTypeRequest;
 import com.event_website.Request.UpdateTicketTypeRequest;
+import com.event_website.Service.SlotService;
+import com.event_website.Service.SlotTicketTypeCapacityService;
 import com.event_website.Service.TicketTypeService;
 import java.util.List;
 import java.util.Optional;
@@ -40,19 +44,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class TicketTypeController {
   @Autowired TicketTypeService ttService;
 
-  //  @Autowired
-  //  SlotTicketTypeCapacityService STTCS;
+  @Autowired SlotTicketTypeCapacityService sTicketCapService;
 
-  //  @Autowired
-  //  SlotService ss;
+  @Autowired SlotService slotService;
 
-  @GetMapping
-  public ResponseEntity<List<TicketTypeDTO>> getAllTicketTypes(@PathVariable Integer eventId) {
-
+  @GetMapping("/event/{id}")
+  public ResponseEntity<List<TicketTypeDTO>> getAllTicketTypesForEvent(@PathVariable Integer id) {
     // 1. get the slot from the service --> returns SLOTS
+    List<Slot> eventSlots = slotService.findByEventId(id);
 
     // 2. Get all slots id
+    List<Integer> slotsIds = eventSlots.stream().map(Slot::getId).toList();
 
+    List<SlotTicketTypeCapacity> slots = sTicketCapService.getBySlotIds(slotsIds);
+    List<TicketTypeDTO> filteredTicketTypes =
+        slots.stream()
+            .map(SlotTicketTypeCapacity::getTicketType)
+            .distinct()
+            .map(TicketTypeDTO::fromEntity)
+            .toList();
+
+    // 3. get the capacity arr and filter
+    return ResponseEntity.ok(filteredTicketTypes);
   }
 
   // GET - Getting all types
@@ -79,13 +92,6 @@ public class TicketTypeController {
     } else {
       return ResponseEntity.notFound().build();
     }
-  }
-
-  // GET - tType by Event id
-  @GetMapping("event/{id}")
-  public ResponseEntity<TicketTypeDTO> getTypeByEventId(@PathVariable Integer id) {
-    TicketType tt = ttService.findTypeByEventId(id);
-    return ResponseEntity.ok(TicketTypeDTO.fromEntity(tt));
   }
 
   // POST - Create a ticket type

@@ -16,15 +16,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateTicketRequest {
-  private Integer ticketTypeId;
+  private Integer slotTicketTypeCapacityId;
   private Integer seatId; // Optional: only for assigned seating
   private String ticketCode;
 
   @Override
   public String toString() {
     return "CreateTicketRequest{"
-        + "ticketTypeId="
-        + ticketTypeId
+        + "slotTicketTypeCapacityId="
+        + slotTicketTypeCapacityId
         + ", seatId="
         + seatId
         + ", ticketCode='"

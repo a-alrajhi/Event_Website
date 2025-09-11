@@ -24,9 +24,7 @@ public class CreateTicketTypeRequest {
   private String name;
   private Slot slot;
   private BigDecimal price;
-
-  // add this later
-  //  private Boolean hasAssignedSeating;
+  private Boolean hasAssignedSeating;
 
   @Override
   public String toString() {

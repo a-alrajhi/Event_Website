@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container bg-card">
     <div class="login-card">
       <div class="login-header">
         <h2>Welcome Back</h2>
@@ -28,15 +28,19 @@
       </form>
     </div>
   </div>
+
 </template>
 
 <script setup>
+import "../styles/LoginForm.css"; 
 import { ref } from "vue";
 import { useAuthStore } from "../stores/auth";
 
 const auth = useAuthStore();
 const username = ref("");
 const password = ref("");
+
+
 
 const handleLogin = () => {
   auth.loginUser(username.value, password.value);

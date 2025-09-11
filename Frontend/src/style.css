@@ -1,93 +1,10 @@
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url('../src/assets/Ticket.jpg') no-repeat center/cover;
-  font-family: "Poppins", sans-serif;
-  position: relative;
-}
+@import "tailwindcss";
 
-/* Optional: subtle overlay for better contrast */
-
-
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-}
-
-.login-card {
-  background: rgba(130, 174, 245, 0.85); /* #82aef5 with opacity */
-  border-radius: 20px;
-  padding: 40px;
-  width: 360px;
-  text-align: center;
-  color: #ffffff; /* white text for contrast */
-  backdrop-filter: blur(12px); /* glass effect */
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.login-header h2 {
-  margin: 0;
-  font-size: 30px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.login-header p {
-  font-size: 14px;
-  color: #e6f0ff;
-  margin: 8px 0 25px;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-field {
-  margin: 10px 0;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  outline: none;
-  font-size: 14px;
-}
-
-.input-field::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.login-btn {
-  margin-top: 18px;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #5f8ce0, #82aef5);
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.login-btn:hover {
-  background: linear-gradient(135deg, #486fcf, #5f8ce0);
-}
-
-.signup-text {
-  margin-top: 20px;
-  font-size: 14px;
-  color: #e6f0ff;
-}
-
-.signup-text a {
-  color: #ffffff;
-  text-decoration: underline;
+@theme {
+  --color-page-bg: oklch(0.033 0 0);           /* Black background for page */
+  --color-card: oklch(0.125 0.261 263.1);      /* #0D1164 → Dark blue card / Nav / Footer */
+  --color-card-hover: oklch(0.263 0.128 260.9);/* #3B38A0 → Hover / button color */
+  --color-text: oklch(0.999 0 0);              /* White text */
+  --color-error: oklch(0.595 0.257 29.2);      /* Red for errors */
+  --font-poppins: "Poppins", sans-serif;
 }

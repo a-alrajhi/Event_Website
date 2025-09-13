@@ -1,4 +1,6 @@
-body {
+/* body  */
+
+.login-page{
   margin: 0;
   height: 100vh;
   font-family: var(--font-poppins);

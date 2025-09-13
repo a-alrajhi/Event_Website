@@ -3,10 +3,12 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
 import Auth from "../Pages/Auth.vue";
 import LoginForm from "../Pages/LoginForm.vue";
+import EventDetailsPage from "../Pages/EventDetailsPage.vue";
 
 const routes = [
   { path: "/login", name: "Login", component: LoginForm },
   { path: "/register", name: "Register", component: Auth },
+  {path:"/event/:id", name:"EventDetails", component: EventDetailsPage}
   //   { path: "/", name: "Dashboard", component: Dashboard, meta: { requiresAuth: true } },
 ];
 

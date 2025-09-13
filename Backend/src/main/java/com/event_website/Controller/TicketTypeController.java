@@ -1,9 +1,13 @@
 package com.event_website.Controller;
 
 import com.event_website.Dto.TicketTypeDTO;
+import com.event_website.Entity.Slot;
+import com.event_website.Entity.SlotTicketTypeCapacity;
 import com.event_website.Entity.TicketType;
 import com.event_website.Request.CreateTicketTypeRequest;
 import com.event_website.Request.UpdateTicketTypeRequest;
+import com.event_website.Service.SlotService;
+import com.event_website.Service.SlotTicketTypeCapacityService;
 import com.event_website.Service.TicketTypeService;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +43,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ticket-type")
 public class TicketTypeController {
   @Autowired TicketTypeService ttService;
+
+  @Autowired SlotTicketTypeCapacityService sTicketCapService;
+
+  @Autowired SlotService slotService;
+
+  @GetMapping("/event/{id}")
+  public ResponseEntity<List<TicketTypeDTO>> getAllTicketTypesForEvent(@PathVariable Integer id) {
+    // 1. get the slot from the service --> returns SLOTS
+    List<Slot> eventSlots = slotService.findByEventId(id);
+
+    // 2. Get all slots id
+    List<Integer> slotsIds = eventSlots.stream().map(Slot::getId).toList();
+
+    List<SlotTicketTypeCapacity> slots = sTicketCapService.getBySlotIds(slotsIds);
+    List<TicketTypeDTO> filteredTicketTypes =
+        slots.stream()
+            .map(SlotTicketTypeCapacity::getTicketType)
+            .distinct()
+            .map(TicketTypeDTO::fromEntity)
+            .toList();
+
+    // 3. get the capacity arr and filter
+    return ResponseEntity.ok(filteredTicketTypes);
+  }
 
   // GET - Getting all types
   @GetMapping("/all")

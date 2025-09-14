@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
-import LoginRegister from "../Pages/LoginRegister.vue";  // نفس المكون لكل من login و register
-
+import LoginRegister from "../Pages/LoginRegister.vue";
+//
 const routes = [
   { path: "/login", name: "Login", component: LoginRegister },
   { path: "/register", name: "Register", component: LoginRegister },

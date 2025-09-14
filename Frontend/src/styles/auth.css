@@ -1,58 +1,55 @@
-/* Import Poppins font from Google Fonts */
+/* Import font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
-/* Basic reset */
-/* * {
+/* Reset */
+.auth-page * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
-} */
+}
 
 /* Page background */
-/* body {
+.auth-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #7d2ae8;
+    background: #711616;
     padding: 30px;
-} */
+}
 
-/* White card container */
-.container {
+/* Container */
+.auth-page .container {
     position: relative;
     max-width: 850px;
     width: 100%;
     background: #fff;
     padding: 40px 30px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    perspective: 2700px;
+    border-radius: 6px;
 }
 
-/* Forms wrapper */
-.forms {
-    height: 100%;
+/* Forms */
+.auth-page .forms {
     width: 100%;
     background: #fff;
 }
 
-/* Center form content */
-.form-content {
+.auth-page .form-content {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-/* Limit form width */
-.form-box {
+.auth-page .form-box {
     width: 100%;
     max-width: 400px;
 }
 
-/* Form title */
-.title {
+/* Title */
+.auth-page .title {
     font-size: 24px;
     font-weight: 600;
     color: #333;
@@ -61,8 +58,7 @@
     position: relative;
 }
 
-/* Small line under title */
-.title::before {
+.auth-page .title::before {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -70,16 +66,15 @@
     transform: translateX(-50%);
     width: 30px;
     height: 3px;
-    background: #7d2ae8;
+    background: #aaa;
 }
 
-/* Input fields wrapper */
-.input-boxes {
+/* Input fields */
+.auth-page .input-boxes {
     margin-top: 20px;
 }
 
-/* Single input box */
-.input-box {
+.auth-page .input-box {
     display: flex;
     align-items: center;
     height: 50px;
@@ -88,16 +83,14 @@
     position: relative;
 }
 
-/* Icons inside inputs */
-.input-box i {
+.auth-page .input-box i {
     position: absolute;
     left: 10px;
-    color: #7d2ae8;
+    color: #666;
     font-size: 17px;
 }
 
-/* Input fields */
-.input-box input {
+.auth-page .input-box input {
     height: 100%;
     width: 100%;
     padding: 0 35px;
@@ -108,17 +101,16 @@
     transition: border-color 0.3s ease;
 }
 
-/* Highlight input on focus/valid */
-.input-box input:focus,
-.input-box input:valid {
-    border-color: #7d2ae8;
+.auth-page .input-box input:focus,
+.auth-page .input-box input:valid {
+    border-color: #000;
 }
 
-/* Submit button */
-.button input {
+/* Button */
+.auth-page .button input {
     width: 100%;
     height: 45px;
-    background: #7d2ae8;
+    background: #333;
     border: none;
     border-radius: 6px;
     color: #fff;
@@ -128,29 +120,26 @@
     transition: background 0.3s ease;
 }
 
-/* Button hover effect */
-.button input:hover {
-    background: #5b13b9;
+.auth-page .button input:hover {
+    background: #111;
 }
 
-/* Footer text (login/register links) */
-.text {
+/* Footer */
+.auth-page .text {
     margin-top: 15px;
     text-align: center;
     font-size: 14px;
 }
 
-/* Links under the form */
-.text a,
-.text label {
-    color: #7d2ae8;
+.auth-page .text a,
+.auth-page .text label {
+    color: #333;
     cursor: pointer;
     font-weight: 500;
     text-decoration: none;
 }
 
-/* Link hover effect */
-.text a:hover,
-.text label:hover {
+.auth-page .text a:hover,
+.auth-page .text label:hover {
     text-decoration: underline;
 }

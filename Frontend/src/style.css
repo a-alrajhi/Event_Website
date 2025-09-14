@@ -1,16 +1,31 @@
+@import "tailwindcss";
+@import "primeflex/primeflex.css";
+
+@theme {
+  --color-primary: oklch(0.72 0.11 178);
+}
+
 body {
   margin: 0;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('../src/assets/Ticket.jpg') no-repeat center/cover;
   font-family: "Poppins", sans-serif;
   position: relative;
 }
 
-/* Optional: subtle overlay for better contrast */
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
 
+body.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Optional: subtle overlay for better contrast */
 
 .login-container {
   display: flex;

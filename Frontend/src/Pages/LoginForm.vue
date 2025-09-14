@@ -23,7 +23,8 @@
         </button>
         <p class="error-text" v-if="auth.error">{{ auth.error }}</p>
         <p class="signup-text">
-          Don’t have an account? <router-link to="/register">Sign up</router-link>
+          Don’t have an account?
+          <router-link to="/register">Sign up</router-link>
         </p>
       </form>
     </div>
@@ -32,7 +33,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { useAuthStore } from "../stores/auth";
+import { useAuthStore } from "../stores/authStore";
 
 const auth = useAuthStore();
 const username = ref("");

@@ -1,7 +1,7 @@
+import router from "../Router";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosClient from "../apis/axiosClient";
-
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     axiosClient.defaults.headers.common["Authorization"] =
-        `Bearer ${newAccess}`;
+      `Bearer ${newAccess}`;
   };
 
   const clearTokens = () => {
@@ -36,43 +36,37 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = () => {
     clearTokens();
     isLoggedIn.value = false;
-    // 🚫 لا تستعمل router.push هنا
-    // رجّع بس إشارة انك طلعت
-    return true;
+    router.push("/login");
   };
 
-  const authUser = async (authBody, uri) => {
+  const authUser = async (form, uri) => {
     loading.value = true;
     error.value = null;
+
     try {
-      const response = await axiosClient.post(uri, authBody);
-      const { accessToken } = response.data;
-
-      if (!accessToken || response.status !== 200) {
-        clearTokens();
-        return { status: response.status, message: response.data.message };
-      }
-
-      setTokens(accessToken, null);
+      const res = await axiosClient.post(uri, form);
+      const { accessToken, refreshToken } = res.data;
+      setTokens(accessToken, refreshToken || null);
       isLoggedIn.value = true;
-      return { status: response.status, accessToken, message: "Successful!" };
     } catch (err) {
-      clearTokens();
       error.value = err.response?.data?.message || "Authentication failed";
-      return { status: 500, message: error.value };
+      clearTokens();
+      throw err;
     } finally {
       loading.value = false;
     }
   };
 
   const isTokenValid = () => {
-    if (!accessToken.value) return false;
+    if (!accessToken) return false;
     try {
-      const [, payloadBase64] = accessToken.value.split(".");
+      const [, payloadBase64] = accessToken.split(".");
       const payload = JSON.parse(atob(payloadBase64));
       const now = Math.floor(Date.now() / 1000);
+
       return payload.exp && payload.exp > now;
-    } catch {
+    } catch (error) {
+      console.error("Invalid token:", error);
       return false;
     }
   };

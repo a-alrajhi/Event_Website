@@ -5,6 +5,7 @@ import com.event_website.Entity.Ticket;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -22,7 +23,12 @@ import org.springframework.stereotype.Repository;
  * @author Omar Alomair
  */
 @Repository
-public interface TicketRepo extends JpaRepository<Ticket, Integer> {
+public interface TicketRepo extends JpaRepository<Ticket, Integer>, TicketCustomRepo {
   Optional<Ticket> findByTicketCode(String ticketCode);
   List<Ticket> findByUserId(Integer userId);
+  @Query("SELECT COUNT(t) FROM Ticket t")
+  long countAllTickets();
+
+  @Query("SELECT COUNT(t) FROM Ticket t WHERE t.checkedIn = true")
+  long countCheckedInTickets();
 }

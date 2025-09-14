@@ -15,4 +15,5 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     boolean existsByEmail(String email);
     @Query(value = "SELECT * FROM users LIMIT :limit OFFSET :offset", nativeQuery = true)
     List<User> findUsersWithPagination(@Param("limit") int limit, @Param("offset") int offset);
+    long count();
 }

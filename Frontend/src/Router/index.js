@@ -1,15 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import Dashboard from "../Pages/Dashboard.vue";
 import { useAuthStore } from "../stores/authStore";
-import Auth from "../Pages/Auth.vue";
-import LoginForm from "../Pages/LoginForm.vue";
-import Event from "../Pages/Event.vue"; // <-- Import your Event page
+import LoginRegister from "../Pages/LoginRegister.vue";  // نفس المكون لكل من login و register
 
 const routes = [
-  { path: "/login", name: "Login", component: LoginForm },
-  { path: "/register", name: "Register", component: Auth },
-  { path: "/event", name: "Event", component: Event }, 
-  // { path: "/", name: "Dashboard", component: Dashboard, meta: { requiresAuth: true } },
+  { path: "/login", name: "Login", component: LoginRegister },
+  { path: "/register", name: "Register", component: LoginRegister },
 ];
 
 const router = createRouter({
@@ -20,6 +15,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.meta.requiresAuth;
   const authStore = useAuthStore();
+
   if (requiresAuth && !authStore.isTokenValid()) {
     next({ path: "/login", query: { redirect: to.fullPath } });
   } else {

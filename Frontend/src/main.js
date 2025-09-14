@@ -6,6 +6,7 @@ import Aura from "@primeuix/themes/aura";
 import router from "./Router";
 import 'primeicons/primeicons.css'
 
+
 import { createPinia } from "pinia";
 
 const app = createApp(App);

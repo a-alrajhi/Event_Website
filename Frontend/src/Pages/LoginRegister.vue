@@ -1,6 +1,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import '../styles/login_Register.css';
+
 
 const name = ref('')
 const email = ref('')
@@ -81,7 +83,7 @@ watch(
               <div class="text">
                 {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
                 <router-link :to="isLogin ? '/register' : '/login'">
-                  {{ isLogin ? 'Signup now' : 'Login now' }}
+                  {{ isLoging ? 'Signup now' : 'Login now' }}
                 </router-link>
               </div>
             </div>

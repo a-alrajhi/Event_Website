@@ -25,4 +25,6 @@ public interface EventRepo extends JpaRepository<Event, Integer> {
             Pageable pageable
     );
 
+    long count();
+
 }

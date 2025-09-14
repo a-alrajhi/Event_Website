@@ -14,6 +14,6 @@ watchEffect(() => {
 <template>
   <div class="w-screen p-2 lg:p-6 flex flex-col justify-center items-center">
     <AuthForm :fields="['email', 'password']" v-if="login" />
-    <AuthForm :fields="['name', 'email', 'password']" v-if="!login" />
+    <AuthForm :fields="['name', 'email', 'phone', 'password']" v-if="!login" />
   </div>
 </template>

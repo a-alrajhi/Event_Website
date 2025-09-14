@@ -49,7 +49,7 @@ export const useAuthStore = defineStore("auth", () => {
       isLoggedIn.value = true;
       router.push("/");
     } catch (err) {
-      error.value = err.response?.data?.message || "Login failed";
+      error.value = err.response?.data?.message || "LoginRegister failed";
       clearTokens();
     } finally {
       loading.value = false;

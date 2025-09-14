@@ -1,13 +1,13 @@
 <script setup>
-import LoginRegister from './Pages/LoginRegister.vue';
-
+import Dashboard   from "./Pages/Dashboard.vue";
 </script>
+
 
 <template>
   <div class="min-h-screen flex flex-col">
     <main class="flex-grow">
-      <LoginRegister />
-
+      <router-view />
+      <Dashboard />
 
     </main>
   </div>

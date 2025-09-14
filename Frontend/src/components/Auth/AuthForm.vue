@@ -3,6 +3,8 @@ import { ref, watch, computed } from "vue";
 import * as yup from "yup";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/authStore";
+import AuthInput from "./AuthInput.vue";
+import AuthButton from "./AuthButton.vue";
 
 const props = defineProps({
   fields: {
@@ -23,27 +25,45 @@ const errors = ref({});
 
 // Initialize form fields
 props.fields.forEach((field) => {
-  form.value[field] = "";
+  if (field === "phone number") {
+    form.value["phoneNumber"] = "";
+  } else {
+    form.value[field] = "";
+  }
 });
 
 // Dynamic schema
 const schema = computed(() => {
   const shape = {};
+
+  if (props.fields.includes("name")) {
+    shape.name = yup
+        .string()
+        .required("Name is required")
+        .min(2, "Name must be at least 2 characters");
+  }
   if (props.fields.includes("email")) {
-    shape.email = yup.string().required("Email is required").email();
+    shape.email = yup
+        .string()
+        .required("Email is required")
+        .email("Invalid email format");
+  }
+  if (props.fields.includes("phoneNumber")) {
+    shape.phoneNumber = yup.string().required("Phone number is required");
   }
   if (props.fields.includes("password")) {
     shape.password = yup
-      .string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters");
+        .string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters");
   }
-  if (props.fields.includes("name")) {
-    shape.name = yup
-      .string()
-      .required("Name is required")
-      .min("Name must be at least 2 characters");
+  if (props.fields.includes("confirmPassword")) {
+    shape.confirmPassword = yup
+        .string()
+        .oneOf([yup.ref("password")], "Passwords do not match")
+        .required("Please confirm your password");
   }
+
   return yup.object().shape(shape);
 });
 
@@ -63,58 +83,53 @@ const validate = async () => {
 const authUser = async () => {
   const valid = await validate();
   if (!valid) return;
-  const uri = props.mode == "login" ? "/auth/login" : "/auth/register";
+
+  const uri = props.mode === "login" ? "/auth/login" : "/auth/register";
   try {
-    const { status, message } = await auth.authUser({ ...form.value }, uri);
-    if (status === 200) {
-      auth.isLoggedIn2 = true;
-      router.push("/");
-    } else if (status === 401) {
-      errors.value.failure = message;
-    }
+    await auth.authUser({ ...form.value }, uri);
+
+    // ✅ التصحيح هنا
+    auth.isLoggedIn.value = true;
+
+    router.push("/");
   } catch (error) {
-    errors.value.failure = "Operation Failed";
+    if (error.response?.status === 401) {
+      errors.value.failure = error.response.data?.message || "Unauthorized";
+    } else {
+      errors.value.failure = "Operation Failed";
+    }
   }
 };
 
 watch(
-  () => ({ ...form.value }),
-  () => {
-    errors.value.failure = "";
-    for (const key in form.value) {
-      if (errors.value[key] && form.value[key]) {
-        errors.value[key] = "";
+    () => ({ ...form.value }),
+    () => {
+      errors.value.failure = "";
+      for (const key in form.value) {
+        if (errors.value[key] && form.value[key]) {
+          errors.value[key] = "";
+        }
       }
     }
-  }
 );
 </script>
+
 <template>
-  <form @submit.prevent="authUser">
-    <div v-if="fields.includes('name')">
-      <input v-model="form.name" placeholder="Name" />
-      <p class="error">{{ errors.name }}</p>
-    </div>
-
-    <div v-if="fields.includes('email')">
-      <input v-model="form.email" placeholder="Email" />
-      <p class="error">{{ errors.email }}</p>
-    </div>
-
-    <div v-if="fields.includes('username')">
-      <input v-model="form.username" placeholder="Username" />
-      <p class="error">{{ errors.username }}</p>
-    </div>
-
-    <div v-if="fields.includes('password')">
-      <input type="password" v-model="form.password" placeholder="Password" />
-      <p class="error">{{ errors.password }}</p>
-    </div>
-
-    <p class="error">{{ errors.failure }}</p>
-
-    <button type="submit">
-      {{ mode === "login" ? "Login" : "Register" }}
-    </button>
-  </form>
+  <div class="bg-primary/20 rounded-2xl shadow-md flex flex-col gap-2 p-4">
+    <form @submit.prevent="authUser" class="space-y-5 w-full max-w-md">
+      <AuthInput
+          v-for="field in fields"
+          :key="field"
+          :id="field"
+          :label="field"
+          :type="field !== 'password' && field !== 'confirmPassword' ? 'text' : 'password'"
+          v-model="form[field]"
+          :error="errors[field]"
+      />
+      <AuthButton
+          :error="errors.failure"
+          :label="mode === 'login' ? 'Login' : 'Register'"
+      />
+    </form>
+  </div>
 </template>

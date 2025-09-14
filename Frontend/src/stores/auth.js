@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosClient from "../apis/axiosClient";
-import router from "../Router";
 
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
@@ -34,7 +33,6 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = () => {
     clearTokens();
     isLoggedIn.value = false;
-    router.push("/login");
   };
 
   const loginUser = async (username, password) => {
@@ -47,10 +45,11 @@ export const useAuthStore = defineStore("auth", () => {
 
       setTokens(accessToken, refreshToken);
       isLoggedIn.value = true;
-      router.push("/");
+      return { success: true };
     } catch (err) {
-      error.value = err.response?.data?.message || "LoginRegister failed";
+      error.value = err.response?.data?.message || "Login failed";
       clearTokens();
+      return { success: false, message: error.value };
     } finally {
       loading.value = false;
     }
@@ -66,10 +65,11 @@ export const useAuthStore = defineStore("auth", () => {
 
       setTokens(accessToken, null);
       isLoggedIn.value = true;
-      router.push("/");
+      return { success: true };
     } catch (err) {
       error.value = err.response?.data?.message || "Registration failed";
       clearTokens();
+      return { success: false, message: error.value };
     } finally {
       loading.value = false;
     }

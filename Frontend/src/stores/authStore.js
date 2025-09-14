@@ -1,7 +1,7 @@
-import router from "../Router";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosClient from "../apis/axiosClient";
+
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     axiosClient.defaults.headers.common["Authorization"] =
-      `Bearer ${newAccess}`;
+        `Bearer ${newAccess}`;
   };
 
   const clearTokens = () => {
@@ -36,38 +36,43 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = () => {
     clearTokens();
     isLoggedIn.value = false;
-    router.push("/login");
+    // 🚫 لا تستعمل router.push هنا
+    // رجّع بس إشارة انك طلعت
+    return true;
   };
 
   const authUser = async (authBody, uri) => {
+    loading.value = true;
+    error.value = null;
     try {
       const response = await axiosClient.post(uri, authBody);
       const { accessToken } = response.data;
 
-      if (!accessToken || response.status != 200) {
+      if (!accessToken || response.status !== 200) {
         clearTokens();
-        return { status: response.data.status, message: response.data.message };
+        return { status: response.status, message: response.data.message };
       }
 
       setTokens(accessToken, null);
+      isLoggedIn.value = true;
       return { status: response.status, accessToken, message: "Successful!" };
-    } catch (error) {
-      console.error("Register failed:", error.response?.data || error.message);
+    } catch (err) {
       clearTokens();
-      return { status: response.data.status, message: response.data.message };
+      error.value = err.response?.data?.message || "Authentication failed";
+      return { status: 500, message: error.value };
+    } finally {
+      loading.value = false;
     }
   };
 
   const isTokenValid = () => {
-    if (!accessToken) return false;
+    if (!accessToken.value) return false;
     try {
-      const [, payloadBase64] = accessToken.split(".");
+      const [, payloadBase64] = accessToken.value.split(".");
       const payload = JSON.parse(atob(payloadBase64));
       const now = Math.floor(Date.now() / 1000);
-
       return payload.exp && payload.exp > now;
-    } catch (error) {
-      console.error("Invalid token:", error);
+    } catch {
       return false;
     }
   };

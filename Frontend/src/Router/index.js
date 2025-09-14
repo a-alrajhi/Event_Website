@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
-import LoginRegister from "../Pages/LoginRegister.vue";  // نفس المكون لكل من login و register
+import Auth from "../Pages/Auth.vue";
+import LoginForm from "../Pages/LoginForm.vue";
+import AdminForms from "../Pages/AdminForms.vue";
 
 const routes = [
-  { path: "/login", name: "Login", component: LoginRegister },
-  { path: "/register", name: "Register", component: LoginRegister },
+  { path: "/login", name: "Login", component: Auth },
+  { path: "/register", name: "Register", component: Auth },
+  { path: "/admin-form", name: "Admin forms", component: AdminForms },
+  //   { path: "/", name: "Dashboard", component: Dashboard, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

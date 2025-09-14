@@ -39,22 +39,21 @@ export const useAuthStore = defineStore("auth", () => {
     router.push("/login");
   };
 
-  const authUser = async (authBody, uri) => {
+  const authUser = async (form, uri) => {
+    loading.value = true;
+    error.value = null;
+
     try {
-      const response = await axiosClient.post(uri, authBody);
-      const { accessToken } = response.data;
-
-      if (!accessToken || response.status != 200) {
-        clearTokens();
-        return { status: response.data.status, message: response.data.message };
-      }
-
-      setTokens(accessToken, null);
-      return { status: response.status, accessToken, message: "Successful!" };
-    } catch (error) {
-      console.error("Register failed:", error.response?.data || error.message);
+      const res = await axiosClient.post(uri, form);
+      const { accessToken, refreshToken } = res.data;
+      setTokens(accessToken, refreshToken || null);
+      isLoggedIn.value = true;
+    } catch (err) {
+      error.value = err.response?.data?.message || "Authentication failed";
       clearTokens();
-      return { status: response.data.status, message: response.data.message };
+      throw err;
+    } finally {
+      loading.value = false;
     }
   };
 

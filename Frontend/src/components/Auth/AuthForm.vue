@@ -3,6 +3,9 @@ import { ref, watch, computed } from "vue";
 import * as yup from "yup";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/authStore";
+import { useI18n } from "vue-i18n";
+import AuthInput from "./AuthInput.vue";
+import AuthButton from "./AuthButton.vue";
 
 const props = defineProps({
   fields: {
@@ -18,12 +21,18 @@ const props = defineProps({
 const router = useRouter();
 const auth = useAuthStore();
 
+const { t } = useI18n();
+
 const form = ref({});
 const errors = ref({});
 
 // Initialize form fields
 props.fields.forEach((field) => {
-  form.value[field] = "";
+  if (field === "phone number") {
+    form.value["phoneNumber"] = "";
+  } else {
+    form.value[field] = "";
+  }
 });
 
 // Dynamic schema
@@ -63,17 +72,18 @@ const validate = async () => {
 const authUser = async () => {
   const valid = await validate();
   if (!valid) return;
-  const uri = props.mode == "login" ? "/auth/login" : "/auth/register";
+
+  const uri = props.mode === "login" ? "/auth/login" : "/auth/register";
   try {
-    const { status, message } = await auth.authUser({ ...form.value }, uri);
-    if (status === 200) {
-      auth.isLoggedIn2 = true;
-      router.push("/");
-    } else if (status === 401) {
-      errors.value.failure = message;
-    }
+    await auth.authUser({ ...form.value }, uri);
+    auth.isLoggedIn = true;
+    router.push("/");
   } catch (error) {
-    errors.value.failure = "Operation Failed";
+    if (error.response?.status === 401) {
+      errors.value.failure = error.response.data?.message || "Unauthorized";
+    } else {
+      errors.value.failure = "Operation Failed";
+    }
   }
 };
 
@@ -90,31 +100,17 @@ watch(
 );
 </script>
 <template>
-  <form @submit.prevent="authUser">
-    <div v-if="fields.includes('name')">
-      <input v-model="form.name" placeholder="Name" />
-      <p class="error">{{ errors.name }}</p>
-    </div>
-
-    <div v-if="fields.includes('email')">
-      <input v-model="form.email" placeholder="Email" />
-      <p class="error">{{ errors.email }}</p>
-    </div>
-
-    <div v-if="fields.includes('username')">
-      <input v-model="form.username" placeholder="Username" />
-      <p class="error">{{ errors.username }}</p>
-    </div>
-
-    <div v-if="fields.includes('password')">
-      <input type="password" v-model="form.password" placeholder="Password" />
-      <p class="error">{{ errors.password }}</p>
-    </div>
-
-    <p class="error">{{ errors.failure }}</p>
-
-    <button type="submit">
-      {{ mode === "login" ? "Login" : "Register" }}
-    </button>
-  </form>
+  <div class="bg-primary/20 rounded-2xl shadow-md flex flex-col gap-2 p-4">
+    <form @submit.prevent="authUser" class="space-y-5 w-full max-w-md">
+      <AuthInput
+        v-for="field in fields"
+        :id="field"
+        :label="field"
+        :type="field !== 'password' ? 'text' : 'password'"
+        v-model="form[field]"
+        :error="errors[field]"
+      />
+      <AuthButton :error="errors.failure" />
+    </form>
+  </div>
 </template>

@@ -1,17 +1,93 @@
 <script setup>
-import { InputText } from "primevue";
+import { FileUpload, FloatLabel, Textarea, InputText, Select } from "primevue";
+import { useCreateEventStore } from "../../stores/createEventStore";
+import { watch } from "vue";
+
+const createEventStore = useCreateEventStore();
+
+const onAdvancedUpload = ({ files }) => {
+  if (files && files.length > 0) {
+    createEventStore.setEventImage(files[0]);
+  }
+};
+
+watch(
+  () => [createEventStore.name, createEventStore.desc],
+  ([name, desc]) => {
+    createEventStore.isAllowedNext = name.trim() !== "" && desc.trim() !== "";
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
-  <span class="text-surface-500 dark:text-surface-500 block mb-8"
-    >Basic Info</span
-  >
-  <div class="flex items-center gap-4 mb-4">
-    <label for="username" class="font-semibold w-24">Event Name</label>
-    <InputText id="username" class="flex-auto" autocomplete="off" />
-  </div>
-  <div class="flex items-center gap-4 mb-8">
-    <label for="email" class="font-semibold w-24">Event Arabic Name</label>
-    <InputText id="email" class="flex-auto" autocomplete="off" />
+  <div class="flex flex-col gap-3">
+    <span class="text-primary/90 block">Basic Info</span>
+    <div class="flex flex-col gap-3 w-full">
+      <div class="flex w-full gap-3">
+        <FloatLabel variant="on" class="flex-1">
+          <InputText
+            id="name"
+            v-model="createEventStore.name"
+            autocomplete="off"
+            class="w-full"
+          />
+          <label for="name">Event Name</label>
+        </FloatLabel>
+
+        <FloatLabel variant="on" class="flex-1">
+          <InputText
+            id="arName"
+            v-model="createEventStore.arName"
+            autocomplete="off"
+            class="w-full"
+          />
+          <label for="arName">Arabic Name</label>
+        </FloatLabel>
+      </div>
+
+      <div class="flex w-full gap-3">
+        <FloatLabel variant="on" class="flex-1">
+          <Textarea
+            id="description"
+            v-model="createEventStore.desc"
+            rows="4"
+            class="w-full resize-none"
+          />
+          <label for="description">Description</label>
+        </FloatLabel>
+
+        <FloatLabel variant="on" class="flex-1">
+          <Textarea
+            id="arDescription"
+            v-model="createEventStore.arDesc"
+            rows="4"
+            class="w-full resize-none"
+          />
+          <label for="arDescription">Arabic Description</label>
+        </FloatLabel>
+      </div>
+    </div>
+    <Select
+      v-model="createEventStore.category"
+      editable
+      show-clear="true"
+      :options="createEventStore.categories"
+      optionLabel="name"
+      placeholder="Select/Write a Category"
+      class="w-full"
+    />
+    <FileUpload
+      name="eventImage"
+      :customUpload="true"
+      @uploader="onAdvancedUpload"
+      :multiple="false"
+      accept="image/*"
+      :maxFileSize="1000000"
+    >
+      <template #empty>
+        <span>Drag and drop an image for the event.</span>
+      </template>
+    </FileUpload>
   </div>
 </template>

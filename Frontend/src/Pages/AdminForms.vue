@@ -1,32 +1,23 @@
 <script setup>
 import { Button, Dialog, InputText } from "primevue";
 import { ref } from "vue";
+import AdminDialog from "../components/Admin/AdminDialog.vue";
 import BasicInfoForm from "../components/Admin/BasicInfoForm.vue";
+import { useCreateEventStore } from "../stores/createEventStore";
+import LocationForm from "../components/Admin/LocationForm.vue";
+import SlotForm from "../components/Admin/slotForm.vue";
 
-const createRef = ref(false);
-
-const show = () => {
-  createRef.value = true;
-};
+const createRefVisible = ref(false);
+const createEventStore = useCreateEventStore();
+const createEventPages = [BasicInfoForm, LocationForm, SlotForm];
 </script>
 
 <template>
-  <Button :onclick="show">Create Event</Button>
-  <Dialog
-    v-model:visible="createRef"
-    modal
+  <Button @click="createRefVisible = true">Create Event</Button>
+  <AdminDialog
     header="Create Event"
-    :style="{ width: '32rem' }"
-  >
-    <BasicInfoForm />
-    <div class="flex justify-end gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        severity="secondary"
-        @click="createRef = false"
-      ></Button>
-      <Button type="button" label="Save" @click="createRef = false"></Button>
-    </div>
-  </Dialog>
+    v-model:isAllowedNext="createEventStore.isAllowedNext"
+    v-model:visible="createRefVisible"
+    :pages="createEventPages"
+  />
 </template>

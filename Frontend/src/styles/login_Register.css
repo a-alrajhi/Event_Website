@@ -1,0 +1,156 @@
+/* Import Poppins font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Page background */
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #7d2ae8;
+    padding: 30px;
+}
+
+/* White card container */
+.container {
+    position: relative;
+    max-width: 850px;
+    width: 100%;
+    background: #fff;
+    padding: 40px 30px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    perspective: 2700px;
+}
+
+/* Forms wrapper */
+.forms {
+    height: 100%;
+    width: 100%;
+    background: #fff;
+}
+
+/* Center form content */
+.form-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Limit form width */
+.form-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Form title */
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* Small line under title */
+.title::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 3px;
+    background: #7d2ae8;
+}
+
+/* Input fields wrapper */
+.input-boxes {
+    margin-top: 20px;
+}
+
+/* Single input box */
+.input-box {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    margin: 10px 0;
+    position: relative;
+}
+
+/* Icons inside inputs */
+.input-box i {
+    position: absolute;
+    left: 10px;
+    color: #7d2ae8;
+    font-size: 17px;
+}
+
+/* Input fields */
+.input-box input {
+    height: 100%;
+    width: 100%;
+    padding: 0 35px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    transition: border-color 0.3s ease;
+}
+
+/* Highlight input on focus/valid */
+.input-box input:focus,
+.input-box input:valid {
+    border-color: #7d2ae8;
+}
+
+/* Submit button */
+.button input {
+    width: 100%;
+    height: 45px;
+    background: #7d2ae8;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
+
+/* Button hover effect */
+.button input:hover {
+    background: #5b13b9;
+}
+
+/* Footer text (login/register links) */
+.text {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Links under the form */
+.text a,
+.text label {
+    color: #7d2ae8;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* Link hover effect */
+.text a:hover,
+.text label:hover {
+    text-decoration: underline;
+}

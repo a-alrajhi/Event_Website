@@ -1,31 +1,26 @@
-<<<<<<< HEAD
 import { createApp } from 'vue';
 import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from './Pages/Login.vue';
+import LoginRegister from './Pages/LoginRegister.vue';
+import PrimeVue from "primevue/config";
+import Aura from "@primeuix/themes/aura";
+import { createPinia } from "pinia";
+import "./style.css";
+import './styles/login_Register.css';
 
 const routes = [
-    { path: '/', component: Login },
+    { path: '/login', name: 'Login', component: LoginRegister },
+    { path: '/register', name: 'Register', component: LoginRegister },
 ];
+
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
 });
 
-createApp(App).use(router).mount('#app');
-=======
-import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
-import PrimeVue from "primevue/config";
-import Aura from "@primeuix/themes/aura";
-import router from "./Router";
-import { createPinia } from "pinia";
-
 const app = createApp(App);
 app.use(PrimeVue);
 app.use(router);
 app.use(createPinia());
-app.mount("#app");
->>>>>>> afc9417f073f64589e4d5648551e0e98a2778bc8
+app.mount('#app');

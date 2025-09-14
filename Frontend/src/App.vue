@@ -1,9 +1,14 @@
-<script setup></script>
+<script setup>
+import LoginRegister from './Pages/LoginRegister.vue';
+
+</script>
 
 <template>
   <div class="min-h-screen flex flex-col">
     <main class="flex-grow">
-      <router-view />
+      <LoginRegister />
+
+
     </main>
   </div>
 </template>

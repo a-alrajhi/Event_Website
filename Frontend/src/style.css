@@ -1,10 +1,10 @@
-@import "tailwindcss";
+/*@import "tailwindcss";*/
 
-@theme {
-  --color-primary: oklch(0.125 0.261 263.1);      /* Dark blue (#0D1164) */
-  --color-secondary: oklch(0.263 0.128 260.9);    /* Hover / accent (#3B38A0) */
-  --color-bg: oklch(0.033 0 0);                   /* Page background (#08080a) */
-  --color-text: oklch(0.999 0 0);                 /* White text (#ffffff) */
-  --color-error: oklch(0.595 0.257 29.2);         /* Red text (#ff3333) */
-  --font-poppins: "Poppins", sans-serif;
-}
+/*@theme {*/
+/*  --color-primary: oklch(0.125 0.261 263.1);      !* Dark blue (#0D1164) *!*/
+/*  --color-secondary: oklch(0.263 0.128 260.9);    !* Hover / accent (#3B38A0) *!*/
+/*  --color-bg: oklch(0.033 0 0);                   !* Page background (#08080a) *!*/
+/*  --color-text: oklch(0.999 0 0);                 !* White text (#ffffff) *!*/
+/*  --color-error: oklch(0.595 0.257 29.2);         !* Red text (#ff3333) *!*/
+/*  --font-poppins: "Poppins", sans-serif;*/
+/*}*/

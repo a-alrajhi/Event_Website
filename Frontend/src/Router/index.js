@@ -2,10 +2,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
 import AuthView from "../Pages/Auth.vue";
+import EventDetailsPage from "../Pages/EventDetailsPage.vue";
 
 const routes = [
   { path: "/login", name: "Login", component: AuthView },
   { path: "/register", name: "Register", component: AuthView },
+  {path:"/event/:id", name:"EventDetails", component: EventDetailsPage}
   { path: "/", redirect: "/login" },
 ];
 

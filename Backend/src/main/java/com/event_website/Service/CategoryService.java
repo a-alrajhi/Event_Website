@@ -1,8 +1,10 @@
 package com.event_website.Service;
 
 import com.event_website.Dto.CategoryDTO;
+import com.event_website.Dto.EventDto;
 import com.event_website.Entity.Category;
 import com.event_website.Repository.CategoryRepo;
+import com.event_website.Repository.EventRepo;
 import com.event_website.Request.CreateCategoryRequest;
 import com.event_website.Request.UpdateCategoryRequest;
 import jakarta.validation.Valid;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
   @Autowired private CategoryRepo categoryRepo;
+  @Autowired private EventRepo eventRepo;
 
   public List<CategoryDTO> findAll() {
     return categoryRepo.findAll().stream().map(this::toDto).collect(Collectors.toList());
@@ -101,5 +104,10 @@ public class CategoryService {
     dto.setDescription(category.getDescription());
     dto.setArDescription(category.getArDescription());
     return dto;
+  }
+
+
+  public List<EventDto> findAllEventsByCategory(Integer categoryId) {
+    return eventRepo.findByCategoryId(categoryId).stream().map(EventDto::fromEntity).toList();
   }
 }

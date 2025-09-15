@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "primeflex/primeflex.css";
+@import "primeicons/primeicons.css";
 
 @theme {
   --color-primary: oklch(0.125 0.261 263.1); /* Dark blue (#0D1164) */

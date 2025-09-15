@@ -1,21 +1,42 @@
 <script setup>
 import { FileUpload, FloatLabel, Textarea, InputText, Select } from "primevue";
 import { useCreateEventStore } from "../../stores/createEventStore";
-import { watch } from "vue";
+import { watch, onMounted } from "vue";
 
 const createEventStore = useCreateEventStore();
 
-const onAdvancedUpload = ({ files }) => {
-  if (files && files.length > 0) {
-    createEventStore.setEventImage(files[0]);
+onMounted(async () => {
+  await createEventStore.loadCategories();
+});
+
+const onAdvancedUpload = (event) => {
+  const file = event?.files?.[0];
+  console.log("file: " + file);
+  if (file) {
+    createEventStore.setEventImage(file);
   }
 };
 
 watch(
-  () => [createEventStore.name, createEventStore.desc],
-  ([name, desc]) => {
-    createEventStore.isAllowedNext = name.trim() !== "" && desc.trim() !== "";
+  () => [
+    createEventStore.name,
+    createEventStore.desc,
+    createEventStore.arName,
+    createEventStore.arDesc,
+    createEventStore.category,
+    createEventStore.eventImage,
+  ],
+  ([name, desc, arName, arDesc, category, eventImage]) => {
+    createEventStore.isAllowedNext =
+      name.trim() !== "" &&
+      desc.trim() !== "" &&
+      arName.trim() !== "" &&
+      arDesc.trim() !== "" &&
+      eventImage &&
+      category;
+    console.log(eventImage);
   },
+
   { immediate: true }
 );
 </script>
@@ -81,6 +102,7 @@ watch(
       name="eventImage"
       :customUpload="true"
       @uploader="onAdvancedUpload"
+      :show-cancel-button="false"
       :multiple="false"
       accept="image/*"
       :maxFileSize="1000000"
@@ -91,3 +113,9 @@ watch(
     </FileUpload>
   </div>
 </template>
+
+<style scoped>
+.p-fileupload-content {
+  display: none !important;
+}
+</style>

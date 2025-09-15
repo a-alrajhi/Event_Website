@@ -1,10 +1,14 @@
 <script setup>
 import { useCreateEventStore } from "../../stores/createEventStore";
 import EventLocationMap from "../Map/EventLocationMap.vue";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, watchEffect, onMounted } from "vue";
 import { Select, Button, InputText, FloatLabel } from "primevue";
 
 const createEventStore = useCreateEventStore();
+
+onMounted(async () => {
+  await createEventStore.loadLocations();
+});
 
 const mapVisible = ref(false);
 const error = ref(false);
@@ -31,14 +35,13 @@ const locationValid = computed(() => {
   );
 });
 
-watch(
-  () => createEventStore.location,
-  () => {
-    error.value = !locationValid.value;
-    createEventStore.isAllowedNext = locationValid.value;
-  },
-  { deep: true }
-);
+watchEffect(() => {
+  const isValid =
+    createEventStore.location &&
+    typeof createEventStore.location.name === "string" &&
+    createEventStore.location.name.trim() !== "";
+  createEventStore.isAllowedNext = isValid;
+});
 </script>
 
 <template>

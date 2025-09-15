@@ -19,5 +19,6 @@ const createEventPages = [BasicInfoForm, LocationForm, SlotForm];
     v-model:isAllowedNext="createEventStore.isAllowedNext"
     v-model:visible="createRefVisible"
     :pages="createEventPages"
+    :save-function="createEventStore.createEvent"
   />
 </template>

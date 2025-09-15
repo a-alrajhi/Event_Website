@@ -19,11 +19,15 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  saveFunction: {
+    type: Function,
+    required: true,
+  },
 });
 
 const emit = defineEmits(["update:visible", "update:isAllowedNext"]);
 
-const { header, pages } = toRefs(props);
+const { header, pages, saveFunction } = toRefs(props);
 
 const dialogVisible = ref(props.visible);
 
@@ -42,19 +46,27 @@ watch(dialogVisible, (newVal) => {
 
 const currentIndex = ref(0);
 
-const next = () => {
+const next = async () => {
   if (currentIndex.value < pages.value.length - 1) {
     currentIndex.value++;
   } else {
-    dialogVisible.value = false;
-    currentIndex.value = 0;
+    try {
+      await saveFunction.value();
+      dialogVisible.value = false;
+      currentIndex.value = 0;
+    } catch (error) {
+      console.error("Save failed:", error);
+    }
   }
-  emit("update:isAllowedNext", false);
 };
 
 const cancel = () => {
   dialogVisible.value = false;
   currentIndex.value = 0;
+};
+
+const back = () => {
+  currentIndex.value--;
 };
 </script>
 
@@ -74,6 +86,13 @@ const cancel = () => {
         label="Cancel"
         severity="secondary"
         @click="cancel"
+      />
+      <Button
+        type="button"
+        label="Back"
+        v-if="currentIndex != 0"
+        severity="primary"
+        @click="back"
       />
       <Button
         type="button"

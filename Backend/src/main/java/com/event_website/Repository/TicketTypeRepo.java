@@ -25,6 +25,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TicketTypeRepo extends JpaRepository<TicketType, Integer> {
-    List<TicketType> findBySlot_Id(Integer slotId);
     Optional<TicketType> findByName(String name);
 }

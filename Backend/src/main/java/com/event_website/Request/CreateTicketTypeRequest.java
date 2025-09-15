@@ -22,7 +22,6 @@ import lombok.Setter;
 @Setter
 public class CreateTicketTypeRequest {
   private String name;
-  private Slot slot;
   private BigDecimal price;
   private Boolean hasAssignedSeating;
 
@@ -32,8 +31,6 @@ public class CreateTicketTypeRequest {
         + "name='"
         + name
         + '\''
-        + ", slot="
-        + slot
         + ", price="
         + price
         + '}';

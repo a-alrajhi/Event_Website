@@ -56,7 +56,6 @@ public class TicketTypeService {
     TicketType t = new TicketType();
     t.setName(req.getName());
     t.setPrice(req.getPrice());
-    t.setSlot(req.getSlot());
     t.setHasAssignedSeating(false); // default val
 
     return ticketTypeRepo.save(t);
@@ -80,9 +79,6 @@ public class TicketTypeService {
     }
     if (req.getPrice() != null) {
       t.setPrice(req.getPrice());
-    }
-    if (req.getSlot() != null) {
-      t.setSlot(req.getSlot());
     }
     return ticketTypeRepo.save(t);
   }

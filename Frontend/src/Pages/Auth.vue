@@ -17,8 +17,8 @@ watchEffect(() => {
 const handleSubmit = async (formData) => {
   if (login.value) {
     const res = await auth.authUser(
-        { email: formData.email, password: formData.password },
-        "/auth/login"
+      { email: formData.email, password: formData.password },
+      "/auth/login"
     );
     if (res.status === 200) {
       router.push("/");
@@ -47,18 +47,26 @@ const handleSubmit = async (formData) => {
 
             <!-- Form -->
             <AuthForm
-                :fields="
+              :fields="
                 login
                   ? ['email', 'password']
-                  : ['name', 'email', 'phoneNumber', 'password', 'confirmPassword']
+                  : [
+                      'name',
+                      'email',
+                      'phoneNumber',
+                      'password',
+                      'confirmPassword',
+                    ]
               "
-                :onSubmit="handleSubmit"
-                :mode="login ? 'login' : 'register'"
+              :onSubmit="handleSubmit"
+              :mode="login ? 'login' : 'register'"
             />
 
             <!-- Switch -->
             <div class="text">
-              {{ login ? "Don't have an account?" : "Already have an account?" }}
+              {{
+                login ? "Don't have an account?" : "Already have an account?"
+              }}
               <router-link :to="login ? '/register' : '/login'">
                 {{ login ? "Signup now" : "Login now" }}
               </router-link>

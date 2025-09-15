@@ -1,6 +1,30 @@
 /* Import font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
+.auth-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: url('../assets/blvd1.png') no-repeat center center;
+    background-size: cover;
+
+    padding: 30px;
+}
+
+.auth-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
 /* Reset */
 .auth-page * {
     margin: 0;
@@ -9,20 +33,11 @@
     font-family: "Poppins", sans-serif;
 }
 
-/* Page background */
-.auth-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #711616;
-    padding: 30px;
-}
-
 /* Container */
 .auth-page .container {
     position: relative;
-    max-width: 850px;
+    z-index: 1;
+    max-width: 400px;
     width: 100%;
     background: #fff;
     padding: 40px 30px;
@@ -34,6 +49,7 @@
 .auth-page .forms {
     width: 100%;
     background: #fff;
+    padding: 20px 0;
 }
 
 .auth-page .form-content {
@@ -72,6 +88,8 @@
 /* Input fields */
 .auth-page .input-boxes {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .auth-page .input-box {
@@ -79,7 +97,6 @@
     align-items: center;
     height: 50px;
     width: 100%;
-    margin: 10px 0;
     position: relative;
 }
 
@@ -106,40 +123,73 @@
     border-color: #000;
 }
 
-/* Button */
 .auth-page .button input {
     width: 100%;
-    height: 45px;
-    background: #333;
+    height: 50px;
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     color: #fff;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 20px;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .auth-page .button input:hover {
-    background: #111;
+    background: linear-gradient(90deg, #4338ca, #4f46e5);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.auth-page .button input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
 }
 
 /* Footer */
 .auth-page .text {
-    margin-top: 15px;
+    margin-top: 20px;
     text-align: center;
     font-size: 14px;
 }
 
 .auth-page .text a,
 .auth-page .text label {
-    color: #333;
+    color: #4f46e5;
     cursor: pointer;
     font-weight: 500;
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .auth-page .text a:hover,
 .auth-page .text label:hover {
     text-decoration: underline;
+    color: #4338ca;
+}
+/* Container */
+.auth-page .container {
+    position: relative;
+    z-index: 1;
+    max-width: 400px;
+    width: 100%;
+    background: #fff;
+    padding: 20px 25px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+
+/* Forms */
+.auth-page .forms {
+    width: 100%;
+    background: #fff;
+    padding: 0;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }

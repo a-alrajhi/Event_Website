@@ -57,6 +57,21 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const updateUser = async (form) => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const res = await axiosClient.put("/profile/", form);
+      console.log(res.data);
+    } catch (err) {
+      error.value = err.response?.data?.message || "Authentication failed";
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   const isTokenValid = () => {
     if (!accessToken) return false;
     try {
@@ -71,5 +86,5 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  return { isLoggedIn, error, loading, authUser, logout, isTokenValid };
+  return { isLoggedIn, error, loading, authUser, logout, isTokenValid, updateUser };
 });

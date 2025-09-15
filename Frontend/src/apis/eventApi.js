@@ -1,3 +1,9 @@
+/**
+Event API 
+@author: Abdulrahman Al Rajhi
+@since: 9/15/2025
+@version: 1.0
+ */
 import apis from "./axiosClient";
 
 // THIS METHOD SHOULD BE IN THE SERVICE FOLDER
@@ -54,5 +60,14 @@ export async function getEventSlotsFromId(eventId) {
  */
 export async function getEventLocationFromId(eventId) {
   const resp = await apis.get(`/locations/${eventId}`);
+  return resp.data;
+}
+
+/**
+ * Getting all events from a given category
+ * @param {*} categoryId category id
+ */
+export async function getEventsByCategory(categoryId) {
+  const resp = await apis.get(`/category/events/category/${categoryId}`);
   return resp.data;
 }

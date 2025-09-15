@@ -1,3 +1,9 @@
+<!--
+Event Rules Component
+@author: Abdulrahman Al Rajhi
+@since: 9/15/2025
+@version: 1.0
+-->
 <template>
   <div class="px-8 py-12 max-w-4xl mx-auto space-y-10">
     <!-- Terms & Conditions -->

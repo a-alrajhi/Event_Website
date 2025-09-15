@@ -1,3 +1,9 @@
+<!--
+Event Sidebar Component
+@author: Abdulrahman Al Rajhi
+@since: 9/15/2025
+@version: 1.0
+-->
 <template>
   <div
     class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm bg-gradient-to-r from-neutral-900 to-sky-900 dark:border-gray-700"
@@ -6,7 +12,7 @@
       class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
     >
       <!-- update this once backend is ready -->
-      Starting from 100{{ startingPrice }} SAR!
+      Starting from {{ startingPrice }} SAR!
     </h5>
 
     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
@@ -19,7 +25,8 @@
       class="text-white bg-gradient-to-r from-sky-500 to-cyan-800 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg"
     >
       <!-- update this once backend is ready -->
-      Book Now{{ bookNowBtn }}
+      <!-- Book Now{{ bookNowBtn }} -->
+      Book Now
 
       <!-- drawing arrow from button to right SVG -->
       <svg
@@ -61,9 +68,9 @@
             />
           </svg>
         </span>
-        <span class="ml-2 font-medium text-gray-900 dark:text-white"
-          >Tue 16 Dec{{ date }}</span
-        >
+        <span class="ml-2 font-medium text-gray-900 dark:text-white">{{
+          eventDate
+        }}</span>
       </div>
 
       <!-- Event starting time section -->
@@ -84,31 +91,47 @@
             />
           </svg>
         </span>
-        <span class="ml-2 font-medium text-gray-900 dark:text-white"
-          >21:30{{ eventStartingTime }}</span
-        >
+        <span class="ml-2 font-medium text-gray-900 dark:text-white">{{
+          eventTime
+        }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from "vue";
+import dayjs from "dayjs";
+
 const props = defineProps({
+  slots: { type: Array, required: true },
+  startingPrice: {
+    type: [Number, null],
+    default: 0,
+  },
   bookNowBtn: {
     type: Boolean,
     default: true,
   },
-  startingPrice: {
-    type: Number,
-    required: true,
-  },
-  date: {
-    type: String,
-    required: true,
-  },
-  eventStartingTime: {
-    type: String,
-    required: true,
-  },
+});
+
+// Get the first slot or default to "TBD"
+const firstSlot = computed(() => props.slots?.[0] ?? "TBD");
+
+// Compute event date and time based on the first slot
+const eventDateTime = computed(() => {
+  if (!firstSlot.value) return null;
+  return dayjs(
+    `${firstSlot.value.date} ${firstSlot.value.startTime}`,
+    "YYYY-MM-DD HH:mm:ss"
+  );
+});
+
+const eventDate = computed(() => {
+  return eventDateTime.value ? eventDateTime.value.format("ddd D MMM") : "TBD";
+});
+
+const eventTime = computed(() => {
+  return eventDateTime.value ? eventDateTime.value.format("HH:mm") : "TBD";
 });
 </script>

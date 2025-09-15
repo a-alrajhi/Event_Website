@@ -1,8 +1,12 @@
+<!--
+Event Media Component
+@author: Abdulrahman Al Rajhi
+@since: 9/15/2025
+@version: 1.0
+-->
+
 <!-- Reusable component to display event media such as photos or videos. -->
 <template>
-  <div class="w-full flex justify-center">
-    <h3 class="text-xl font-semibold mb-2 text-center">Event Media</h3>
-  </div>
   <div class="w-full flex justify-center">
     <img
       :src="photo"

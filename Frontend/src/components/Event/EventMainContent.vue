@@ -1,5 +1,11 @@
+<!--
+Event Main Content Component
+@author: Abdulrahman Al Rajhi
+@since: 9/15/2025
+@version: 1.0
+-->
 <template>
-  <div class="px-8 py-12 max-w-4xl mx-auto space-y-10">
+  <div class="max-w-4xl mx-auto space-y-10">
     <!-- Event Info -->
     <section class="space-y-4">
       <h1 class="text-4xl font-bold text-gray-800">{{ title }}</h1>

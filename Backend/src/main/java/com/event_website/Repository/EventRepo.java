@@ -25,4 +25,5 @@ public interface EventRepo extends JpaRepository<Event, Integer> {
             Pageable pageable
     );
 
+  List<Event> findByCategoryId(Integer categoryId);
 }

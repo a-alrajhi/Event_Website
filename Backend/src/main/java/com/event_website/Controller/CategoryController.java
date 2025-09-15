@@ -1,6 +1,7 @@
 package com.event_website.Controller;
 
 import com.event_website.Dto.CategoryDTO;
+import com.event_website.Dto.EventDto;
 import com.event_website.Request.CreateCategoryRequest;
 import com.event_website.Request.UpdateCategoryRequest;
 import com.event_website.Service.CategoryService;
@@ -45,6 +46,11 @@ public class CategoryController {
   @GetMapping("/categories")
   public ResponseEntity<List<CategoryDTO>> findAll() {
     return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
+  }
+
+  @GetMapping("/events/category/{categoryId}")
+  public ResponseEntity<List<EventDto>> getAllEventsByCategory(@PathVariable Integer categoryId) {
+    return ResponseEntity.ok(categoryService.findAllEventsByCategory(categoryId));
   }
 
   @GetMapping("/categories/by-name")

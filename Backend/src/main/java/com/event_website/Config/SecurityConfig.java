@@ -54,9 +54,12 @@ public class SecurityConfig {
                         "/classes/all",
                         "/Event/**",
                         "/classes/**",
+                        "/capacities/**",
                         "/api-docs/**",
                         "/swagger-ui/**",
                         "/ticket-type/**",
+                        "/slots/**",
+                        "/category/**",
                         "/ticket/**")
                     .permitAll()
                     .anyRequest()

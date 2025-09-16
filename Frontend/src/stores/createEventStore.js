@@ -17,6 +17,7 @@ export const useCreateEventStore = defineStore("createEvent", () => {
   const locations = ref([]);
   const ticketTypes = ref([]);
   const eventImage = ref(null);
+  const loading = ref(false);
 
   const setEventImage = (file) => {
     eventImage.value = file;
@@ -49,34 +50,45 @@ export const useCreateEventStore = defineStore("createEvent", () => {
     ticketTypes.value = res.data;
   };
 
-  const createEvent = () => {
+  const createEvent = async () => {
     if (!isValid) return;
-    const request = buildEventObject();
-
-    console.log(request);
+    loading.value = true;
+    const request = await buildEventObject();
+    const res = axiosClient.post("/Event/create-composite", request);
+    console.log(res.data);
+    loading.value = false;
+    reset();
   };
 
-  const buildEventObject = () => {
+  const buildEventObject = async () => {
     const finalCategory =
-      category.value.id == null ? category.value : category.value.id;
+      category.value.id == null
+        ? { name: category.value }
+        : { id: category.value.id };
     const finalLocation =
-      location.value.id == null ? location.value : location.value.id;
+      location.value.id == null ? location.value : { id: location.value.id };
     const finalSlots = slots.value.map((slot) => ({
       ...slot,
       ticketTypes: slot.ticketTypes
         .filter((tt) => tt.id != null)
-        .map((tt) => tt.id),
+        .map((tt) => ({ ttId: tt.id, capacity: tt.capacity })),
     }));
+    const photoUrl = await uploadImage();
+
+    if (!photoUrl) {
+      return null;
+    }
+
     const request = {
       event: {
         name: name.value,
         arName: arName.value,
         description: desc.value,
         arDescription: arDesc.value,
-        eventImage: eventImage.value,
-        location: finalLocation,
-        category: finalCategory,
+        photoUrl,
       },
+      location: finalLocation,
+      category: finalCategory,
       slots: finalSlots,
     };
 
@@ -84,7 +96,7 @@ export const useCreateEventStore = defineStore("createEvent", () => {
   };
 
   const uploadImage = async () => {
-    const file = createEventStore.eventImage;
+    const file = eventImage.value;
     if (!file) return null;
 
     const fileName = `${Date.now()}_${file.name}`;
@@ -144,6 +156,7 @@ export const useCreateEventStore = defineStore("createEvent", () => {
     locations,
     slots,
     ticketTypes,
+    loading,
     setEventImage,
     reset,
     loadCategories,

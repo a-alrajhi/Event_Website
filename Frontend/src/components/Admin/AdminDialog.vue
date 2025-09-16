@@ -1,6 +1,6 @@
 <script setup>
 import { Dialog, Button } from "primevue";
-import { ref, toRefs, watch } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 
 const props = defineProps({
   visible: {
@@ -19,6 +19,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
   saveFunction: {
     type: Function,
     required: true,
@@ -27,7 +31,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:visible", "update:isAllowedNext"]);
 
-const { header, pages, saveFunction } = toRefs(props);
+const { header, pages, saveFunction, isLoading, isAllowedNext } = toRefs(props);
 
 const dialogVisible = ref(props.visible);
 
@@ -68,6 +72,16 @@ const cancel = () => {
 const back = () => {
   currentIndex.value--;
 };
+
+const primaryButtonLabel = computed(() => {
+  if (currentIndex.value === pages.value.length - 1) {
+    if (isLoading.value) {
+      return "Saving...";
+    }
+    return "Save";
+  }
+  return "Next";
+});
 </script>
 
 <template>
@@ -96,9 +110,9 @@ const back = () => {
       />
       <Button
         type="button"
-        :label="currentIndex === pages.length - 1 ? 'Save' : 'Next'"
+        :label="primaryButtonLabel"
         @click="next"
-        :disabled="!isAllowedNext"
+        :disabled="!isAllowedNext || isLoading"
       />
     </div>
   </Dialog>

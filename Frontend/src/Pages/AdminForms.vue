@@ -20,5 +20,6 @@ const createEventPages = [BasicInfoForm, LocationForm, SlotForm];
     v-model:visible="createRefVisible"
     :pages="createEventPages"
     :save-function="createEventStore.createEvent"
+    v-model:isLoading="createEventStore.loading"
   />
 </template>

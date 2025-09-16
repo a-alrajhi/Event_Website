@@ -11,13 +11,20 @@ onMounted(async () => {
 });
 
 const mapVisible = ref(false);
-const error = ref(false);
+const coords = ref({ latitude: 24.7136, longitude: 46.6753 });
 
 const openMap = () => {
-  createEventStore.location = {
-    name: "",
-    latitude: 24.7136,
-    longitude: 46.6753,
+  if (!createEventStore.location) {
+    createEventStore.location = {
+      name: "",
+      additionalInfo: "",
+      latitude: 24.7136,
+      longitude: 46.6753,
+    };
+  }
+  coords.value = {
+    latitude: createEventStore.location.latitude,
+    longitude: createEventStore.location.longitude,
   };
   mapVisible.value = true;
 };
@@ -30,17 +37,22 @@ const closeMap = () => {
 const locationValid = computed(() => {
   return (
     createEventStore.location &&
-    createEventStore.location.name &&
+    typeof createEventStore.location.name === "string" &&
     createEventStore.location.name.trim() !== ""
   );
 });
 
 watchEffect(() => {
-  const isValid =
-    createEventStore.location &&
-    typeof createEventStore.location.name === "string" &&
-    createEventStore.location.name.trim() !== "";
-  createEventStore.isAllowedNext = isValid;
+  createEventStore.isAllowedNext = locationValid.value;
+});
+
+watch(coords, () => {
+  if (mapVisible.value) {
+    createEventStore.location = {
+      ...createEventStore.location,
+      ...coords.value,
+    };
+  }
 });
 </script>
 
@@ -57,15 +69,27 @@ watchEffect(() => {
         placeholder="Select Location"
         class="w-full flex-9"
       />
-      <FloatLabel variant="on" class="flex-9" v-else>
-        <InputText
-          id="name"
-          v-model="createEventStore.location.name"
-          autocomplete="off"
-          class="w-full"
-        />
-        <label for="name">Location Name</label>
-      </FloatLabel>
+      <div class="flex gap-3 flex-9" v-else>
+        <FloatLabel variant="on" class="flex-1">
+          <InputText
+            id="location-name"
+            v-model="createEventStore.location.name"
+            autocomplete="off"
+            class="w-full"
+          />
+          <label for="location-name">Location Name</label>
+        </FloatLabel>
+        <FloatLabel variant="on" class="flex-1">
+          <InputText
+            id="location-info"
+            v-model="createEventStore.location.additionalInfo"
+            autocomplete="off"
+            class="w-full"
+          />
+          <label for="location-info">Additional Info (Optional)</label>
+        </FloatLabel>
+      </div>
+
       <Button
         icon="pi pi-plus"
         class="w-full flex-1 h-[38px]"
@@ -81,11 +105,8 @@ watchEffect(() => {
         v-else
       />
     </div>
-    <p v-if="error" class="text-red-500 text-sm mt-1">
-      Select or enter a location name
-    </p>
     <div class="flex flex-col gap-3" v-if="mapVisible">
-      <EventLocationMap v-model="createEventStore.location" />
+      <EventLocationMap v-model="coords" />
       <p>
         Latitude: {{ createEventStore.location.latitude.toFixed(5) }},
         Longitude: {{ createEventStore.location.longitude.toFixed(5) }}

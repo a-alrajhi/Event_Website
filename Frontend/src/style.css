@@ -1,10 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: oklch(0.125 0.261 263.1); /* Dark blue (#0D1164) */
-  --color-secondary: oklch(0.263 0.128 260.9); /* Hover / accent (#3B38A0) */
-  --color-bg: oklch(0.033 0 0); /* Page background (#08080a) */
-  --color-text: oklch(0.999 0 0); /* White text (#ffffff) */
-  --color-error: oklch(0.595 0.257 29.2); /* Red text (#ff3333) */
+  --color-primary: oklch(0.54 0.23 280);     /* Primary Purple (#7C3AED) */
+  --color-secondary: oklch(0.45 0.31 285);   /* Secondary Purple (#9333EA) */
+  --color-hover: oklch(0.41 0.26 275);       /* Hover / Accent (#6D28D9) */
+  --color-bg: oklch(0.067 0 0);               /* Page Background (#08080A) */ 
+  --color-card: oklch(0.05 0 0);             /* Card Background (#0C0C10) */
+  --color-footer: oklch(0.06 0 0);           /* Footer Background (#0D0D12) */
+  --color-text: oklch(0.95 0 0);             /* White Text (#FFFFFF) */
+  --color-gray: oklch(0.65 0 0);             /* Gray Text (#A0A0A0) */
+  --color-error: oklch(0.595 0.257 29.2);    /* Red Text (#FF3333) */
   --font-poppins: "Poppins", sans-serif;
 }

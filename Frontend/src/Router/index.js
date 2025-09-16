@@ -1,13 +1,17 @@
-// router/index.js
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
-import AuthView from "../Pages/Auth.vue";
-
+import Auth from "../Pages/Auth.vue";
+import AdminForms from "../Pages/AdminForms.vue"; 
+import Event from "../Pages/Event.vue"
 const routes = [
-  { path: "/login", name: "Login", component: AuthView },
-  { path: "/register", name: "Register", component: AuthView },
-  { path: "/", redirect: "/login" },
+  { path: "/login", name: "Login", component: Auth },
+  { path: "/register", name: "Register", component: Auth },
+  { path: "/admin-form", name: "Admin forms", component: AdminForms },
+    { path: "/event", name: "Event", component: Event },
+
+  //   { path: "/", name: "Dashboard", component: Dashboard, meta: { requiresAuth: true } },
 ];
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,8 +19,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const requiresAuth = to.meta.requiresAuth;
   const authStore = useAuthStore();
-  if (to.meta.requiresAuth && !authStore.isTokenValid()) {
+
+  if (requiresAuth && !authStore.isTokenValid()) {
     next({ path: "/login", query: { redirect: to.fullPath } });
   } else {
     next();

@@ -21,21 +21,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateTicketTypeRequest {
-  private String name;
-  private Slot slot;
-  private BigDecimal price;
-  private Boolean hasAssignedSeating;
+    private String name;
+    private BigDecimal price;
+    private Boolean hasAssignedSeating;
 
-  @Override
-  public String toString() {
-    return "CreateTicketTypeRequest{"
-        + "name='"
-        + name
-        + '\''
-        + ", slot="
-        + slot
-        + ", price="
-        + price
-        + '}';
-  }
+    @Override
+    public String toString() {
+        return "CreateTicketTypeRequest{"
+                + "name='"
+                + name
+                + '\''
+                + ", price="
+                + price
+                + '}';
+    }
 }

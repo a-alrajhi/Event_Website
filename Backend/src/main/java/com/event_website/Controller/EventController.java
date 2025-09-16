@@ -1,6 +1,7 @@
 package com.event_website.Controller;
 
 import com.event_website.Dto.EventDto;
+import com.event_website.Dto.EventDtoDetalis;
 import com.event_website.Entity.Category;
 import com.event_website.Entity.Event;
 import com.event_website.Repository.CategoryRepo;
@@ -121,4 +122,20 @@ public class EventController {
         eventService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<EventDtoDetalis> getEventDetails(@PathVariable Integer id) {
+        EventDtoDetalis eventDetails = eventService.getEventDetails(id);
+        return ResponseEntity.ok(eventDetails);
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<Page<EventDtoDetalis>> getAllEventDetails(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<EventDtoDetalis> events = eventService.getAllEventDetails(page, size);
+        return ResponseEntity.ok(events);
+    }
 }
+

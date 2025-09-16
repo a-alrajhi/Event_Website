@@ -17,11 +17,13 @@
 package com.event_website.Repository;
 
 import com.event_website.Entity.TicketType;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TicketTypeRepo extends JpaRepository<TicketType, Integer> {
-  Optional<TicketType> findByName(String name);
+    Optional<TicketType> findByName(String name);
 }

@@ -52,12 +52,14 @@ public class SecurityConfig {
                         "bookmarks/delete/{id}",
                         "/trainer/{id}",
                         "/classes/all",
-                        "/Event/**",
                         "/classes/**",
                         "/api-docs/**",
                         "/swagger-ui/**",
                         "/ticket-type/**",
-                        "/ticket/**")
+                        "/ticket/**",
+                                "/Event/**",
+                                "/Event/details"
+                                )
                     .permitAll()
                     .anyRequest()
                     .authenticated())

@@ -26,72 +26,68 @@ import org.springframework.stereotype.Service;
 @Service
 public class TicketTypeService {
 
-  @Autowired TicketTypeRepo ticketTypeRepo;
+    @Autowired TicketTypeRepo ticketTypeRepo;
 
-  // GET - Getting all types
-  public List<TicketType> getAllTicketTypes() {
-    return ticketTypeRepo.findAll();
-  }
-
-  //   GET - Get type by id
-  public TicketType getTicketTypeById(Integer id) {
-    return ticketTypeRepo
-        .findById(id)
-        .orElseThrow(() -> new RuntimeException("Ticket Type with id " + id + " not found"));
-  }
-
-  // GET - Find by name
-  public Optional<TicketType> findTicketTypeByName(String name) {
-    if (name == null || name.trim().isEmpty()) {
-      throw new RuntimeException("Ticket Type name is null or empty");
+    // GET - Getting all types
+    public List<TicketType> getAllTicketTypes() {
+        return ticketTypeRepo.findAll();
     }
-    return ticketTypeRepo.findByName(name.trim());
-  }
 
-  // POST - Create a ticket type
-  public TicketType createTicketType(CreateTicketTypeRequest req) {
-    if (req.getName() == null || req.getName().trim().isEmpty()) {
-      throw new RuntimeException("Ticket type name cannot be null or empty");
+    //   GET - Get type by id
+    public TicketType getTicketTypeById(Integer id) {
+        return ticketTypeRepo
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket Type with id " + id + " not found"));
     }
-    TicketType t = new TicketType();
-    t.setName(req.getName());
-    t.setPrice(req.getPrice());
-    t.setSlot(req.getSlot());
-    t.setHasAssignedSeating(false); // default val
 
-    return ticketTypeRepo.save(t);
-  }
+    // GET - Find by name
+    public Optional<TicketType> findTicketTypeByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new RuntimeException("Ticket Type name is null or empty");
+        }
+        return ticketTypeRepo.findByName(name.trim());
+    }
 
-  // PUT - Update a ticket type
-  public TicketType updateTicketType(Integer id, UpdateTicketTypeRequest req) {
-    if (req.getName() == null || req.getName().trim().isEmpty()) {
-      throw new RuntimeException("Ticket type name cannot be null or empty");
-    }
-    TicketType t =
-        ticketTypeRepo
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new RuntimeException(
-                        "Cannot update ticket type.\nTicket type with id " + id + " not found"));
+    // POST - Create a ticket type
+    public TicketType createTicketType(CreateTicketTypeRequest req) {
+        if (req.getName() == null || req.getName().trim().isEmpty()) {
+            throw new RuntimeException("Ticket type name cannot be null or empty");
+        }
+        TicketType t = new TicketType();
+        t.setName(req.getName());
+        t.setPrice(req.getPrice());
+        t.setHasAssignedSeating(false); // default val
 
-    if (req.getName() != null) {
-      t.setName(req.getName());
+        return ticketTypeRepo.save(t);
     }
-    if (req.getPrice() != null) {
-      t.setPrice(req.getPrice());
-    }
-    if (req.getSlot() != null) {
-      t.setSlot(req.getSlot());
-    }
-    return ticketTypeRepo.save(t);
-  }
 
-  // DELETE - delete a ticket type
-  public void deleteTicketType(Integer id) {
-    if (!ticketTypeRepo.existsById(id)) {
-      throw new RuntimeException("Ticket Type with id " + id + " not found");
+    // PUT - Update a ticket type
+    public TicketType updateTicketType(Integer id, UpdateTicketTypeRequest req) {
+        if (req.getName() == null || req.getName().trim().isEmpty()) {
+            throw new RuntimeException("Ticket type name cannot be null or empty");
+        }
+        TicketType t =
+                ticketTypeRepo
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Cannot update ticket type.\nTicket type with id " + id + " not found"));
+
+        if (req.getName() != null) {
+            t.setName(req.getName());
+        }
+        if (req.getPrice() != null) {
+            t.setPrice(req.getPrice());
+        }
+        return ticketTypeRepo.save(t);
     }
-    ticketTypeRepo.deleteById(id);
-  }
+
+    // DELETE - delete a ticket type
+    public void deleteTicketType(Integer id) {
+        if (!ticketTypeRepo.existsById(id)) {
+            throw new RuntimeException("Ticket Type with id " + id + " not found");
+        }
+        ticketTypeRepo.deleteById(id);
+    }
 }

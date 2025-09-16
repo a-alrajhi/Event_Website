@@ -18,11 +18,6 @@ public class TicketType {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "slot_id")
-    private Slot slot;
-
     @Column(name = "name", nullable = false)
     private String name;
 

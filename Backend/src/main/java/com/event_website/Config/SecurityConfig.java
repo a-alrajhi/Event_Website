@@ -52,7 +52,6 @@ public class SecurityConfig {
                         "bookmarks/delete/{id}",
                         "/trainer/{id}",
                         "/classes/all",
-                        "/Event/**",
                         "/classes/**",
                         "/capacities/**",
                         "/api-docs/**",
@@ -60,7 +59,10 @@ public class SecurityConfig {
                         "/ticket-type/**",
                         "/slots/**",
                         "/category/**",
-                        "/ticket/**")
+                        "/ticket/**",
+                                "/Event/**",
+                                "/Event/details"
+                                )
                     .permitAll()
                     .anyRequest()
                     .authenticated())

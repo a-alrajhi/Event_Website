@@ -12,19 +12,13 @@
       <!-- Main content and sidebar -->
       <div class="flex flex-col lg:flex-row gap-6 mt-8">
         <div class="flex-1">
-          <EventMainContent
-            :title="eventDetailsFetched.name"
-            :subtitle="eventDetailsFetched.description"
-          />
+          <EventMainContent :title="eventDetailsFetched.name" :subtitle="eventDetailsFetched.description" />
           <EventRules :rules="eventDetailsFetched.rules" />
         </div>
 
-        <div class="w-full lg:w-1/3 px-3 py-12">
-          <EventSidebar
-            :startingPrice="eventDetailsFetched.startingPrice"
-            :slots="eventDetailsFetched.slots"
-            :ticketTypes="eventDetailsFetched.ticketInfo"
-          />
+        <div class="lg:w-[320px] xl:w-[400px] shrink-0 px-3 py-12">
+          <EventSidebar :startingPrice="eventDetailsFetched.startingPrice" :slots="eventDetailsFetched.slots"
+            :ticketTypes="eventDetailsFetched.ticketInfo" :eventId="eventDetailsFetched.id" />
         </div>
       </div>
 
@@ -35,10 +29,9 @@
 
       <!-- Similar Events -->
       <div class="mt-10">
-        <SimilarEvents
-          :categoryId="eventDetailsFetched.categoryId"
-          :curEventId="eventDetailsFetched.id"
-        />
+        <SimilarEvents v-if="eventDetailsFetched && eventDetailsFetched.categoryId"
+          :categoryId="eventDetailsFetched.categoryId" :curEventId="eventDetailsFetched.id" />
+
       </div>
     </div>
     <div v-else>

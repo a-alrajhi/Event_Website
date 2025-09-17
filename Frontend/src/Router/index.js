@@ -17,8 +17,8 @@ const routes = [
     meta: { requiresAuth: true }
   },
   // { path: "/", redirect: "/login" }
-  {path:"/event/:id", name:"EventDetails", component: EventDetailsPage},
-  {path:"/event/ticket-types/:eventId", name:"EventTicketTypes", component: EventTicketTypes},
+  // {path:"/event/:id", name:"EventDetails", component: EventDetailsPage},
+  // {path:"/event/ticket-types/:eventId", name:"EventTicketTypes", component: EventTicketTypes},
   {path: "/event/slots/:eventId", name: "EventSlots", component: EventSlots},
   { path: "/", redirect: "/login" },
 ];

@@ -7,12 +7,12 @@ const routes = [
   { path: "/login", name: "Login", component: AuthView },
   { path: "/register", name: "Register", component: AuthView },
   {
-    path: "/userProfile",
+    path: "/user-profile",
     name: "UserProfile",
     component: UserProfile,
     meta: { requiresAuth: true }
   },
-  { path: "/", redirect: "/login" }
+  // { path: "/", redirect: "/login" }
 ];
 
 const router = createRouter({

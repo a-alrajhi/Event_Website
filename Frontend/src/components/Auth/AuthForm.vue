@@ -76,8 +76,6 @@ const authUser = async () => {
   const uri = props.mode === "login" ? "/auth/login" : "/auth/register";
   try {
     await auth.authUser({ ...form.value }, uri);
-    auth.isLoggedIn = true;
-    router.push("/");
   } catch (error) {
     if (error.response?.status === 401) {
       errors.value.failure = error.response.data?.message || "Unauthorized";
@@ -101,7 +99,7 @@ watch(
 </script>
 <template>
   <div class="bg-primary/20 rounded-2xl shadow-md flex flex-col gap-2 p-4">
-    <form @submit.prevent="authUser" class="space-y-5 w-full max-w-md">
+    <form @submit.prevent="authUser" class="flex flex-col gap-3 w-full max-w-md">
       <AuthInput
         v-for="field in fields"
         :id="field"

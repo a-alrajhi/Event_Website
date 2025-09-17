@@ -12,7 +12,7 @@
       />
       <label :for="id">{{ label }}</label>
     </FloatLabel>
-    <p v-if="error" class="text-primary text-sm mt-1">
+    <p v-if="error" class="text-primary text-sm mt-5">
       {{ error }}
     </p>
   </div>

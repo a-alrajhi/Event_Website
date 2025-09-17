@@ -1,0 +1,230 @@
+.user-profile-page {
+    display: flex;
+    justify-content: flex-start; /* push content to the left */
+    align-items: flex-start;
+    padding: 20px;
+    max-width: 1200px; /* limit total page width */
+    margin: 20px auto;
+    gap: 30px;
+}
+
+/* Profile container (left side) */
+.profile-section {
+    width: 250px; /* fixed smaller width */
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Title */
+.profile-section .title,
+.bookmarks-section .title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.profile-section .title::after,
+.bookmarks-section .title::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: #4f46e5;
+    margin-top: 8px;
+    border-radius: 2px;
+}
+
+/* Form layout */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Input styling */
+.form-group input {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 10px;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    outline: none;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 4px;
+    display: block;
+    font-size: 14px;
+}
+
+/* Error message */
+.error-message {
+    color: #e11d48;
+    font-size: 13px;
+    text-align: left;
+    margin-top: -5px;
+}
+
+/* Submit Button */
+.button button {
+    width: 100%;
+    height: 35px;
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.button button:hover {
+    background: linear-gradient(90deg, #4338ca, #4f46e5);
+    transform: translateY(-1px);
+}
+
+.button button:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* --- Bookmarks Section (right side) --- */
+.bookmarks-section {
+    flex: 1;
+}
+
+/* Grid Layout */
+.bookmarks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+/* Card Styling */
+.bookmark-card {
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bookmark-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Image */
+.bookmark-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.bookmark-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Content */
+.bookmark-card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 14px 14px 6px;
+    color: #1f2937; /* dark gray */
+}
+
+.bookmark-card p {
+    font-size: 14px;
+    color: #6b7280; /* gray-500 */
+    margin: 0 14px 12px;
+    line-height: 1.4;
+}
+
+/* Actions */
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px 16px;
+    border-top: 1px solid #f1f1f1;
+    margin-top: auto;
+}
+
+/* Shared Button Styles */
+.card-actions button {
+    flex: 1;
+    border: none;
+    border-radius: 999px; /* pill shape */
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove Button */
+.remove-btn {
+    background: linear-gradient(90deg, #e11d48, #f43f5e);
+    color: #fff;
+}
+
+.remove-btn:hover {
+    background: linear-gradient(90deg, #be123c, #e11d48);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(225, 29, 72, 0.3);
+}
+
+/* Book Now Button */
+.booknow-btn {
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+    color: #fff;
+}
+
+.booknow-btn:hover {
+    background: linear-gradient(90deg, #4338ca, #4f46e5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .user-profile-page {
+        flex-direction: column;
+        max-width: 95%;
+    }
+    .profile-section {
+        width: 100%; /* expand profile section on small screens */
+    }
+}
+
+.no-bookmarks {
+    font-size: 16px;
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+}

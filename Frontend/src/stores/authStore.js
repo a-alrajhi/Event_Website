@@ -2,7 +2,7 @@ import router from "../Router";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosClient from "../apis/axiosClient";
-import { FormKey } from "vuetify/lib/composables/form.mjs";
+
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
@@ -23,7 +23,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     axiosClient.defaults.headers.common["Authorization"] =
-      `Bearer ${newAccess}`;
+        `Bearer ${newAccess}`;
   };
 
   const clearTokens = () => {
@@ -46,12 +46,30 @@ export const useAuthStore = defineStore("auth", () => {
 
     try {
       const res = await axiosClient.post(uri, form);
-      const { accessToken, refreshToken } = res.data;
-      setTokens(accessToken, refreshToken || null);
+      const { accessToken: newAccess, refreshToken: newRefresh } = res.data;
+      setTokens(newAccess, newRefresh || null);
       isLoggedIn.value = true;
+      router.push("/");
     } catch (err) {
       error.value = err.response?.data?.message || "Authentication failed";
       clearTokens();
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const getUser = async () => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      if (!isLoggedIn.value) return null;
+
+      const res = await axiosClient.get("/profile/");
+      return res.data;
+    } catch (err) {
+      error.value = err.response?.data?.message || "Failed to fetch user";
       throw err;
     } finally {
       loading.value = false;
@@ -63,10 +81,11 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = null;
 
     try {
+      if (!isLoggedIn.value) return "Update failed, User must be logged in";
       const res = await axiosClient.put("/profile/", form);
-      console.log(res.data);
+      return res.data;
     } catch (err) {
-      error.value = err.response?.data?.message || "Authentication failed";
+      error.value = err.response?.data?.message || "Update failed";
       throw err;
     } finally {
       loading.value = false;
@@ -74,18 +93,27 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const isTokenValid = () => {
-    if (!accessToken) return false;
+    if (!accessToken.value) return false;
     try {
-      const [, payloadBase64] = accessToken.split(".");
+      const [, payloadBase64] = accessToken.value.split(".");
       const payload = JSON.parse(atob(payloadBase64));
       const now = Math.floor(Date.now() / 1000);
 
       return payload.exp && payload.exp > now;
-    } catch (error) {
-      console.error("Invalid token:", error);
+    } catch (e) {
+      console.error("Invalid token:", e);
       return false;
     }
   };
 
-  return { isLoggedIn, error, loading, authUser, logout, isTokenValid, updateUser };
+  return {
+    isLoggedIn,
+    error,
+    loading,
+    authUser,
+    logout,
+    getUser,
+    updateUser,
+    isTokenValid,
+  };
 });

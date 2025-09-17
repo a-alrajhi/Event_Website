@@ -11,7 +11,7 @@ export async function getFullEventDetails(eventId) {
   // fetching all data in parallel
   const [eventDetails, ticketTypes, slots, location] = await Promise.all([
     getEventDetailsFromId(eventId),
-    getEventTicketTypesFromId(eventId),
+    getAllTicketTypesForEvent(eventId),
     getEventSlotsFromId(eventId),
     getEventLocationFromId(eventId),
   ]);
@@ -40,7 +40,7 @@ export async function getEventDetailsFromId(eventId) {
  * Getting event tickets from event id
  * @param {*} eventId event id
  */
-export async function getEventTicketTypesFromId(eventId) {
+export async function getAllTicketTypesForEvent(eventId) {
   const resp = await apis.get(`/ticket-type/event/${eventId}`);
   return resp.data;
 }

@@ -55,10 +55,16 @@ public class SecurityConfig {
                         "/Event/**",
                         "/profile/",
                         "/classes/**",
+                        "/capacities/**",
                         "/api-docs/**",
                         "/swagger-ui/**",
                         "/ticket-type/**",
-                        "/ticket/**")
+                        "/slots/**",
+                        "/category/**",
+                        "/ticket/**",
+                                "/Event/**",
+                                "/Event/details"
+                                )
                     .permitAll()
                     .anyRequest()
                     .authenticated())

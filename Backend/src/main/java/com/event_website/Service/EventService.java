@@ -1,21 +1,29 @@
 package com.event_website.Service;
 
+import com.event_website.Dto.EventDtoDetalis;
 import com.event_website.Entity.Event;
+import com.event_website.Entity.TicketType;
 import com.event_website.Repository.EventRepo;
+import com.event_website.Repository.TicketTypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @Service
 @RequiredArgsConstructor
 public class EventService {
 
     private final EventRepo eventRepo;
+    private final SlotTicketTypeCapacityService slotCapacityService;
 
 
     public Event save(Event event) {
@@ -62,5 +70,47 @@ public class EventService {
         }
 
         return eventRepo.findAll(pageable);
+    }
+
+    public EventDtoDetalis getEventDetails(Integer eventId) {
+        Event event = eventRepo.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        List<TicketType> ticketTypes = slotCapacityService.getTicketTypesByEventId(eventId);
+
+        List<java.math.BigDecimal> prices = ticketTypes.stream()
+                .map(TicketType::getPrice)
+                .collect(Collectors.toList());
+
+        return new EventDtoDetalis(
+                event.getId(),
+                event.getName(),
+                event.getDescription(),
+                event.getPhotoUrl(),
+                event.getCategory() != null ? event.getCategory().getName() : null,
+                prices
+        );
+    }
+
+    public Page<EventDtoDetalis> getAllEventDetails(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return eventRepo.findAll(pageable)
+                .map(event -> {
+                    List<BigDecimal> prices = slotCapacityService.getTicketTypesByEventId(event.getId())
+                            .stream()
+                            .map(TicketType::getPrice)
+                            .collect(Collectors.toList());
+
+                    return new EventDtoDetalis(
+                            event.getId(),
+                            event.getName(),
+                            event.getDescription(),
+                           event.getPhotoUrl(),
+
+                    event.getCategory() != null ? event.getCategory().getName() : null,
+                            prices
+                    );
+                });
     }
 }

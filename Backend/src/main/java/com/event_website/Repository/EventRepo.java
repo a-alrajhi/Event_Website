@@ -27,4 +27,5 @@ public interface EventRepo extends JpaRepository<Event, Integer> {
 
     long count();
 
+  List<Event> findByCategoryId(Integer categoryId);
 }

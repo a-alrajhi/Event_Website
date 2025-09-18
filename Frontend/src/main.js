@@ -6,12 +6,8 @@ import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 import router from "./Router";
 import { createI18n } from "vue-i18n";
-import "primeicons/primeicons.css";
-
-
 import { createPinia } from "pinia";
 import { messages, defaultLocale } from "./locales";
-
 
 const i18n = createI18n({
   locale: defaultLocale,

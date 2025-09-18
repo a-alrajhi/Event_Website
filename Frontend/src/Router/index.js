@@ -5,15 +5,16 @@ import AuthView from "../Pages/Auth.vue";
 import EventDetailsPage from "../Pages/EventDetailsPage.vue";
 import EventTicketTypes from "../components/Event/EventTicketTypes.vue";
 import EventSlots from "../components/Event/EventSlots.vue";
+import Dashboard from "../Pages/Dashboard.vue";
 
 
 const routes = [
-  { path: "/login", name: "Login", component: AuthView },
-  { path: "/register", name: "Register", component: AuthView },
+  // { path: "/login", name: "Login", component: AuthView },
+  // { path: "/register", name: "Register", component: AuthView },
   {path:"/event/:id", name:"EventDetails", component: EventDetailsPage},
   {path:"/event/ticket-types/:eventId", name:"EventTicketTypes", component: EventTicketTypes},
   {path: "/event/slots/:eventId", name: "EventSlots", component: EventSlots},
-  { path: "/", redirect: "/login" },
+  { path: "/", component: Dashboard },
 ];
 
 const router = createRouter({

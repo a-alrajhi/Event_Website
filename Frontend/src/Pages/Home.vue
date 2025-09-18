@@ -55,8 +55,7 @@
       </div>
     </section>
 
-    <!-- Slider Section -->
-    <SliderSection />
+ 
 
     <!-- Best Events Section -->
     <h2 class="text-3xl font-bold text-center text-[var(--color-primary)] drop-shadow-[0_0_10px_var(--color-primary)]">
@@ -64,7 +63,7 @@
     </h2>
     <div class="px-6">
       <EnhancedEventCard />
-\    
+   
     </div>
 
     <!-- Similar Events Section -->
@@ -105,7 +104,6 @@ import { ref } from 'vue';
 import Navbar from '../components/Navbar/Navbar.vue';
 import AppFooter from '../components/AppFooter/AppFooter.vue';
 import EnhancedEventCard from '../components/Cards/EnhancedEventCard.vue';
-import SliderSection from '../components/Cards/SliderSection.vue';
 import { Calendar, MapPin, Ticket } from 'lucide-vue-next';
 
 const cards = ref([

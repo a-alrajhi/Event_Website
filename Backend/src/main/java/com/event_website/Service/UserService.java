@@ -62,6 +62,7 @@ public class UserService {
         if(!userRepository.existsById(user.getId())) {
             throw new ResourceNotFoundException("User not found");
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

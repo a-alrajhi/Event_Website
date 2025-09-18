@@ -56,8 +56,8 @@ const next = async () => {
   } else {
     try {
       await saveFunction.value();
-      dialogVisible.value = false;
       currentIndex.value = 0;
+      dialogVisible.value = false;
     } catch (error) {
       console.error("Save failed:", error);
     }
@@ -65,8 +65,8 @@ const next = async () => {
 };
 
 const cancel = () => {
-  dialogVisible.value = false;
   currentIndex.value = 0;
+  dialogVisible.value = false;
 };
 
 const back = () => {

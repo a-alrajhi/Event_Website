@@ -134,4 +134,21 @@ public class EventController {
         CreateCompositeEventDTO dto = compositeEventService.createCompositeEvent(request);
         return ResponseEntity.ok(dto);
     }
+
+    @LogRequest(description = "Load Composite Event")
+    @GetMapping("/get-composite/{id}")
+    public ResponseEntity<CompositeCreateEvent> getComposite(@PathVariable int id) {
+        CompositeCreateEvent dto = compositeEventService.getComposite(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @LogRequest(description = "Update Composite Event")
+    @PutMapping("/update-composite/{id}")
+    public ResponseEntity<CompositeCreateEvent> updateComposite(
+            @PathVariable int id,
+            @RequestBody CompositeCreateEvent request
+    ) {
+        CompositeCreateEvent dto = compositeEventService.updateCompositeEvent(id, request);
+        return ResponseEntity.ok(dto);
+    }
 }

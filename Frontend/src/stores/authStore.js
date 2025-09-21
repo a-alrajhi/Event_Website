@@ -12,6 +12,7 @@ export const useAuthStore = defineStore("auth", () => {
   const isLoggedIn = ref(!!accessToken.value);
   const error = ref(null);
   const loading = ref(false);
+  const userData = ref(null); // Store user data here
 
   const setTokens = (newAccess, newRefresh) => {
     accessToken.value = newAccess;
@@ -59,6 +60,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  // Fetch user data from API
   const getUser = async () => {
     loading.value = true;
     error.value = null;
@@ -67,6 +69,7 @@ export const useAuthStore = defineStore("auth", () => {
       if (!isLoggedIn.value) return null;
 
       const res = await axiosClient.get("/profile/");
+      userData.value = res.data;  // Store user data in userData
       return res.data;
     } catch (err) {
       error.value = err.response?.data?.message || "Failed to fetch user";
@@ -76,13 +79,17 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  // Update user data (with current password verification)
   const updateUser = async (form) => {
     loading.value = true;
     error.value = null;
 
     try {
       if (!isLoggedIn.value) return "Update failed, User must be logged in";
+
+      // Add current password to form to verify it in the backend
       const res = await axiosClient.put("/profile/", form);
+      userData.value = res.data; // Update local user data
       return res.data;
     } catch (err) {
       error.value = err.response?.data?.message || "Update failed";
@@ -115,5 +122,6 @@ export const useAuthStore = defineStore("auth", () => {
     getUser,
     updateUser,
     isTokenValid,
+    userData,
   };
 });

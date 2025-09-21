@@ -1,42 +1,54 @@
 <template>
   <div class="form-group">
-    <label :for="id">{{ label }}</label>
+    <label :for="id" class="label">{{ label }}</label>
     <input
-        :id="id"
-        :type="type"
-        :placeholder="placeholder"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        :required="required"
-        :minlength="minlength"
+        v-bind="$attrs"
+    :value="modelValue"
+    @input="updateValue"
+    :type="type || 'text'"
+    :placeholder="placeholder"
+    :id="id"
+    class="input"
     />
   </div>
 </template>
 
 <script setup>
-defineProps({
-  id: { type: String, required: true },
-  label: { type: String, required: true },
-  type: { type: String, default: "text" },
-  placeholder: { type: String, default: "" },
-  required: { type: Boolean, default: false },
-  minlength: { type: Number, default: null },
-  modelValue: { type: String, default: "" },
+import { defineProps, defineEmits } from "vue";
+
+const props = defineProps({
+  id: String,
+  label: String,
+  placeholder: String,
+  type: {
+    type: String,
+    default: "text",
+  },
+  modelValue: String,  // Prop for modelValue to enable v-model functionality
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);  // Emit the update:modelValue event
+
+// Method to emit the updated value to the parent component
+const updateValue = (event) => {
+  emit("update:modelValue", event.target.value);  // Emit the updated value from the input
+};
 </script>
 
 <style scoped>
-.form-group {
-  margin-bottom: 1rem;
-}
-label {
-  display: block;
-  margin-bottom: 0.25rem;
-}
-input {
+.input {
   width: 100%;
-  padding: 0.5rem;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 </style>

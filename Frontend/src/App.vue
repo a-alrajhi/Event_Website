@@ -1,7 +1,7 @@
 <script setup>
-import Dashboard   from "./Pages/Dashboard.vue";
 import LeafletMap from "./components/Map/LeafletMap.vue";
-
+import EventLocationMap from "./components/Event/EventLocationMap.vue";
+import EventDetailsPage from "./Pages/EventDetailsPage.vue";
 </script>
 
 
@@ -9,8 +9,10 @@ import LeafletMap from "./components/Map/LeafletMap.vue";
   <div class="min-h-screen flex flex-col">
     <main class="flex-grow">
      <router-view />
+<!--
      <Dashboard />
-      <leafletMap />
+-->
+<!--      <leafletMap />-->
 
     </main>
   </div>

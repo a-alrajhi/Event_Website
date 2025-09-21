@@ -1,5 +1,7 @@
 <script setup>
-import Dashboard from "./Pages/Dashboard.vue";
+// import Home from './Pages/Home.vue';
+ import EventBrowse from './Pages/EventBrowse.vue';
+
 </script>
 
 
@@ -7,7 +9,9 @@ import Dashboard from "./Pages/Dashboard.vue";
   <div class="min-h-screen flex flex-col">
     <main class="flex-grow">
       <router-view />
-      <!-- <Dashboard /> -->
+       <!-- <Home/> -->
+        <EventBrowse/>
+      
 
     </main>
   </div>

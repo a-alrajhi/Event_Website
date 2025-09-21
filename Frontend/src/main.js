@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import App from "./App.vue";
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
-import router from "./Router";
+import router from "./Router/index";
 import { createI18n } from "vue-i18n";
 import { createPinia } from "pinia";
 import { messages, defaultLocale } from "./locales";

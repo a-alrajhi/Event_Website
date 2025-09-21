@@ -1,8 +1,22 @@
 <!-- src/components/EnhancedEventCard.vue -->
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Loading State -->
+  <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div v-for="i in 6" :key="i" class="bg-[var(--color-card)] rounded-xl shadow-lg animate-pulse">
+      <div class="w-full h-48 bg-[var(--color-bg)] rounded-t-xl"></div>
+      <div class="p-4 space-y-3">
+        <div class="h-4 bg-[var(--color-bg)] rounded w-3/4"></div>
+        <div class="h-3 bg-[var(--color-bg)] rounded w-1/2"></div>
+        <div class="h-3 bg-[var(--color-bg)] rounded w-full"></div>
+        <div class="h-8 bg-[var(--color-bg)] rounded"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Events Grid -->
+  <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div
-      v-for="event in filteredEvents"
+      v-for="event in events"
       :key="event.id"
       class="bg-[var(--color-card)] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] relative overflow-hidden group"
     >
@@ -12,6 +26,7 @@
           :src="event.image"
           :alt="event.title"
           class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+          @error="handleImageError"
         />
         
         <!-- Overlay with quick actions -->
@@ -42,8 +57,13 @@
         </button>
 
         <!-- Price Badge -->
-        <div class="absolute top-3 left-3 bg-[var(--color-primary)] px-2 py-1 rounded-full text-sm font-bold text-[var(--color-text)]">
+        <div class="absolute top-3 left-3 bg-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-bold text-[var(--color-text)] shadow-lg">
           {{ event.price === 0 ? 'FREE' : `SAR ${event.price}` }}
+        </div>
+
+        <!-- Category Badge -->
+        <div v-if="event.category" class="absolute bottom-3 right-3 bg-[var(--color-secondary)]/90 px-2 py-1 rounded-full text-xs font-medium text-[var(--color-text)]">
+          {{ event.category }}
         </div>
 
         <!-- Urgency Indicator -->
@@ -56,10 +76,10 @@
       <div class="p-4">
         <!-- Event Title & Rating -->
         <div class="flex justify-between items-start mb-2">
-          <h3 class="text-lg font-semibold text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors">
+          <h3 class="text-lg font-semibold text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors line-clamp-1">
             {{ event.title }}
           </h3>
-          <div v-if="event.rating" class="flex items-center gap-1 text-sm">
+          <div v-if="event.rating" class="flex items-center gap-1 text-sm ml-2 flex-shrink-0">
             <Star class="w-4 h-4 fill-[var(--color-primary)] text-[var(--color-primary)]" />
             <span class="text-[var(--color-gray)]">{{ event.rating }}</span>
           </div>
@@ -68,19 +88,19 @@
         <!-- Event Details -->
         <div class="space-y-2 mb-3">
           <div class="flex items-center gap-2 text-sm text-[var(--color-gray)]">
-            <Calendar class="w-4 h-4 text-[var(--color-primary)]" />
+            <Calendar class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0" />
             <span>{{ formatDate(event.date) }}</span>
-            <Clock class="w-4 h-4 text-[var(--color-primary)] ml-2" />
+            <Clock class="w-4 h-4 text-[var(--color-primary)] ml-2 flex-shrink-0" />
             <span>{{ event.time }}</span>
           </div>
           
           <div class="flex items-center gap-2 text-sm text-[var(--color-gray)]">
-            <MapPin class="w-4 h-4 text-[var(--color-primary)]" />
-            <span>{{ event.venue }}</span>
+            <MapPin class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0" />
+            <span class="truncate">{{ event.venue }}</span>
           </div>
 
           <div class="flex items-center gap-2 text-sm text-[var(--color-gray)]">
-            <Users class="w-4 h-4 text-[var(--color-primary)]" />
+            <Users class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0" />
             <span>{{ event.attendees || 0 }} attending</span>
           </div>
         </div>
@@ -90,7 +110,12 @@
 
         <!-- Organizer Info -->
         <div v-if="event.organizer" class="flex items-center gap-2 mb-3 text-xs text-[var(--color-gray)]">
-          <img :src="event.organizer.avatar" :alt="event.organizer.name" class="w-5 h-5 rounded-full" />
+          <img 
+            :src="event.organizer.avatar" 
+            :alt="event.organizer.name" 
+            class="w-5 h-5 rounded-full"
+            @error="handleAvatarError"
+          />
           <span>by {{ event.organizer.name }}</span>
           <div v-if="event.organizer.verified" class="bg-blue-500 rounded-full p-0.5">
             <Check class="w-2.5 h-2.5 text-[var(--color-text)]" />
@@ -115,6 +140,7 @@
           <button
             @click="shareEvent(event)"
             class="p-2 border border-[var(--color-gray)]/30 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
+            :title="`Share ${event.title}`"
           >
             <Share2 class="w-4 h-4 text-[var(--color-text)]" />
           </button>
@@ -125,31 +151,41 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref } from 'vue';
 import { Heart, Share2, MapPin, Calendar, Clock, Users, Star, Check } from 'lucide-vue-next';
-import { getEvents } from '../../apis/EventDetalisApi';
 
-const events = ref([]);
+// Props
+const props = defineProps({
+  events: {
+    type: Array,
+    default: () => []
+  },
+  isLoading: {
+    type: Boolean,
+    default: false
+  }
+});
+
+// State
 const savedEvents = ref([]);
 
-onMounted(async () => {
-  const fetchedEvents = await getEvents();
-  events.value = fetchedEvents.map(event => ({
-    ...event,
-    date: event.date || '2025-10-15',
-    time: event.time || 'TBD',
-    venue: event.venue || 'Saudi Arabia',
-    rating: event.rating || 4.5,
-    attendees: event.attendees || 100,
-    spotsLeft: event.spotsLeft || 50,
-  }));
-});
+// Emits
+const emit = defineEmits(['quick-book', 'view-details', 'book-now', 'toggle-save', 'clear-filters']);
 
-const filteredEvents = computed(() => {
-  return events.value;
-});
-
-const emit = defineEmits(['quick-book', 'view-details', 'book-now', 'toggle-save']);
+// Methods
+const formatDate = (date) => {
+  if (!date) return 'TBD';
+  
+  try {
+    return new Date(date).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short',
+    });
+  } catch {
+    return 'TBD';
+  }
+};
 
 const toggleSaved = (event) => {
   const isSaved = savedEvents.value.includes(event.id);
@@ -160,32 +196,15 @@ const toggleSaved = (event) => {
   }
   emit('toggle-save', { event, saved: !isSaved });
 };
-
-const shareEvent = (event) => {
-  if (navigator.share) {
-    navigator.share({
-      title: event.title,
-      text: event.description,
-      url: window.location.href,
-    });
-  } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert('Link copied to clipboard!');
-  }
-};
-
-const formatDate = (date) => {
-  return date
-    ? new Date(date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        weekday: 'short',
-      })
-    : 'TBD';
-};
 </script>
 
-<style >
+<style scoped>
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .line-clamp-2 {
   display: -webkit-box;
@@ -194,3 +213,4 @@ const formatDate = (date) => {
   overflow: hidden;
 }
 </style>
+

@@ -86,11 +86,19 @@
           <h2 class="text-lg font-semibold text-[var(--color-text)]">Filters</h2>
         </div>
 
-        <div class="flex-1 px-6 py-6 space-y-8">
+        <div class="flex-1 px-6 py-6 space-y-8 overflow-y-auto">
           
+          <!-- Loading State -->
+          <div v-if="isLoading" class="flex items-center justify-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary)]"></div>
+          </div>
+
           <!-- Categories -->
-          <div class="space-y-4">
-            <h3 class="text-sm font-semibold text-[var(--color-text)] uppercase tracking-wider">Categories</h3>
+          <div v-if="!isLoading" class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-semibold text-[var(--color-text)] uppercase tracking-wider">Categories</h3>
+              <span class="text-xs text-[var(--color-gray)]">{{ sidebarCategories.length }} found</span>
+            </div>
             <div class="space-y-2">
               <div v-for="cat in sidebarCategories" :key="cat" class="group">
                 <label class="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--color-primary)]/8 cursor-pointer transition-colors">
@@ -103,30 +111,71 @@
                   <span class="text-sm font-medium text-[var(--color-text)] group-hover:text-[var(--color-primary)]">
                     {{ cat }}
                   </span>
+                  <!-- Event count per category -->
+                  <span class="text-xs text-[var(--color-gray)] ml-auto">
+                    {{ getCategoryCount(cat) }}
+                  </span>
                 </label>
               </div>
             </div>
           </div>
 
           <!-- Price Range -->
-          <div class="space-y-4">
-            <h3 class="text-sm font-semibold text-[var(--color-text)] uppercase tracking-wider">Price Range</h3>
-            <div class="p-4 rounded-xl">
-              <Slider v-model="price" :min="0" :max="200" class="w-full mb-4" />
+          <div v-if="!isLoading && priceRange.max > 0" class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-semibold text-[var(--color-text)] uppercase tracking-wider">Price Range</h3>
+              <span class="text-xs text-[var(--color-primary)] font-medium">
+                {{ currentPrice === 0 ? 'All Prices' : `SAR ${currentPrice}` }}
+              </span>
+            </div>
+            <div class="p-4 rounded-xl bg-[var(--color-bg)]/50">
+              <Slider 
+                v-model="currentPrice" 
+                :min="priceRange.min" 
+                :max="priceRange.max" 
+                class="w-full mb-4" 
+              />
               <div class="flex justify-between items-center text-sm">
-                <span class="text-[var(--color-gray)]">SAR 0</span>
-                <span class="font-medium text-[var(--color-primary)]">SAR {{ price }}</span>
-                <span class="text-[var(--color-gray)]">SAR 200+</span>
+                <span class="text-[var(--color-gray)]">SAR 0 (All)</span>
+                <span class="font-medium text-[var(--color-primary)]">
+                  {{ currentPrice === 0 ? 'All Prices' : `SAR ${currentPrice}` }}
+                </span>
+                <span class="text-[var(--color-gray)]">SAR 1500</span>
+              </div>
+              <div class="mt-2 text-xs text-[var(--color-gray)] text-center">
+                {{ getFilteredByPriceCount() }} events 
+                {{ currentPrice === 0 ? 'shown (all price ranges)' : `under SAR ${currentPrice}` }}
               </div>
             </div>
           </div>
+
 
         </div>
       </aside>
 
       <!-- Main Content -->
       <main class="flex-1 ml-0 sm:ml-64 p-6">
-        <EnhancedEventCard />
+        <!-- Results Summary -->
+        <div v-if="!isLoading" class="mb-6 flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-[var(--color-text)]">Events in Saudi Arabia</h1>
+            <p class="text-[var(--color-gray)] mt-1">
+              {{ filteredEvents.length }} events found
+              <span v-if="selectedCategories.length > 0 || currentPrice > 0">
+                (filtered)
+              </span>
+            </p>
+          </div>
+          <div class="text-sm text-[var(--color-gray)]">
+            Price range: SAR {{ priceRange.min }} - SAR {{ priceRange.max }}
+          </div>
+        </div>
+
+        <EnhancedEventCard 
+          :events="filteredEvents" 
+          :is-loading="isLoading"
+        />
+
       </main>
     </div>
   </div>
@@ -135,11 +184,11 @@
 <script setup>
 import SearchBar from "../components/SearchBar/SearchBar.vue";
 import EnhancedEventCard from "../components/Cards/EnhancedEventCard.vue";
-import { Music, Home, Star, Calendar, Users, MapPin, Ticket } from "lucide-vue-next";
+import { Music, Home, Star, Calendar, Users, MapPin, Ticket, X } from "lucide-vue-next";
 import Slider from "primevue/slider";
 import Checkbox from "primevue/checkbox";
 import { ref, computed, onMounted } from "vue";
-import { getEvents } from "../apis/EventDetalisApi";
+import { getEvents, getCategories, getPriceRange } from "../apis/EventDetalisApi";
 
 const horizontalCategories = [
   { name: 'Home', icon: Home },
@@ -150,21 +199,67 @@ const horizontalCategories = [
   { name: 'Tickets', icon: Ticket },
 ];
 
-const sidebarCategories = ["Sport", "Art", "Music", "Food", "Film", "Books", "Tech"];
-
+const sidebarCategories = ref([]);
 const selectedCategories = ref([]);
-const price = ref(30);
+const priceRange = ref({ min: 0, max: 1500 });
+const currentPrice = ref(0); 
 const events = ref([]);
+const isLoading = ref(true);
 
-const fetchEvents = async () => { events.value = await getEvents(); };
-onMounted(() => { fetchEvents(); });
+const fetchData = async () => {
+  try {
+    isLoading.value = true;
+    
+    // Fetch all data in parallel
+    const [eventsData, categoriesData, priceRangeData] = await Promise.all([
+      getEvents(),
+      getCategories(),
+      getPriceRange()
+    ]);
 
-const filteredEvents = computed(() =>
-  events.value.filter(
-    e => (selectedCategories.value.length === 0 || selectedCategories.value.includes(e.category)) &&
-         e.price <= price.value
-  )
-);
+    events.value = eventsData;
+    sidebarCategories.value = categoriesData;
+    priceRange.value = priceRangeData;
+    currentPrice.value = 0; 
+    
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchData();
+});
+
+const filteredEvents = computed(() => {
+  return events.value.filter(event => {
+    // Category filter
+    const categoryMatch = selectedCategories.value.length === 0 || 
+                         selectedCategories.value.includes(event.category);
+    
+ 
+    const priceMatch = currentPrice.value === 0 || event.price <= currentPrice.value;
+    
+    return categoryMatch && priceMatch;
+  });
+});
+
+
+const getCategoryCount = (category) => {
+  return events.value.filter(event => event.category === category).length;
+};
+
+const getFilteredByPriceCount = () => {
+  if (currentPrice.value === 0) {
+    return events.value.length;
+  }
+  return events.value.filter(event => event.price <= currentPrice.value).length;
+};
+
+
+
 
 </script>
 

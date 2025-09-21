@@ -1,11 +1,18 @@
 <script setup>
 import { FloatLabel, InputText, InputNumber } from "primevue";
-import { watch, ref } from "vue";
+import { watch, ref, onMounted } from "vue";
 import { useCreateTTStore } from "../../stores/createTTStore";
 
 const ttName = ref("");
 const ttPrice = ref(0);
 const createTTStore = useCreateTTStore();
+
+onMounted(() => {
+  if (createTTStore.isEditMode) {
+    ttName.value = createTTStore.name;
+    ttPrice.value = createTTStore.price;
+  }
+});
 
 watch([ttName, ttPrice], ([name, price]) => {
   createTTStore.price = price;

@@ -8,6 +8,7 @@ import Sidebar from "../components/Admin/AdminSidebar.vue";
 import UserManagement from "../Pages/UserManagement.vue";
 import Dashboard from "../Pages/Dashboard.vue";
 import EventManagement from "../Pages/EventManagement.vue";
+import AdminStats from "../Pages/AdminStats.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Dashboard },
@@ -20,6 +21,11 @@ const routes = [
     path: "/admin/resources",
     name: "Resource Management",
     component: EventManagement,
+  },
+  {
+    path: "/admin/statistics",
+    name: "Admin Statistics",
+    component: AdminStats,
   },
 ];
 

@@ -2,6 +2,7 @@ package com.event_website.Service;
 
 import com.event_website.Dto.*;
 import com.event_website.Entity.*;
+import com.event_website.Repository.EventRepo;
 import com.event_website.Request.CompositeCreateCapacity;
 import com.event_website.Request.CompositeCreateEvent;
 import com.event_website.Request.CreateCategoryRequest;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,8 @@ public class CompositeEventService {
     private final SlotTicketTypeCapacityService slotTicketTypeCapacityService;
     @Autowired
     private TicketTypeService ticketTypeService;
+    @Autowired
+    private EventRepo eventRepo;
 
     public CreateCompositeEventDTO createCompositeEvent(CompositeCreateEvent request) {
         // Handle category
@@ -244,4 +248,25 @@ public class CompositeEventService {
         return dto;
     }
 
+    public List<DetailedEventDto> getAllComposite() {
+        List<Event> events = eventRepo.findAll();
+
+        return events.stream().map((event) -> {
+            DetailedEventDto dto = new DetailedEventDto();
+            dto.setEvent(EventDto.fromEntity(event));
+            dto.setSlots(slotService.findByEventId(event.getId()).stream().map(SlotDTO::fromEntity).toList());
+            dto.setLocation(event.getLocation().getName());
+            dto.setCategory(event.getCategory().getName());
+            dto.setPrice(
+                    dto.getSlots().stream()
+                            .flatMap(slotDTO ->
+                                    slotTicketTypeCapacityService.getBySlotId(slotDTO.getId()).stream()
+                                            .map(capacity -> capacity.getTicketType().getPrice())
+                            )
+                            .min(BigDecimal::compareTo)
+                            .orElse(null) // or throw, or a default value
+            );
+            return dto;
+        }).toList();
+    }
 }

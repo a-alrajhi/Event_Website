@@ -28,8 +28,8 @@ export const useCreateEventStore = defineStore("createEvent", () => {
   };
 
   const fetchEvents = async () => {
-    const res = await axiosClient.get("/Event");
-    events.value = res.data.content;
+    const res = await axiosClient.get("/Event/get-composite");
+    events.value = res.data;
   };
 
   const reset = () => {
@@ -65,8 +65,9 @@ export const useCreateEventStore = defineStore("createEvent", () => {
     if (!isValid) return;
     loading.value = true;
     const request = await buildEventObject();
-    const res = axiosClient.post("/Event/create-composite", request);
-    console.log(res.data);
+    const res = await axiosClient.post("/Event/create-composite", request);
+    const createdEvent = res.data.event;
+    events.value.push(createdEvent);
     loading.value = false;
     reset();
   };
@@ -140,6 +141,7 @@ export const useCreateEventStore = defineStore("createEvent", () => {
   const deleteEvent = async (id) => {
     try {
       await axiosClient.delete(`/Event/${id}`);
+      events.value = events.value.filter((event) => event.id !== id);
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -240,6 +242,18 @@ export const useCreateEventStore = defineStore("createEvent", () => {
         `/Event/update-composite/${id}`,
         request
       );
+
+      const updatedEvent = res.data.event;
+
+      const index = events.value.findIndex(
+        (event) => event.id === updatedEvent.id
+      );
+      if (index !== -1) {
+        events.value[index] = updatedEvent;
+      } else {
+        events.value.push(updatedEvent);
+      }
+
       return res.data;
     } catch (err) {
       console.error("Composite update failed:", err);

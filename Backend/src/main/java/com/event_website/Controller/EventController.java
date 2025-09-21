@@ -151,4 +151,10 @@ public class EventController {
         CompositeCreateEvent dto = compositeEventService.updateCompositeEvent(id, request);
         return ResponseEntity.ok(dto);
     }
+    @LogRequest(description = "get all Events composite")
+    @GetMapping("/get-composite")
+    public ResponseEntity<List<DetailedEventDto>> getAllComposite() {
+        List<DetailedEventDto> dto = compositeEventService.getAllComposite();
+        return ResponseEntity.ok(dto);
+    }
 }

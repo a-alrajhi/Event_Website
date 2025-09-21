@@ -1,11 +1,22 @@
 <template>
   <!-- Navbar -->
-  <nav class="bg-[var(--color-bg)] border-b border-gray-800 text-[var(--color-text)] shadow-md">
-    <div class="max-w-screen-xl flex flex-col sm:flex-row sm:items-center justify-between mx-auto p-4 gap-4">
+  <nav
+    class="bg-[var(--color-bg)] border-b border-gray-800 text-[var(--color-text)] shadow-md"
+  >
+    <div
+      class="max-w-screen-xl flex flex-col sm:flex-row sm:items-center justify-between mx-auto p-4 gap-4"
+    >
       <!-- Logo -->
       <a href="/" class="flex items-center space-x-3">
-        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Logo" />
-        <span class="text-xl md:text-2xl font-bold text-[var(--color-primary)] drop-shadow-md">EventApp</span>
+        <img
+          src="https://flowbite.com/docs/images/logo.svg"
+          class="h-8"
+          alt="Logo"
+        />
+        <span
+          class="text-xl md:text-2xl font-bold text-[var(--color-primary)] drop-shadow-md"
+          >EventApp</span
+        >
       </a>
 
       <!-- Right Side: Search + Profile Photo -->
@@ -36,15 +47,28 @@
       :key="index"
       class="flex flex-col items-center cursor-pointer transition text-[var(--color-text)] hover:text-[var(--color-primary)] min-w-[70px]"
     >
-      <component :is="category.icon" class="w-6 h-6 mb-1 text-[var(--color-primary)] drop-shadow-md" />
-      <span class="text-xs sm:text-sm font-medium text-center">{{ category.name }}</span>
+      <component
+        :is="category.icon"
+        class="w-6 h-6 mb-1 text-[var(--color-primary)] drop-shadow-md"
+      />
+      <span class="text-xs sm:text-sm font-medium text-center">{{
+        category.name
+      }}</span>
     </div>
   </section>
 </template>
 
 <script>
 import SearchBar from "../SearchBar/SearchBar.vue";
-import { Music, Home, Star, Calendar, Users, MapPin, Ticket } from "lucide-vue-next";
+import {
+  Music,
+  Home,
+  Star,
+  Calendar,
+  Users,
+  MapPin,
+  Ticket,
+} from "lucide-vue-next";
 
 export default {
   name: "Navbar",
@@ -52,13 +76,13 @@ export default {
   data() {
     return {
       categories: [
-        { name: 'Home', icon: Home },
-        { name: 'Music', icon: Music },
-        { name: 'Stars', icon: Star },
-        { name: 'Events', icon: Calendar },
-        { name: 'Community', icon: Users },
-        { name: 'Locations', icon: MapPin },
-        { name: 'Tickets', icon: Ticket },
+        { name: "Home", icon: Home },
+        { name: "Music", icon: Music },
+        { name: "Stars", icon: Star },
+        { name: "Events", icon: Calendar },
+        { name: "Community", icon: Users },
+        { name: "Locations", icon: MapPin },
+        { name: "Tickets", icon: Ticket },
       ],
     };
   },
@@ -67,6 +91,11 @@ export default {
 
 <style scoped>
 /* Hide horizontal scrollbar */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 </style>

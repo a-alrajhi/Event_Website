@@ -1,19 +1,17 @@
 <script setup>
-import LeafletMap from "./components/Map/LeafletMap.vue";
-import EventLocationMap from "./components/Event/EventLocationMap.vue";
-import EventDetailsPage from "./Pages/EventDetailsPage.vue";
-</script>
+import AdminLayoutWrapper from "./components/Admin/AdminLayoutWrapper.vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+</script>
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <main class="flex-grow">
-     <router-view />
-<!--
-     <Dashboard />
--->
-<!--      <leafletMap />-->
-
+    <div v-if="route.fullPath.includes('/admin')">
+      <AdminLayoutWrapper />
+    </div>
+    <main class="flex-grow" v-else>
+      <router-view />
     </main>
   </div>
 </template>

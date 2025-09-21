@@ -59,6 +59,18 @@ public class SlotTicketTypeCapacityService {
         return capacityRepo.findBySlot_IdAndTicketType_Id(slotId, ticketTypeId);
     }
 
+    public SlotTicketTypeCapacity save(SlotTicketTypeCapacity capacity) {
+        return capacityRepo.save(capacity);
+    }
+
+    public void deleteById(Integer id) {
+        capacityRepo.deleteById(id);
+    }
+
+    public void deleteBySlotId(Integer id) {
+        capacityRepo.deleteAllBySlot_Id(id);
+    }
+
 
     public List<TicketType> getTicketTypesByEventId(Integer eventId) {
 

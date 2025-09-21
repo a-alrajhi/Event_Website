@@ -25,4 +25,6 @@ public interface SlotTicketTypeCapacityRepo extends JpaRepository<SlotTicketType
         JOIN TicketType tt ON tt.id = sttc.ticketType.id
     """)
     BigDecimal getTotalRevenue();
+
+    void deleteAllBySlot_Id(Integer slotId);
 }

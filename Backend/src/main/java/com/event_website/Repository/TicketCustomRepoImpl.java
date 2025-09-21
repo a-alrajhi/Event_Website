@@ -20,12 +20,12 @@ public class TicketCustomRepoImpl implements TicketCustomRepo {
     @Override
     public List<EventStatDTO> findTopEventsBySales(Pageable pageable) {
         String sql = """
-            SELECT 
+            SELECT
                 e.id AS event_id,
                 e.name AS name,
                 COUNT(t.id) AS tickets_sold,
-                COALESCE(SUM(tt.price), 0) AS revenue,
-                CASE 
+                COALESCE(SUM(tt.price) FILTER (WHERE t.id IS NOT NULL), 0) AS revenue,
+                CASE
                     WHEN COUNT(t.id) = 0 THEN 0
                     ELSE ROUND(SUM(CASE WHEN t.checked_in THEN 1 ELSE 0 END)::decimal / COUNT(t.id) * 100, 2)
                 END AS check_in_rate

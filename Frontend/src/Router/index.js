@@ -4,15 +4,22 @@ import { useAuthStore } from "../stores/authStore";
 import AuthView from "../Pages/Auth.vue";
 import EventDetailsPage from "../Pages/EventDetailsPage.vue";
 import EventTicketTypes from "../components/Event/EventTicketTypes.vue";
-import EventPaymentPage from "../Pages/EventPaymentPage.vue"
-
+import EventPaymentPage from "../Pages/EventPaymentPage.vue";
 
 const routes = [
   { path: "/login", name: "Login", component: AuthView },
   { path: "/register", name: "Register", component: AuthView },
-  {path:"/event/:id", name:"EventDetails", component: EventDetailsPage},
-  {path:"/event/ticket-types/:eventId", name:"EventTicketTypes", component: EventTicketTypes},
-  {path:"/event/:eventId/payment", name:"EventPaymentPage", component: EventPaymentPage},
+  { path: "/event/:id", name: "EventDetails", component: EventDetailsPage },
+  {
+    path: "/event/ticket-types/:eventId",
+    name: "EventTicketTypes",
+    component: EventTicketTypes,
+  },
+  {
+    path: "/event/:eventId/payment",
+    name: "EventPaymentPage",
+    component: EventPaymentPage,
+  },
   { path: "/", redirect: "/login" },
 ];
 

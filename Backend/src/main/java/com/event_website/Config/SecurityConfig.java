@@ -52,7 +52,6 @@ public class SecurityConfig {
                         "bookmarks/delete/{id}",
                         "/trainer/{id}",
                         "/classes/all",
-                        "/Event/**",
                         "/classes/**",
                         "/capacities/**",
                         "/api-docs/**",
@@ -60,7 +59,10 @@ public class SecurityConfig {
                         "/ticket-type/**",
                         "/slots/**",
                         "/category/**",
-                        "/ticket/**")
+                        "/ticket/**",
+                                "/Event/**",
+                                "/Event/details"
+                                )
                     .permitAll()
                     .anyRequest()
                     .authenticated())
@@ -76,7 +78,7 @@ public class SecurityConfig {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
     config.setAllowedOrigins(
-        List.of("http://localhost:5174", "http://localhost:5173")); // frontend origin
+        List.of("http://localhost:5174", "http://localhost:5173","http://localhost:5176")); // frontend origin
     config.setAllowedHeaders(List.of("*"));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 

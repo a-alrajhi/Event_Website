@@ -54,6 +54,7 @@ public class SlotTicketTypeCapacityService {
         return capacityRepo.findBySlot_IdIn(slotIds);
     }
 
+
     public Optional<SlotTicketTypeCapacity> getBySlotAndTicketType(Integer slotId, Integer ticketTypeId) {
         return capacityRepo.findBySlot_IdAndTicketType_Id(slotId, ticketTypeId);
     }
@@ -69,4 +70,22 @@ public class SlotTicketTypeCapacityService {
     public void deleteBySlotId(Integer id) {
         capacityRepo.deleteAllBySlot_Id(id);
     }
+
+
+    public List<TicketType> getTicketTypesByEventId(Integer eventId) {
+
+        List<Slot> slots = slotRepo.findByEvent_Id(eventId);
+        List<Integer> slotIds = slots.stream().map(Slot::getId).toList();
+
+        if (slotIds.isEmpty()) return List.of();
+
+
+        List<SlotTicketTypeCapacity> capacities = capacityRepo.findBySlot_IdIn(slotIds);
+
+        return capacities.stream()
+                .map(SlotTicketTypeCapacity::getTicketType)
+                .distinct()
+                .toList();
+    }
+
 }

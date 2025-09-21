@@ -1,6 +1,7 @@
 package com.event_website.Controller;
 
 import com.event_website.Dto.*;
+import com.event_website.Dto.EventDtoDetalis;
 import com.event_website.Entity.*;
 import com.event_website.Repository.CategoryRepo;
 import com.event_website.Request.CompositeCreateCapacity;
@@ -157,4 +158,20 @@ public class EventController {
         List<DetailedEventDto> dto = compositeEventService.getAllComposite();
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<EventDtoDetalis> getEventDetails(@PathVariable Integer id) {
+        EventDtoDetalis eventDetails = eventService.getEventDetails(id);
+        return ResponseEntity.ok(eventDetails);
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<Page<EventDtoDetalis>> getAllEventDetails(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<EventDtoDetalis> events = eventService.getAllEventDetails(page, size);
+        return ResponseEntity.ok(events);
+    }
 }
+

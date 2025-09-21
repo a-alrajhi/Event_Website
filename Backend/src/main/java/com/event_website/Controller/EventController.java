@@ -68,15 +68,6 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @LogRequest(description = "Get event by ID")
-    @GetMapping("/{id}")
-    public ResponseEntity<EventDto> getById(@PathVariable Integer id){
-        return eventService.findEventbyId(id)
-                .map(EventDto::fromEntity)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @LogRequest(description = "Get all events with pagination")
     @GetMapping
     public ResponseEntity<Object> getAll(
@@ -172,6 +163,15 @@ public class EventController {
     ) {
         Page<EventDtoDetalis> events = eventService.getAllEventDetails(page, size);
         return ResponseEntity.ok(events);
+    }
+
+    @LogRequest(description = "Get event by ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<EventDto> getById(@PathVariable Integer id){
+        return eventService.findEventbyId(id)
+                .map(EventDto::fromEntity)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
 

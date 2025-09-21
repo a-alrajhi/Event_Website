@@ -111,11 +111,6 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  const fetchEvents = async () => {
-    const res = await axiosClient.get(`/Events/all`);
-    events.value = res.data;
-  };
-
   const resetSelectedUser = () => {
     selectedUser.value = null;
     userTickets.value = [];

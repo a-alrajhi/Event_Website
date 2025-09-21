@@ -1,6 +1,5 @@
 <script setup>
 import AdminLayoutWrapper from "./components/Admin/AdminLayoutWrapper.vue";
-import Dashboard from "./Pages/Dashboard.vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();

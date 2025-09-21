@@ -8,12 +8,11 @@ import Home from "../Pages/Home.vue";
 import EventBrowse from "../Pages/EventBrowse.vue";
 import AdminForms from "../Pages/AdminForms.vue";
 import UserManagement from "../Pages/UserManagement.vue";
-import Dashboard from "../Pages/Dashboard.vue";
 import EventManagement from "../Pages/EventManagement.vue";
 import AdminStats from "../Pages/AdminStats.vue";
 
 const routes = [
-  { path: "/", name: "Home", component: Dashboard },
+  { path: "/", name: "Home", component: Home },
   { path: "/login", name: "Login", component: AuthView },
   { path: "/register", name: "Register", component: AuthView },
 
@@ -26,13 +25,13 @@ const routes = [
     component: EventTicketTypes,
   },
 
-  // Dashboard
-  {
-    path: "/Home",
-    name: "Home",
-    component: Home,
-    meta: { requiresAuth: true },
-  }, // ✅ new
+  // // Dashboard
+  // {
+  //   path: "/Home",
+  //   name: "Home",
+  //   component: Home,
+  //   meta: { requiresAuth: true },
+  // }, // ✅ new
 
   { path: "/admin-form", name: "Admin Forms", component: AdminForms },
   { path: "/admin/users", name: "User Management", component: UserManagement },
@@ -46,9 +45,6 @@ const routes = [
     name: "Admin Statistics",
     component: AdminStats,
   },
-
-  // Default redirect
-  { path: "/", redirect: "/login" },
 ];
 const router = createRouter({
   history: createWebHistory(),

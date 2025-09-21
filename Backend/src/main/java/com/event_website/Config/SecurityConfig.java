@@ -80,7 +80,7 @@ public class SecurityConfig {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
     config.setAllowedOrigins(
-        List.of("http://localhost:5174", "http://localhost:5173")); // frontend origin
+        List.of("http://localhost:5174", "http://localhost:5173","http://localhost:5176")); // frontend origin
     config.setAllowedHeaders(List.of("*"));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 

@@ -17,9 +17,13 @@ Event Sidebar Component
     </p>
 
     <!-- button -->
-    <RouterLink :to="slotsCounter(slots) ? `/event/slots/${eventId}` : `/event/ticket-types/${eventId}`"
-      class="text-white bg-gradient-to-r from-sky-500 to-cyan-800 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg">
+    <!-- <RouterLink :to="slotsCounter(slots) ? `/event/slots/${eventId}` : `/event/ticket-types/${eventId}`" -->
+    <button type="button" @click="handleBookNow" class="text-white bg-gradient-to-r from-sky-500 to-cyan-800 hover:bg-gradient-to-bl focus:ring-4
+      focus:outline-none focus:ring-cyan-300 inline-flex items-center px-3 py-2 text-sm font-medium text-center
+      rounded-lg">
+
       Book Now
+
       <!-- drawing arrow from button to right SVG -->
       <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
         viewBox="0 0 14 10">
@@ -29,7 +33,11 @@ Event Sidebar Component
 
       <!-- multiple slots available  go to slots page-->
       <!-- else ticket page-->
-    </RouterLink>
+      <!-- </RouterLink> -->
+    </button>
+
+    <!-- Slot Picker Dialog -->
+    <SlotsPickerDialog v-model="showSlotDialog" :slots="slots" @confirm="goToTicketPage" />
 
     <!-- horizontal line -->
     <hr class="my-6 border-gray-300 border-gray-600" />
@@ -66,11 +74,10 @@ Event Sidebar Component
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import dayjs from "dayjs";
-
-// true if multiple slots are available
-const slotsCounter = (slots) => slots.length > 1;
+import SlotsPickerDialog from "../Slots/SlotsPickerDialog.vue";
 
 const props = defineProps({
   slots: { type: Array, required: true },
@@ -78,16 +85,30 @@ const props = defineProps({
     type: [Number, null],
     default: 0,
   },
-  bookNowBtn: {
-    type: Boolean,
-    default: true,
-  },
   eventId: { type: Number, required: true },
 });
 
+const router = useRouter();
+const showSlotDialog = ref(false);
 
+function handleBookNow() {
+  if (props.slots.length === 1) {
+    goToTicketPage(props.slots[0]); // go directly to ticket page
+  }
+  else {
+    showSlotDialog.value = true;
+  }
+}
 
-console.log("THIS IS HTE EVENTIDDDD!!! " + props.eventId)
+function goToTicketPage(selectedSlot) {
+  if (!selectedSlot?.id) return;
+
+  router.push({
+    name: "EventTicketTypes",
+    params: { eventId: props.eventId },
+    query: { slotId: selectedSlot.id }
+  });
+}
 
 // Get the first slot or default to "TBD"
 const firstSlot = computed(() => props.slots?.[0] ?? "TBD");

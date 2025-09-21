@@ -63,9 +63,9 @@ public class UserController {
     @LogRequest(description = "Updating User")
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@RequestBody UpdateUserRequest updateUserRequest, @PathVariable Integer id) throws Exception {
-        User user = new User(updateUserRequest);
-        user.setId(id);
-        User userUpdated = userService.update(user);
+        User user = userService.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User updatedUser = UpdateUserRequest.mergeUserUpdates(user, updateUserRequest);
+        User userUpdated = userService.update(updatedUser);
         return ResponseEntity.ok(UserDTO.fromEntity(userUpdated));
     }
 

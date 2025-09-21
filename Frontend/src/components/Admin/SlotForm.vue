@@ -17,11 +17,38 @@ const props = defineProps({
   },
 });
 
+const createEventStore = useCreateEventStore();
+
+const slots = ref([]);
+
+// Init slots based on edit mode
 onMounted(async () => {
   await createEventStore.loadTicketTypes();
-});
 
-const createEventStore = useCreateEventStore();
+  // Wait for ticket types before mapping existing slot data
+  if (createEventStore.isEditMode) {
+    if (createEventStore.slots.length > 0) {
+      slots.value = createEventStore.slots.map((slot) => ({
+        id: slot.id ?? null,
+        date: slot.date ? new Date(slot.date) : null,
+        startTime: slot.startTime ?? null,
+        endTime: slot.endTime ?? null,
+        ticketTypes: slot.ticketTypes.map((tt) => {
+          const matchingTT = createEventStore.ticketTypes.find(
+            (storeTT) => storeTT.id === tt.ttId
+          );
+          return {
+            id: matchingTT?.id ?? tt.ttId ?? null,
+            capacity: tt.capacity ?? 0,
+            price: matchingTT?.price ?? 0,
+          };
+        }),
+      }));
+    }
+  } else {
+    slots.value = [createEmptySlot()];
+  }
+});
 
 // Helper to create an empty slot
 function createEmptySlot() {
@@ -38,17 +65,6 @@ function createEmptySlot() {
     ],
   };
 }
-
-// State
-const slots = ref(
-  createEventStore.slots.length > 0
-    ? createEventStore.slots.map((slot) => ({
-        ...slot,
-        date: slot.date ? new Date(slot.date) : null,
-        ticketTypes: slot.ticketTypes.map((tt) => ({ ...tt })),
-      }))
-    : [createEmptySlot()]
-);
 
 // Actions
 const addSlot = () => {
@@ -72,7 +88,7 @@ const removeTicketType = (slot, index) => {
 function isValidTime(timeStr) {
   if (!timeStr) return false;
   const parts = timeStr.split(":");
-  if (parts.length !== 2) return false;
+  if (parts.length < 2 || parts.length > 3) return false;
   const [hours, minutes] = parts.map((p) => Number(p));
   if (isNaN(hours) || isNaN(minutes)) return false;
   return hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60;
@@ -80,15 +96,12 @@ function isValidTime(timeStr) {
 
 // This version of getAvailableTTs ensures the current ticket's selection remains, and others can't pick the same
 function getAvailableTTs(slot, ticket) {
+  const usedIds = slot.ticketTypes
+    .filter((other) => other !== ticket && other.id !== null)
+    .map((other) => other.id);
+
   return createEventStore.ticketTypes.filter((tt) => {
-    // Always allow the option that matches this ticket's current id (so it doesn't disappear)
-    if (ticket.id === tt.id) {
-      return true;
-    }
-    // Otherwise, filter out any tt.id that is already used by *other* ticket entries in this slot
-    return !slot.ticketTypes.some(
-      (other) => other !== ticket && other.id === tt.id
-    );
+    return tt.id === ticket.id || !usedIds.includes(tt.id);
   });
 }
 
@@ -101,12 +114,18 @@ const validTT = computed(() => {
   );
 });
 
-// Other validations
+const cleanTime = (t) => t?.trim().padStart(5, "0").slice(0, 5); // Ensure "9:0" → "09:00"
+
 const hasDuplicateSlots = computed(() => {
   const seen = new Set();
   for (const slot of slots.value) {
     if (!slot.date || !slot.startTime) continue;
-    const key = `${slot.date.toISOString().split("T")[0]} ${slot.startTime}`;
+
+    const dateStr = toLocalDateString(slot.date);
+    const timeStr = cleanTime(slot.startTime);
+
+    const key = `${dateStr} ${timeStr}`;
+    console.log(key);
     if (seen.has(key)) return true;
     seen.add(key);
   }
@@ -116,7 +135,7 @@ const hasDuplicateSlots = computed(() => {
 const hasPastSlot = computed(() => {
   const now = new Date();
   return slots.value.some((slot) => {
-    if (!slot.date || !slot.startTime) return false;
+    if (!slot.date || !slot.startTime || slot.id) return false;
     const [h, m] = slot.startTime.split(":").map(Number);
     if (isNaN(h) || isNaN(m)) return false;
     const dt = new Date(slot.date);
@@ -158,9 +177,12 @@ watch(isFormValid, (newVal) => {
 watch(
   slots,
   (newSlots) => {
+    console.log("local: " + slots.value[0].date);
     if (isFormValid.value) {
-      createEventStore.slots = newSlots;
-      console.log(createEventStore.slots);
+      createEventStore.slots = newSlots.map((slot) => ({
+        ...slot,
+        date: toLocalDateString(slot.date),
+      }));
     }
   },
   { deep: true }
@@ -179,6 +201,14 @@ function onTicketTypeChange(ticket) {
     ticket.price = 0;
   }
 }
+
+function toLocalDateString(date) {
+  if (!(date instanceof Date)) return null;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 </script>
 
 <template>
@@ -191,6 +221,9 @@ function onTicketTypeChange(ticket) {
       class="border rounded-lg border-solid border-primary/80 p-2 mb-4"
     >
       <h4 class="mb-2">Slot #{{ slotIndex + 1 }}</h4>
+      <span v-if="slot.id" class="text-xs text-gray-500"
+        >(ID: {{ slot.id }})</span
+      >
 
       <!-- Date & Time -->
       <div class="flex flex-col gap-3 mb-3">

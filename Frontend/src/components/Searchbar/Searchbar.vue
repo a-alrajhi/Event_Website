@@ -3,9 +3,7 @@
     <label for="search" class="sr-only">Search</label>
     <div class="relative">
       <!-- Search Icon -->
-      <div
-        class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-      >
+      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
         <svg
           class="w-4 h-4 text-[var(--color-secondary)]"
           xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +26,10 @@
         type="search"
         id="search"
         placeholder="Search..."
-        class="block w-full p-2 ps-10 text-sm rounded-lg border border-[var(--color-primary)/50] bg-[var(--color-bg)] text-[var(--color-text)] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] transition"
+        class="block w-full p-2 ps-10 text-sm rounded-lg border border-[var(--color-primary)/50]
+               bg-[var(--color-bg)] text-[var(--color-text)] placeholder-gray-400
+               focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]
+               focus:border-[var(--color-primary)] transition"
       />
     </div>
   </form>

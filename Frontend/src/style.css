@@ -1,4 +1,7 @@
+@import "tailwindcss";
+@import "primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
+
 @theme {
   --color-primary: oklch(0.54 0.23 280);
   --color-secondary: oklch(0.45 0.31 285);
@@ -11,5 +14,3 @@
   --color-error: oklch(0.595 0.257 29.2);
   --font-poppins: "Poppins", sans-serif;
 }
-
-@import "tailwindcss";

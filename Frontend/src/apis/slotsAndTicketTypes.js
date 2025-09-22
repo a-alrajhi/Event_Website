@@ -23,3 +23,16 @@ export async function getEventTicketTypes(eventId) {
   const response = await apis.get(`/ticket-type/event/${eventId}`);
   return response.data;
 }
+
+// @PostMapping("/create-ticket")
+
+// TODO: UNDER DEVELOPMENT
+export async function createTicket(eventId) {
+  try {
+    const response = await apis.post(`/create-ticket`);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating ticket:", error);
+    throw error;
+  }
+}

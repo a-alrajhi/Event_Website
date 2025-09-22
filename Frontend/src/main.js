@@ -6,7 +6,10 @@ import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 import router from "./Router/index";
 import { createI18n } from "vue-i18n";
+
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+
 import { messages, defaultLocale } from "./locales";
 
 const i18n = createI18n({
@@ -17,12 +20,15 @@ const i18n = createI18n({
 
 const app = createApp(App);
 
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
 app.use(PrimeVue, {
   theme: {
     preset: Aura,
   },
 });
 app.use(router);
-app.use(createPinia());
+app.use(pinia);
 app.use(i18n);
 app.mount("#app");

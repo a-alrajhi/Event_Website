@@ -2,7 +2,7 @@ import router from "../Router";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosClient from "../apis/axiosClient";
-import { FormKey } from "vuetify/lib/composables/form.mjs";
+
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
@@ -12,6 +12,7 @@ export const useAuthStore = defineStore("auth", () => {
   const isLoggedIn = ref(!!accessToken.value);
   const error = ref(null);
   const loading = ref(false);
+  const userData = ref(null); // Store user data here
 
   const setTokens = (newAccess, newRefresh) => {
     accessToken.value = newAccess;
@@ -23,7 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     axiosClient.defaults.headers.common["Authorization"] =
-      `Bearer ${newAccess}`;
+        `Bearer ${newAccess}`;
   };
 
   const clearTokens = () => {
@@ -46,9 +47,10 @@ export const useAuthStore = defineStore("auth", () => {
 
     try {
       const res = await axiosClient.post(uri, form);
-      const { accessToken, refreshToken } = res.data;
-      setTokens(accessToken, refreshToken || null);
+      const { accessToken: newAccess, refreshToken: newRefresh } = res.data;
+      setTokens(newAccess, newRefresh || null);
       isLoggedIn.value = true;
+      router.push("/");
     } catch (err) {
       error.value = err.response?.data?.message || "Authentication failed";
       clearTokens();
@@ -58,19 +60,68 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  const isTokenValid = () => {
-    if (!accessToken) return false;
+  // Fetch user data from API
+  const getUser = async () => {
+    loading.value = true;
+    error.value = null;
+
     try {
-      const [, payloadBase64] = accessToken.split(".");
+      if (!isLoggedIn.value) return null;
+
+      const res = await axiosClient.get("/profile/");
+      userData.value = res.data;  // Store user data in userData
+      return res.data;
+    } catch (err) {
+      error.value = err.response?.data?.message || "Failed to fetch user";
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Update user data (with current password verification)
+  const updateUser = async (form) => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      if (!isLoggedIn.value) return "Update failed, User must be logged in";
+
+      // Add current password to form to verify it in the backend
+      const res = await axiosClient.put("/profile/", form);
+      userData.value = res.data; // Update local user data
+      return res.data;
+    } catch (err) {
+      error.value = err.response?.data?.message || "Update failed";
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const isTokenValid = () => {
+    if (!accessToken.value) return false;
+    try {
+      const [, payloadBase64] = accessToken.value.split(".");
       const payload = JSON.parse(atob(payloadBase64));
       const now = Math.floor(Date.now() / 1000);
 
       return payload.exp && payload.exp > now;
-    } catch (error) {
-      console.error("Invalid token:", error);
+    } catch (e) {
+      console.error("Invalid token:", e);
       return false;
     }
   };
 
-  return { isLoggedIn, error, loading, authUser, logout, isTokenValid };
+  return {
+    isLoggedIn,
+    error,
+    loading,
+    authUser,
+    logout,
+    getUser,
+    updateUser,
+    isTokenValid,
+    userData,
+  };
 });

@@ -14,26 +14,6 @@ watchEffect(() => {
   login.value = route.path === "/login";
 });
 
-const handleSubmit = async (formData) => {
-  if (login.value) {
-    const res = await auth.authUser(
-      { email: formData.email, password: formData.password },
-      "/auth/login"
-    );
-    if (res.status === 200) {
-      router.push("/");
-    }
-  } else {
-    if (formData.password !== formData.confirmPassword) {
-      console.error("Passwords do not match!");
-      return;
-    }
-    const res = await auth.authUser(formData, "/auth/register");
-    if (res.status === 200) {
-      router.push("/");
-    }
-  }
-};
 </script>
 
 <template>
@@ -58,7 +38,6 @@ const handleSubmit = async (formData) => {
                       'confirmPassword',
                     ]
               "
-              :onSubmit="handleSubmit"
               :mode="login ? 'login' : 'register'"
             />
 

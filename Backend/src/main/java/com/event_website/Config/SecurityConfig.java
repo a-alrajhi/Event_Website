@@ -52,6 +52,8 @@ public class SecurityConfig {
                         "bookmarks/delete/{id}",
                         "/trainer/{id}",
                         "/classes/all",
+                        "/Event/**",
+                        "/profile/",
                         "/classes/**",
                         "/capacities/**",
                         "/api-docs/**",

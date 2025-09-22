@@ -1,18 +1,23 @@
 package com.event_website.Controller;
 
-import com.event_website.Dto.EventDto;
+import com.event_website.Dto.*;
 import com.event_website.Dto.EventDtoDetalis;
-import com.event_website.Entity.Category;
-import com.event_website.Entity.Event;
+import com.event_website.Entity.*;
 import com.event_website.Repository.CategoryRepo;
-import com.event_website.Service.EventService;
+import com.event_website.Request.CompositeCreateCapacity;
+import com.event_website.Request.CompositeCreateEvent;
+import com.event_website.Request.CreateCategoryRequest;
+import com.event_website.Service.*;
 import com.event_website.Logging.LogRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Event")
@@ -21,6 +26,7 @@ public class EventController {
 
     private final EventService eventService;
     private final CategoryRepo categoryRepo;
+    private final CompositeEventService compositeEventService;
 
     @LogRequest(description = "Create new event")
     @PostMapping
@@ -59,15 +65,6 @@ public class EventController {
                     Event updated = eventService.save(existing);
                     return ResponseEntity.ok(EventDto.fromEntity(updated));
                 })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @LogRequest(description = "Get event by ID")
-    @GetMapping("/{id}")
-    public ResponseEntity<EventDto> getById(@PathVariable Integer id){
-        return eventService.findEventbyId(id)
-                .map(EventDto::fromEntity)
-                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -123,6 +120,36 @@ public class EventController {
         return ResponseEntity.noContent().build();
     }
 
+    @LogRequest(description = "Create Composite Event")
+    @PostMapping("/create-composite")
+    public ResponseEntity<CreateCompositeEventDTO> createComposite(@RequestBody CompositeCreateEvent request) {
+        CreateCompositeEventDTO dto = compositeEventService.createCompositeEvent(request);
+        return ResponseEntity.ok(dto);
+    }
+
+    @LogRequest(description = "Load Composite Event")
+    @GetMapping("/get-composite/{id}")
+    public ResponseEntity<CompositeCreateEvent> getComposite(@PathVariable int id) {
+        CompositeCreateEvent dto = compositeEventService.getComposite(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @LogRequest(description = "Update Composite Event")
+    @PutMapping("/update-composite/{id}")
+    public ResponseEntity<CompositeCreateEvent> updateComposite(
+            @PathVariable int id,
+            @RequestBody CompositeCreateEvent request
+    ) {
+        CompositeCreateEvent dto = compositeEventService.updateCompositeEvent(id, request);
+        return ResponseEntity.ok(dto);
+    }
+    @LogRequest(description = "get all Events composite")
+    @GetMapping("/get-composite")
+    public ResponseEntity<List<DetailedEventDto>> getAllComposite() {
+        List<DetailedEventDto> dto = compositeEventService.getAllComposite();
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/{id}/details")
     public ResponseEntity<EventDtoDetalis> getEventDetails(@PathVariable Integer id) {
         EventDtoDetalis eventDetails = eventService.getEventDetails(id);
@@ -136,6 +163,15 @@ public class EventController {
     ) {
         Page<EventDtoDetalis> events = eventService.getAllEventDetails(page, size);
         return ResponseEntity.ok(events);
+    }
+
+    @LogRequest(description = "Get event by ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<EventDto> getById(@PathVariable Integer id){
+        return eventService.findEventbyId(id)
+                .map(EventDto::fromEntity)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
 

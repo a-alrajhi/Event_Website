@@ -4,9 +4,12 @@ package com.event_website.Dto;
  * DTO class to represent location data, including validation rules
  * for location attributes.
  */
+import com.event_website.Entity.Location;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -15,7 +18,7 @@ public class LocationDTO {
 
     private Integer id;
 
-    @NotNull(message = "Location name is required")
+    //@NotNull(message = "Location name is required")
     @Size(max = 255, message = "Name cannot exceed 255 characters")
     private String name;
 
@@ -40,4 +43,15 @@ public class LocationDTO {
 
     // Default constructor for JSON deserialization
     public LocationDTO() {}
+
+    public Location toEntity() {
+        Location location = new Location();
+        location.setId(this.id);
+        location.setName(this.name);
+        location.setAddress(this.address);
+        location.setLatitude(this.latitude);
+        location.setLongitude(this.longitude);
+        location.setAdditionalInfo(this.additionalInfo);
+        return location;
+    }
 }

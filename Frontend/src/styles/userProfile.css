@@ -1,0 +1,178 @@
+.user-profile-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+/* --- Profile Section --- */
+.profile-section {
+    width: 100%;
+    max-width: 380px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 30px;
+}
+
+.profile-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* --- Title --- */
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 20px;
+    position: relative;
+    text-align: center;
+}
+
+.title::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: #4f46e5;
+    margin-top: 8px;
+    border-radius: 2px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Card Section --- */
+.bookmarks-section {
+    flex: 1;
+    width: 100%;
+    max-width: 700px;
+}
+
+/* Grid Layout */
+.bookmarks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* --- Card Styling --- */
+.bookmark-card {
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+}
+
+.bookmark-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Image --- */
+.bookmark-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: #ccc; /* Placeholder color */
+    transition: transform 0.3s ease;
+}
+
+.bookmark-card:hover img {
+    transform: scale(1.05); /* Image zoom effect */
+}
+
+/* --- Content --- */
+.bookmark-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 14px;
+    color: #1f2937;
+}
+
+.bookmark-card p {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0 14px 12px;
+    line-height: 1.4;
+}
+
+/* --- Actions --- */
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px 16px;
+    border-top: 1px solid #f1f1f1;
+    margin-top: auto;
+}
+
+.card-actions button {
+    flex: 1;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.remove-btn {
+    background: linear-gradient(90deg, #e11d48, #f43f5e);
+    color: #fff;
+}
+
+.remove-btn:hover {
+    background: linear-gradient(90deg, #be123c, #e11d48);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(225, 29, 72, 0.3);
+}
+
+.booknow-btn {
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+    color: #fff;
+}
+
+.booknow-btn:hover {
+    background: linear-gradient(90deg, #4338ca, #4f46e5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+}
+
+/* --- No Bookmarks Message --- */
+.no-bookmarks {
+    font-size: 16px;
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+    .user-profile-page {
+        flex-direction: column;
+        max-width: 95%;
+        gap: 20px;
+    }
+
+    .profile-section {
+        width: 100%;
+    }
+
+    .bookmarks-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

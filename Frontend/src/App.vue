@@ -1,14 +1,17 @@
 <script setup>
-import Dashboard from "./Pages/Dashboard.vue";
-</script>
+import AdminLayoutWrapper from "./components/Admin/AdminLayoutWrapper.vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+</script>
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <main class="flex-grow">
+    <div v-if="route.fullPath.includes('/admin')">
+      <AdminLayoutWrapper />
+    </div>
+    <main class="flex-grow" v-else>
       <router-view />
-      <!-- <Dashboard /> -->
-
     </main>
   </div>
 </template>

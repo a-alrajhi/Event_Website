@@ -1,6 +1,9 @@
 package com.event_website.Dto;
 
+import com.event_website.Entity.Category;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -18,6 +21,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryDTO {
   private Integer id;
   private String name;
@@ -26,4 +31,15 @@ public class CategoryDTO {
   private String photo;
   private String description;
   private String arDescription;
+
+  public Category toEntity() {
+    Category category = new Category();
+    category.setId(id);
+    category.setName(name);
+    category.setArName(arName);
+    category.setPhoto(photo);
+    category.setDescription(description);
+    category.setArDescription(arDescription);
+    return category;
+  }
 }

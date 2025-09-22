@@ -5,6 +5,7 @@ import AuthView from "../Pages/Auth.vue";
 import EventDetailsPage from "../Pages/EventDetailsPage.vue";
 import EventTicketTypes from "../components/Event/EventTicketTypes.vue";
 import EventPaymentPage from "../Pages/EventPaymentPage.vue";
+import EventConfirmationPage from "../Pages/EventConfirmationPage.vue";
 
 const routes = [
   { path: "/login", name: "Login", component: AuthView },
@@ -14,6 +15,12 @@ const routes = [
     path: "/event/ticket-types/:eventId",
     name: "EventTicketTypes",
     component: EventTicketTypes,
+  },
+
+  {
+    path: "/event/:eventId/confirmation",
+    name: "EventConfirmation",
+    component: EventConfirmationPage,
   },
   {
     path: "/event/:eventId/payment",

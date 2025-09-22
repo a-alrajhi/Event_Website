@@ -18,6 +18,7 @@ import lombok.Setter;
 public class CreateTicketRequest {
   private Integer slotTicketTypeCapacityId;
   private Integer seatId; // Optional: only for assigned seating
+  private Integer userId;
   private String ticketCode;
 
   @Override
@@ -29,6 +30,8 @@ public class CreateTicketRequest {
         + seatId
         + ", ticketCode='"
         + ticketCode
+        + ", user ID ='" +
+        + userId
         + '\''
         + '}';
   }

@@ -5,6 +5,8 @@ Event Payment Page - Handles payment processing and order summary
 @version: 1.0
 -->
 
+<!-- EventPaymentPage -->
+
 <template>
   <!-- Breadcrumb component step 2 -->
   <div class="max-w-[105rem] mx-auto mb-8 px-4">
@@ -125,7 +127,6 @@ Event Payment Page - Handles payment processing and order summary
   </div>
 
   <!-- Main Content Area -->
-
   <div class="max-w-[105rem] mx-auto mt-12 px-6">
     <div class="flex flex-col md:flex-row gap-6">
       <!-- Left Section (Order Info) -->
@@ -262,6 +263,8 @@ Event Payment Page - Handles payment processing and order summary
         <h2 class="text-xl font-bold mb-4">Payment Details</h2>
 
         <PaymentAccordion />
+        <!-- Total Summary -->
+        <TotalPayment />
       </div>
     </div>
   </div>
@@ -276,7 +279,8 @@ import { computed } from "vue";
 import dayjs from "dayjs";
 import EventLocationMap from "../components/Event/EventLocationMap.vue";
 import SubRulesAndReminders from "../components/Event/SubRulesAndReminders.vue";
-import PaymentAccordion from "../components/Event/PaymentAccordion.vue";
+import PaymentAccordion from "../Utils/PaymentAccordion.vue";
+import TotalPayment from "../Utils/TotalPayment.vue";
 
 const paymentStore = usePaymentStore();
 
@@ -286,14 +290,6 @@ const selectedSlot = computed(() => {
     (slot) => String(slot.id) === String(paymentStore.slotId)
   );
 });
-
-console.log("Payment Store Data:" + selectedSlot.value?.startTime);
-
-// Debug logging for payment data
-console.log("EVENT PICTURE PATH: ", paymentStore.event?.photoUrl);
-console.log("Checkout event id data !!!!:", paymentStore.eventId);
-console.log("ALL TICKETS!!!! :", paymentStore.tickets);
-console.log("Total PAYMENT!!!:", paymentStore.totalAmount);
 
 // Compute event date and time based on the first slot
 const eventDateTime = computed(() => {
@@ -319,3 +315,5 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 </script>
+
+<!-- End of EventPaymentPage File -->

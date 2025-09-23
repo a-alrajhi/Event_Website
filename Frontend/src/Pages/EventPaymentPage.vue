@@ -49,7 +49,9 @@ Event Payment Page - Handles payment processing and order summary
         </div>
 
         <!-- Connector Line -->
-        <div class="flex-1 h-0.5 bg-green-300 mx-4"></div>
+        <div
+          class="flex-1 h-1 bg-gradient-to-r from-green-400/60 to-blue-400/80 mx-6 rounded-full shadow-md"
+        ></div>
 
         <!-- Step 2: Payment (Active) -->
         <div class="flex flex-col items-center">
@@ -80,7 +82,7 @@ Event Payment Page - Handles payment processing and order summary
         </div>
 
         <!-- Connector Line -->
-        <div class="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+        <div class="flex-1 h-1 bg-gray-200 mx-6 rounded-full shadow-md"></div>
 
         <!-- Step 3: Confirmation -->
         <div class="flex flex-col items-center">
@@ -275,6 +277,10 @@ Event Payment Page - Handles payment processing and order summary
       </div>
     </div>
   </div>
+
+  <div class="mt-12">
+    <AppFooter />
+  </div>
 </template>
 
 <script setup>
@@ -288,6 +294,7 @@ import EventLocationMap from "../components/Event/EventLocationMap.vue";
 import SubRulesAndReminders from "../components/Event/SubRulesAndReminders.vue";
 import PaymentAccordion from "../Utils/PaymentAccordion.vue";
 import TotalPayment from "../Utils/TotalPayment.vue";
+import AppFooter from "../components/AppFooter/AppFooter.vue";
 
 const paymentStore = usePaymentStore();
 console.log("Carried Tickets from paymentStore: ", paymentStore.tickets);

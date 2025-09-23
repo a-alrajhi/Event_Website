@@ -274,7 +274,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
         <!-- only show when tickets > 1 -->
         <div
           v-if="totalTickets > 0"
-          class="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200"
+          class="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200 hover:scale-[1.02] transition-all duration-500"
         >
           <div
             class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0"
@@ -326,6 +326,8 @@ Event Ticket Types Component - Handles ticket selection and quantity management
       </section>
     </div>
   </div>
+
+  <AppFooter />
 </template>
 
 <script setup>
@@ -334,6 +336,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getAllTicketTypesForEvent } from "../../apis/eventApi";
 import { getFullEventDetails } from "../../apis/eventApi";
 import { usePaymentStore } from "../../stores/paymentStore";
+import AppFooter from "../AppFooter/AppFooter.vue";
 
 const route = useRoute();
 const paymentStore = usePaymentStore();

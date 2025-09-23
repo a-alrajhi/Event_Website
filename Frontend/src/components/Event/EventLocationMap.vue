@@ -7,8 +7,16 @@ Event Location Map
 <template>
   <div>
     <!-- using iframe to embed google maps -->
-    <iframe :src="mapSrc" width="100%" height="450" style="border: 0" allowfullscreen="" loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade" title="Event Location Map">
+    <iframe
+      :src="mapSrc"
+      width="100%"
+      height="450"
+      style="border: 0"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Event Location Map"
+    >
     </iframe>
   </div>
 

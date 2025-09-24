@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayoutWrapper from "./components/Admin/AdminLayoutWrapper.vue";
 import { useRoute } from "vue-router";
+import LeafletMap from "./components/Map/LeafletMap.vue";
 
 const route = useRoute();
 </script>

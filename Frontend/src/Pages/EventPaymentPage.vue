@@ -6,7 +6,6 @@ Event Payment Page - Handles payment processing and order summary
 -->
 
 <!-- EventPaymentPage -->
-
 <template>
   <!-- Main Container with glassmorphism background -->
   <div
@@ -326,6 +325,12 @@ import AppFooter from "../components/AppFooter/AppFooter.vue";
 
 const paymentStore = usePaymentStore();
 console.log("Carried Tickets from paymentStore: ", paymentStore.tickets);
+
+// const selectedPaymentMethod = computed(() => {
+//   return paymentStore.selectedPaymentMethod;
+// });
+
+// console.log("Selected Payment Method: ", selectedPaymentMethod.value);
 
 const selectedSlot = computed(() => {
   if (!paymentStore.event?.slots) return null;

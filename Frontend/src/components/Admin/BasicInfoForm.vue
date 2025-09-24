@@ -35,7 +35,7 @@ const handleDrop = (event) => {
   event.preventDefault();
   dragOver.value = false;
   const file = event.dataTransfer.files[0];
-  if (file && file.type.startsWith('image/')) {
+  if (file && file.type.startsWith("image/")) {
     eventImage.value = file;
   }
 };
@@ -79,14 +79,17 @@ watch(
   <div class="flex flex-col gap-6">
     <!-- Section Title -->
     <div class="flex items-center gap-3">
-      <i class="pi pi-info-circle text-xl" style="color: var(--color-primary);"></i>
-      <h3 class="text-xl font-semibold" style="color: var(--color-text);">
+      <i
+        class="pi pi-info-circle text-xl"
+        style="color: var(--color-primary)"
+      ></i>
+      <h3 class="text-xl font-semibold" style="color: var(--color-text)">
         Basic Information
       </h3>
     </div>
 
     <!-- Form Fields -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
       <!-- Event Names -->
       <div class="admin-form-group">
         <label class="admin-form-label">Event Name (English)</label>
@@ -137,10 +140,7 @@ watch(
     <!-- Category Selection -->
     <div class="admin-form-group">
       <label class="admin-form-label">Category</label>
-      <select
-        v-model="category"
-        class="admin-select"
-      >
+      <select v-model="category" class="admin-select">
         <option value="" disabled>Select or enter a category</option>
         <option
           v-for="cat in createEventStore.categories"
@@ -157,23 +157,28 @@ watch(
       <label class="admin-form-label">Event Image</label>
       <div
         class="admin-file-upload"
-        :class="{ 'dragover': dragOver }"
+        :class="{ dragover: dragOver }"
         @drop="handleDrop"
         @dragover="handleDragOver"
         @dragleave="handleDragLeave"
         @click="$refs.fileInput.click()"
       >
         <div class="flex flex-col items-center gap-4">
-          <i class="pi pi-cloud-upload text-4xl" style="color: var(--color-primary);"></i>
+          <i
+            class="pi pi-cloud-upload text-4xl"
+            style="color: var(--color-primary)"
+          ></i>
           <div class="text-center">
-            <p class="text-lg font-medium" style="color: var(--color-text);">
-              <span v-if="eventImage">{{ eventImage.name || 'Image selected' }}</span>
+            <p class="text-lg font-medium" style="color: var(--color-text)">
+              <span v-if="eventImage">{{
+                eventImage.name || "Image selected"
+              }}</span>
               <span v-else-if="createEventStore.isEditMode">
                 Click to change current event image
               </span>
               <span v-else>Click to upload or drag and drop</span>
             </p>
-            <p class="text-sm mt-1" style="color: var(--color-gray);">
+            <p class="text-sm mt-1" style="color: var(--color-gray)">
               PNG, JPG, GIF up to 1MB
             </p>
           </div>

@@ -1,5 +1,6 @@
 package com.event_website.Request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +18,25 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Schema(
+        name = "UpdateCategoryRequest",
+        description = "Request payload for updating an existing category with optional fields"
+)
 public class UpdateCategoryRequest {
+
+  @Schema(description = "Category name in English", example = "Music")
   private String name;
+
+  @Schema(description = "Category name in Arabic", example = "موسيقى")
   private String arName;
+
+  @Schema(description = "URL or path of the category photo", example = "https://example.com/photos/music.jpg")
   private String photo;
+
+  @Schema(description = "Description in English", example = "All music related events")
   private String description;
+
+  @Schema(description = "Description in Arabic", example = "كل الفعاليات المتعلقة بالموسيقى")
   private String arDescription;
 
   @Override

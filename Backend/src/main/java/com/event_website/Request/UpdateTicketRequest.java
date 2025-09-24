@@ -1,5 +1,6 @@
 package com.event_website.Request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,21 +16,31 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Schema(
+        name = "UpdateTicketRequest",
+        description = "Request payload to update fields of an existing ticket"
+)
 public class UpdateTicketRequest {
+
+  @Schema(description = "ID of the slot ticket type capacity", example = "5", nullable = true)
   private Integer slotTicketTypeCapacityId;
-  private Integer seatId; // Optional: only for assigned seating
+
+  @Schema(description = "ID of the assigned seat (if applicable)", example = "12", nullable = true)
+  private Integer seatId;
+
+  @Schema(description = "Custom ticket code", example = "TKT-XXXX", nullable = true)
   private String ticketCode;
 
   @Override
   public String toString() {
     return "UpdateTicketRequest{"
-        + "slotTicketTypeCapacityId="
-        + slotTicketTypeCapacityId
-        + ", seatId="
-        + seatId
-        + ", ticketCode='"
-        + ticketCode
-        + '\''
-        + '}';
+            + "slotTicketTypeCapacityId="
+            + slotTicketTypeCapacityId
+            + ", seatId="
+            + seatId
+            + ", ticketCode='"
+            + ticketCode
+            + '\''
+            + '}';
   }
 }

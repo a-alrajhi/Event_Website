@@ -1,6 +1,5 @@
 package com.event_website.Request;
 
-import com.event_website.Entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -16,10 +15,18 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @Validated
 @NoArgsConstructor
+@Schema(
+        name = "RegisterRequest",
+        description = "Request payload for user registration including authentication and personal details"
+)
 public class RegisterRequest extends AuthRequest {
+
     @NotNull
-    @Schema(description = "The user's name")
+    @Size(min = 2, max = 100)
+    @Schema(description = "The user's full name", example = "John Doe", required = true)
     private String name;
-    @Schema(description = "the user's phone number")
+
+    @Size(max = 20)
+    @Schema(description = "The user's phone number", example = "+1234567890")
     private String phoneNumber;
 }

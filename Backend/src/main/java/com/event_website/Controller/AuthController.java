@@ -40,42 +40,35 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-//    @Operation(
-//            summary = "Login",
-//            description = "Authenticates a user with email and password, returning a JWT access token.",
-//            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Login credentials",
-//                    required = true,
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    name = "Login Example",
-//                                    value = """
-//                    {
-//                      "email": "user@example.com",
-//                      "password": "secret123"
-//                    }
-//                    """
-//                            )
-//                    )),
-//            responses = {
-//                    @ApiResponse(
-//                            responseCode = "200",
-//                            description = "Login successful - JWT token returned",
-//                            content = @Content(
-//                                    mediaType = "application/json",
-//                                    schema = @Schema(example = "{\"accessToken\": \"eyJhbGciOi...\"}")
-//                            )
-//                    ),
-//                    @ApiResponse(
-//                            responseCode = "401",
-//                            description = "Unauthorized - Invalid credentials",
-//                            content = @Content(
-//                                    mediaType = "application/json",
-//                                    schema = @Schema(example = "{\"error\": \"Invalid email or password\"}")
-//                            )
-//                    )
-//            }
-//    )
+    @Operation(
+            summary = "Login user",
+            description = "Authenticates the user with email and password. Returns a JWT access token.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = AuthRequest.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Login example",
+                                            value = """
+                        {
+                          "email": "user@example.com",
+                          "password": "password123"
+                        }
+                        """
+                                    )
+                            }
+                    )
+            ),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Login successful, token returned", content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(example = "{\"accessToken\": \"eyJhbGciOi...\"}")
+                            )),
+                    @ApiResponse(responseCode = "401", description = "Invalid credentials"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @LogRequest(description = "Login attempt for user")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
@@ -101,6 +94,38 @@ public class AuthController {
             }
     }
 
+    @Operation(
+            summary = "Register a new user",
+            description = "Registers a new user account and returns a JWT access token.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = RegisterRequest.class),
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Register example",
+                                            value = """
+                        {
+                          "email": "newuser@example.com",
+                          "password": "password123",
+                          "name": "New User"
+                          "phoneNumber": "+96651234567"
+                        }
+                        """
+                                    )
+                            }
+                    )
+            ),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User registered successfully, token returned",  content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(example = "{\"accessToken\": \"eyJhbGciOi...\"}")
+                    )),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data (e.g., email taken, password less than 6 chars)"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @LogRequest(description = "Registering a new user")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) throws Exception {

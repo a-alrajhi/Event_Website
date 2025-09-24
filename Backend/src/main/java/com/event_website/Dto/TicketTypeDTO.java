@@ -1,6 +1,7 @@
 package com.event_website.Dto;
 
 import com.event_website.Entity.TicketType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,10 +22,19 @@ import org.springframework.beans.BeanUtils;
  */
 @Getter
 @Setter
+@Schema(description = "Data Transfer Object representing the ticket type details")
 public class TicketTypeDTO {
+
+  @Schema(description = "Unique identifier of the ticket type", example = "1")
   private Integer id;
+
+  @Schema(description = "Name of the ticket type", example = "VIP")
   private String name;
+
+  @Schema(description = "Price of the ticket type", example = "99.99")
   private BigDecimal price;
+
+  @Schema(description = "Indicates if the ticket type has assigned seating", example = "true")
   private Boolean hasAssignedSeating;
 
   public static TicketTypeDTO fromEntity(TicketType ticketType) {

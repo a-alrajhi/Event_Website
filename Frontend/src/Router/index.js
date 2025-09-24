@@ -15,16 +15,21 @@ const routes = [
   { path: "/", name: "Home", component: Home },
   { path: "/login", name: "Login", component: AuthView },
   { path: "/register", name: "Register", component: AuthView },
-  { path: "/user-profile", name: "UserProfile", component: UserProfile, meta: { requiresAuth: true }},
+  {
+    path: "/user-profile",
+    name: "UserProfile",
+    component: UserProfile,
+    meta: { requiresAuth: true },
+  },
   // { path: "/", redirect: "/login" }
   // {path:"/event/:id", name:"EventDetails", component: EventDetailsPage},
   // {path:"/event/ticket-types/:eventId", name:"EventTicketTypes", component: EventTicketTypes},
-/*
+  /*
   {path: "/event/slots/:eventId", name: "EventSlots", component: EventSlots},
 */
 
   // Events
-  { path: "/events", name: "Events", component: EventBrowse }, // ✅ new
+  { path: "/events", name: "Events", component: EventBrowse },
   { path: "/event/:id", name: "EventDetails", component: EventDetailsPage },
   {
     path: "/event/ticket-types/:eventId",
@@ -39,19 +44,24 @@ const routes = [
   //   component: Home,
   //   meta: { requiresAuth: true },
   // }, // ✅ new
-
-  // { path: "/admin-form", name: "Admin Forms", component: AdminForms },
-  { path: "/admin/users", name: "User Management", component: UserManagement },
+  {
+    path: "/admin/users",
+    name: "User Management",
+    component: UserManagement,
+    meta: { requiresAuth: true },
+  },
   {
     path: "/admin/resources",
     name: "Resource Management",
     component: EventManagement,
+    meta: { requiresAuth: true },
   },
 
   {
     path: "/admin/statistics",
     name: "Admin Statistics",
     component: AdminStats,
+    meta: { requiresAuth: true },
   },
 ];
 

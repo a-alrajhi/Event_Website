@@ -24,7 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     axiosClient.defaults.headers.common["Authorization"] =
-        `Bearer ${newAccess}`;
+      `Bearer ${newAccess}`;
   };
 
   const clearTokens = () => {
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore("auth", () => {
       const { accessToken: newAccess, refreshToken: newRefresh } = res.data;
       setTokens(newAccess, newRefresh || null);
       isLoggedIn.value = true;
-      router.push("/");
+      redirectToPast();
     } catch (err) {
       error.value = err.response?.data?.message || "Authentication failed";
       clearTokens();
@@ -69,7 +69,7 @@ export const useAuthStore = defineStore("auth", () => {
       if (!isLoggedIn.value) return null;
 
       const res = await axiosClient.get("/profile/");
-      userData.value = res.data;  // Store user data in userData
+      userData.value = res.data; // Store user data in userData
       return res.data;
     } catch (err) {
       error.value = err.response?.data?.message || "Failed to fetch user";
@@ -97,6 +97,12 @@ export const useAuthStore = defineStore("auth", () => {
     } finally {
       loading.value = false;
     }
+  };
+
+  const redirectToPast = () => {
+    const route = router.currentRoute.value;
+    const redirectQuery = route.query.redirect || "/";
+    router.push(redirectQuery);
   };
 
   const isTokenValid = () => {

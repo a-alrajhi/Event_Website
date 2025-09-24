@@ -9,16 +9,17 @@
       <!-- Desktop Layout -->
       <div class="hidden sm:flex items-center justify-between gap-8">
         <div class="flex items-center gap-8">
+          <!-- Logo -->
           <div class="flex items-center gap-3">
             <div
               class="w-10 h-10 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-xl flex items-center justify-center"
             >
               <Calendar class="w-5 h-5 text-white" />
             </div>
-            <span class="text-xl font-bold text-[var(--color-text)]"
-              >EventHub</span
-            >
+            <span class="text-xl font-bold">EventHub</span>
           </div>
+
+          <!-- Horizontal Categories -->
           <div class="flex items-center gap-1">
             <div
               v-for="(category, index) in horizontalCategories"
@@ -35,9 +36,11 @@
             </div>
           </div>
         </div>
+
+        <!-- Search + Profile -->
         <div class="flex items-center gap-4">
           <div class="w-80">
-            <SearchBar class="w-full" />
+            <SearchBar class="w-full" @search="handleSearch" />
           </div>
           <div class="relative">
             <img
@@ -51,6 +54,7 @@
           </div>
         </div>
       </div>
+
       <!-- Mobile Layout -->
       <div class="sm:hidden space-y-4">
         <div class="flex items-center justify-between">
@@ -60,9 +64,7 @@
             >
               <Calendar class="w-4 h-4 text-white" />
             </div>
-            <span class="text-lg font-bold text-[var(--color-text)]"
-              >EventHub</span
-            >
+            <span class="text-lg font-bold">EventHub</span>
           </div>
           <img
             class="w-9 h-9 rounded-full border-2 border-[var(--color-primary)]/50"
@@ -70,7 +72,7 @@
             alt="Profile"
           />
         </div>
-        <SearchBar class="w-full" />
+        <SearchBar class="w-full" @search="handleSearch" />
         <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
           <div
             v-for="(category, index) in horizontalCategories"
@@ -87,8 +89,9 @@
       </div>
     </nav>
 
+    <!-- Sidebar + Main -->
     <div class="flex">
-      <!-- Modern Sidebar -->
+      <!-- Sidebar -->
       <aside
         class="hidden sm:flex flex-col fixed top-0 left-0 z-40 w-64 h-screen bg-[var(--color-card)]/90 backdrop-blur-xl border-r border-[var(--color-primary)]/20 shadow-xl"
       >
@@ -100,29 +103,28 @@
           >
             <MapPin class="w-4 h-4 text-white" />
           </div>
-          <h2 class="text-lg font-semibold text-[var(--color-text)]">
-            Filters
-          </h2>
+          <h2 class="text-lg font-semibold">Filters</h2>
         </div>
+
         <div class="flex-1 px-6 py-6 space-y-8 overflow-y-auto">
-          <!-- Loading State -->
+          <!-- Loading Spinner -->
           <div v-if="isLoading" class="flex items-center justify-center py-8">
             <div
               class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary)]"
             ></div>
           </div>
+
           <!-- Categories -->
           <div v-if="!isLoading" class="space-y-4">
             <div class="flex items-center justify-between">
-              <h3
-                class="text-sm font-semibold text-[var(--color-text)] uppercase tracking-wider"
-              >
+              <h3 class="text-sm font-semibold uppercase tracking-wider">
                 Categories
               </h3>
               <span class="text-xs text-[var(--color-gray)]"
                 >{{ sidebarCategories.length }} found</span
               >
             </div>
+
             <div class="space-y-2">
               <div v-for="cat in sidebarCategories" :key="cat" class="group">
                 <label
@@ -132,29 +134,26 @@
                     v-model="selectedCategories"
                     :value="cat"
                     :inputId="cat"
-                    class="accent-[var(--color-primary)]"
                   />
                   <span
-                    class="text-sm font-medium text-[var(--color-text)] group-hover:text-[var(--color-primary)]"
+                    class="text-sm font-medium group-hover:text-[var(--color-primary)]"
+                    >{{ cat }}</span
                   >
-                    {{ cat }}
-                  </span>
-                  <span class="text-xs text-[var(--color-gray)] ml-auto">
-                    {{ getCategoryCount(cat) }}
-                  </span>
+                  <span class="text-xs text-[var(--color-gray)] ml-auto">{{
+                    getCategoryCount(cat)
+                  }}</span>
                 </label>
               </div>
             </div>
           </div>
+
           <!-- Price Range -->
           <div v-if="!isLoading && priceRange.max > 0" class="space-y-4">
             <div class="flex items-center justify-between">
-              <h3
-                class="text-sm font-semibold text-[var(--color-text)] uppercase tracking-wider"
-              >
+              <h3 class="text-sm font-semibold uppercase tracking-wider">
                 Price Range
               </h3>
-              <span class="text-xs text-[var(--color-primary)] font-medium">
+              <span class="text-xs font-medium text-[var(--color-primary)]">
                 {{ currentPrice === 0 ? "All Prices" : `SAR ${currentPrice}` }}
               </span>
             </div>
@@ -193,20 +192,25 @@
       <main class="flex-1 ml-0 sm:ml-64 p-6">
         <div v-if="!isLoading" class="mb-6 flex items-center justify-between">
           <div>
-            <h1 class="text-2xl font-bold text-[var(--color-text)]">
-              Events in Saudi Arabia
-            </h1>
+            <h1 class="text-2xl font-bold">Events in Saudi Arabia</h1>
             <p class="text-[var(--color-gray)] mt-1">
               {{ filteredEvents.length }} events found
-              <span v-if="selectedCategories.length > 0 || currentPrice > 0"
-                >(filtered)</span
+              <span
+                v-if="
+                  selectedCategories.length > 0 ||
+                  currentPrice > 0 ||
+                  searchInput
+                "
               >
+                (filtered)
+              </span>
             </p>
           </div>
           <div class="text-sm text-[var(--color-gray)]">
             Price range: SAR 0 - SAR {{ priceRange.max }}
           </div>
         </div>
+
         <EnhancedEventCard :events="filteredEvents" :is-loading="isLoading" />
       </main>
     </div>
@@ -214,8 +218,13 @@
 </template>
 
 <script setup>
-import SearchBar from "../components/SearchBar/SearchBar.vue";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import { getEvents } from "../apis/EventDetalisApi";
 import EnhancedEventCard from "../components/Cards/EnhancedEventCard.vue";
+import SearchBar from "../components/SearchBar/SearchBar.vue";
+import Slider from "primevue/slider";
+import Checkbox from "primevue/checkbox";
 import {
   Music,
   Home,
@@ -225,11 +234,16 @@ import {
   MapPin,
   Ticket,
 } from "lucide-vue-next";
-import Slider from "primevue/slider";
-import Checkbox from "primevue/checkbox";
-import { ref, computed, onMounted } from "vue";
-import { getEvents } from "../apis/EventDetalisApi";
-import { useRoute } from "vue-router";
+
+const events = ref([]);
+const isLoading = ref(true);
+const selectedCategories = ref([]);
+const priceRange = ref({ min: 0, max: 200 });
+const currentPrice = ref(0);
+const sidebarCategories = ref([]);
+const searchInput = ref("");
+
+const route = useRoute();
 
 const horizontalCategories = [
   { name: "Home", icon: Home },
@@ -240,55 +254,50 @@ const horizontalCategories = [
   { name: "Tickets", icon: Ticket },
 ];
 
-const sidebarCategories = ref([]);
-const selectedCategories = ref([]);
-const priceRange = ref({ min: 0, max: 200 });
-const currentPrice = ref(0);
-const events = ref([]);
-const isLoading = ref(true);
-const route = useRoute();
-
 const fetchData = async () => {
+  isLoading.value = true;
   try {
-    isLoading.value = true;
-    const eventsData = await getEvents();
-    events.value = eventsData;
+    const data = await getEvents();
+    events.value = data;
+
     sidebarCategories.value = [
-      ...new Set(eventsData.map((event) => event.category)),
+      ...new Set(data.map((event) => event.category)),
     ].filter(Boolean);
-    const prices = eventsData
-      .map((event) => event.price)
-      .filter((price) => price > 0);
+
+    const prices = data.map((e) => e.price).filter((p) => p > 0);
     priceRange.value = prices.length
       ? { min: 0, max: Math.ceil(Math.max(...prices) * 1.2) }
       : { min: 0, max: 200 };
+
     currentPrice.value = 0;
-  } catch (error) {
-    console.error("Error fetching data:", error);
+  } catch (e) {
+    console.error("Error loading events:", e);
   } finally {
     isLoading.value = false;
   }
 };
 
 onMounted(async () => {
-  const categoryFromQuery = route.query.category;
-
   await fetchData();
 
-  if (
-    categoryFromQuery &&
-    typeof categoryFromQuery === "string" &&
-    sidebarCategories.value.find(
+  const categoryFromQuery = route.query.category;
+  const searchQuery = route.query.q;
+
+  if (categoryFromQuery && typeof categoryFromQuery === "string") {
+    const match = sidebarCategories.value.find(
       (cat) => cat.toLowerCase() === categoryFromQuery.toLowerCase()
-    )
-  ) {
-    selectedCategories.value = [
-      sidebarCategories.value.find(
-        (cat) => cat.toLowerCase() === categoryFromQuery.toLowerCase()
-      ),
-    ];
+    );
+    if (match) selectedCategories.value = [match];
+  }
+
+  if (searchQuery && typeof searchQuery === "string") {
+    searchInput.value = searchQuery.trim();
   }
 });
+
+const handleSearch = (q) => {
+  searchInput.value = q;
+};
 
 const filteredEvents = computed(() => {
   return events.value.filter((event) => {
@@ -297,19 +306,21 @@ const filteredEvents = computed(() => {
       selectedCategories.value.includes(event.category);
     const priceMatch =
       currentPrice.value === 0 || event.price <= currentPrice.value;
-    return categoryMatch && priceMatch;
+    const searchMatch =
+      !searchInput.value ||
+      event.title.toLowerCase().includes(searchInput.value.toLowerCase());
+
+    return categoryMatch && priceMatch && searchMatch;
   });
 });
 
-const getCategoryCount = (category) => {
-  return events.value.filter((event) => event.category === category).length;
-};
+const getCategoryCount = (category) =>
+  events.value.filter((event) => event.category === category).length;
 
-const getFilteredByPriceCount = () => {
-  return currentPrice.value === 0
+const getFilteredByPriceCount = () =>
+  currentPrice.value === 0
     ? events.value.length
     : events.value.filter((event) => event.price <= currentPrice.value).length;
-};
 </script>
 
 <style scoped>

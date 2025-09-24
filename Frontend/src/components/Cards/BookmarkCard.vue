@@ -1,25 +1,65 @@
 <template>
-  <div class="bookmark-card">
-    <figure>
-      <img v-if="bookmark.image" :src="bookmark.image" :alt="bookmark.title" />
-      <img v-else src="https://via.placeholder.com/350x200?text=Here+is+the+picture" alt="Placeholder image" />
-    </figure>
-    <div class="card-body">
-      <h2>{{ bookmark.title }}</h2>
-      <p>{{ bookmark.description }}</p>
-      <div class="card-actions">
-        <button @click="removeBookmark" class="btn btn-danger">Remove</button>
-        <button @click="bookNow" class="btn btn-primary">Book Now</button>
-      </div>
+  <div
+      class="bookmark-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+  >
+    <!-- Image -->
+    <div class="relative overflow-hidden">
+      <img
+          v-if="bookmark.image"
+          :src="bookmark.image"
+          :alt="bookmark.title"
+          class="w-full h-48 object-cover"
+      />
+      <img
+          v-else
+          src="https://via.placeholder.com/400x200.png?text=Event+Image"
+          alt="Placeholder image"
+          class="w-full h-48 object-cover"
+      />
+    </div>
+
+    <!-- Card Content -->
+    <div class="card-body p-4">
+      <h2
+          class="card-title text-lg font-semibold text-gray-800 line-clamp-1 hover:text-[var(--color-primary)] transition-colors"
+      >
+        {{ bookmark.title }}
+      </h2>
+      <p class="card-description text-sm text-gray-600 line-clamp-2">
+        {{ bookmark.description }}
+      </p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="card-actions flex gap-2 p-3 pt-0">
+      <button
+          @click="bookNow"
+          class="btn flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white"
+      >
+        Book
+      </button>
+      <button
+          @click="removeBookmark"
+          class="btn flex-1 bg-[var(--color-error)] hover:bg-red-700 text-white"
+      >
+        Remove
+      </button>
+      <RouterLink
+          :to="`/event/${bookmark.id}`"
+          class="btn flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-center"
+      >
+        Details
+      </RouterLink>
     </div>
   </div>
 </template>
 
 <script setup>
 import { defineProps, defineEmits } from "vue";
+import { RouterLink } from "vue-router";
 
 const props = defineProps({
-  bookmark: Object,
+  bookmark: { type: Object, required: true },
 });
 
 const emit = defineEmits(["remove-bookmark", "book-now"]);
@@ -35,37 +75,18 @@ const bookNow = () => {
 
 <style scoped>
 .bookmark-card {
-  width: 100%;
-  max-width: 350px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
-.card-body {
-  padding: 15px;
-}
-
-.card-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+.bookmark-card:hover {
+  transform: translateY(-3px);
 }
 
 .btn {
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-danger {
-  background-color: #e11d48;
-  color: white;
-}
-
-.btn-primary {
-  background-color: #4f46e5;
-  color: white;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.4rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 </style>

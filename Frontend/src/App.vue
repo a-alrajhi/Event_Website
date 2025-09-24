@@ -12,7 +12,8 @@ const route = useRoute();
       <AdminLayoutWrapper />
     </div>
     <main class="flex-grow" v-else>
-      <router-view />
+ <router-view />
+<!--      <leaflet-map />-->
     </main>
   </div>
 </template>

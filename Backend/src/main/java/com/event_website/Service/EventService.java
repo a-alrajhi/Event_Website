@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
-
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -25,21 +23,17 @@ public class EventService {
     private final EventRepo eventRepo;
     private final SlotTicketTypeCapacityService slotCapacityService;
 
-
     public Event save(Event event) {
         return eventRepo.save(event);
     }
-
 
     public Optional<Event> findEventbyId(Integer id) {
         return eventRepo.findById(id);
     }
 
-
     public void deleteById(Integer id) {
         eventRepo.deleteById(id);
     }
-
 
     public Page<Event> findAllEvent(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -72,15 +66,42 @@ public class EventService {
         return eventRepo.findAll(pageable);
     }
 
+    // Get events by location ID
+    public Page<EventDtoDetalis> getEventsByLocationId(Integer locationId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return eventRepo.findByLocation_Id(locationId, pageable)
+                .map(event -> {
+                    List<BigDecimal> prices = slotCapacityService.getTicketTypesByEventId(event.getId())
+                            .stream()
+                            .map(TicketType::getPrice)
+                            .collect(Collectors.toList());
+
+                    String locationName = event.getLocation() != null ? event.getLocation().getName() : null;
+
+                    return new EventDtoDetalis(
+                            event.getId(),
+                            event.getName(),
+                            event.getDescription(),
+                            event.getPhotoUrl(),
+                            event.getCategory() != null ? event.getCategory().getName() : null,
+                            prices,
+                            locationName
+                    );
+                });
+    }
+
     public EventDtoDetalis getEventDetails(Integer eventId) {
         Event event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
         List<TicketType> ticketTypes = slotCapacityService.getTicketTypesByEventId(eventId);
 
-        List<java.math.BigDecimal> prices = ticketTypes.stream()
+        List<BigDecimal> prices = ticketTypes.stream()
                 .map(TicketType::getPrice)
                 .collect(Collectors.toList());
+
+        String locationName = event.getLocation() != null ? event.getLocation().getName() : null;
 
         return new EventDtoDetalis(
                 event.getId(),
@@ -88,7 +109,8 @@ public class EventService {
                 event.getDescription(),
                 event.getPhotoUrl(),
                 event.getCategory() != null ? event.getCategory().getName() : null,
-                prices
+                prices,
+                locationName
         );
     }
 
@@ -102,14 +124,16 @@ public class EventService {
                             .map(TicketType::getPrice)
                             .collect(Collectors.toList());
 
+                    String locationName = event.getLocation() != null ? event.getLocation().getName() : null;
+
                     return new EventDtoDetalis(
                             event.getId(),
                             event.getName(),
                             event.getDescription(),
-                           event.getPhotoUrl(),
-
-                    event.getCategory() != null ? event.getCategory().getName() : null,
-                            prices
+                            event.getPhotoUrl(),
+                            event.getCategory() != null ? event.getCategory().getName() : null,
+                            prices,
+                            locationName
                     );
                 });
     }

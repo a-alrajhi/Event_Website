@@ -63,7 +63,8 @@ public class SecurityConfig {
                         "/category/**",
                         "/ticket/**",
                                 "/Event/**",
-                                "/Event/details"
+                                "/Event/details",
+                                "/locations/{id}/events"
                                 )
                     .permitAll()
                     .anyRequest()

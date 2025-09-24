@@ -143,7 +143,8 @@ public class EventController {
         CompositeCreateEvent dto = compositeEventService.updateCompositeEvent(id, request);
         return ResponseEntity.ok(dto);
     }
-    @LogRequest(description = "get all Events composite")
+
+    @LogRequest(description = "Get all Events composite")
     @GetMapping("/get-composite")
     public ResponseEntity<List<DetailedEventDto>> getAllComposite() {
         List<DetailedEventDto> dto = compositeEventService.getAllComposite();
@@ -174,4 +175,3 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build());
     }
 }
-

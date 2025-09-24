@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="bg-[var(--color-footer)] text-[var(--color-text)] border-t border-[var(--color-primary)/30] mt-auto"
+    class="bg-[var(--color-bg)] text-[var(--color-text)] border-t border-[var(--color-primary)/30] mt-auto"
   >
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
       <div class="md:flex md:justify-between">

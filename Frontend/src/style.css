@@ -1,14 +1,24 @@
 @import "primeicons/primeicons.css";
+
 @theme {
-  --color-primary: oklch(0.54 0.23 280);
-  --color-secondary: oklch(0.45 0.31 285);
-  --color-hover: oklch(0.41 0.26 275);
-  --color-bg: oklch(0.067 0 0);
-  --color-card: oklch(0.05 0 0);
-  --color-footer: oklch(0.06 0 0);
-  --color-text: oklch(0.95 0 0);
-  --color-gray: oklch(0.65 0 0);
-  --color-error: oklch(0.595 0.257 29.2);
+  /* Accents */
+  --color-primary: oklch(0.65 0.25 280); /* Vibrant purple */
+  --color-secondary: oklch(0.58 0.20 285); /* Softer purple */
+  --color-hover: oklch(0.52 0.18 275); /* Darker hover state */
+
+  /* Background layers */
+  --color-bg: oklch(0.20 0 270);
+  --color-card: oklch(0.20 0 270); /* Slightly lighter than bg */
+  --color-footer: oklch(0.10 0 270); /* Darker than bg, footer feel */
+
+  /* Text */
+  --color-text: oklch(0.94 0.02 270); /* Almost white, slight cool tint */
+  --color-gray: oklch(0.70 0 270); /* Neutral gray for muted text */
+
+  /* Semantic */
+  --color-error: oklch(0.60 0.25 25); /* Accessible reddish orange */
+
+  /* Font */
   --font-poppins: "Poppins", sans-serif;
 }
 

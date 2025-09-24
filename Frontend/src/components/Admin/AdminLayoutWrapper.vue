@@ -3,17 +3,25 @@ import AdminSidebar from "./AdminSidebar.vue";
 </script>
 
 <template>
-  <div class="flex min-h-screen">
-    <!-- Make sidebar grow with content height -->
+  <div class="flex min-h-screen" style="background-color: var(--color-bg);">
+    <!-- Sidebar -->
     <aside
-      class="w-64 text-white flex flex-col shadow-lg sticky top-0 self-start"
+      class="w-64 min-h-screen flex flex-col shadow-2xl sticky top-0 self-start admin-scrollbar"
+      style="background-color: var(--color-card); color: var(--color-text);"
     >
       <AdminSidebar />
     </aside>
 
-    <!-- Content -->
-    <main class="flex-1 bg-gray-50 p-6 overflow-y-auto">
+    <!-- Main Content -->
+    <main
+      class="flex-1 p-8 overflow-y-auto admin-scrollbar"
+      style="background-color: var(--color-bg);"
+    >
       <router-view />
     </main>
   </div>
 </template>
+
+<style scoped>
+@import "../../styles/admin.css";
+</style>

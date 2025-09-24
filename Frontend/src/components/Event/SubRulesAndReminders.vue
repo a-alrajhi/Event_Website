@@ -43,7 +43,7 @@ Event Rules Component
     </section>
 
     <!-- Contact -->
-    <section class="pt-4 border-t border-gray-200">
+    <section class="pt-4 border-t ">
       <h2 class="text-xl font-semibold text-gray-800 mb-2">Need Help?</h2>
       <p class="text-gray-600">
         Contact us at

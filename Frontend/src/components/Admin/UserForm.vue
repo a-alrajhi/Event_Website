@@ -119,7 +119,7 @@ watch([email, password, name, phoneNumber], () => {
 
 <template>
   <div class="flex flex-col gap-3">
-    <span class="text-primary/90 block">User Info</span>
+    <span class="text-primary/90 block mb-4 ml-1">User Info</span>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <FloatLabel>

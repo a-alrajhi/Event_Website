@@ -59,7 +59,7 @@
     </div>
 
     <!-- Contact Section -->
-    <section class="px-6 py-12 bg-[var(--color-footer)] flex flex-col items-center space-y-6">
+    <section class="px-6 py-12 bg-[var(--color-bg)] flex flex-col items-center space-y-6">
       <h2 class="text-2xl md:text-3xl font-bold text-[var(--color-primary)] drop-shadow-lg">
         Contact Us
       </h2>

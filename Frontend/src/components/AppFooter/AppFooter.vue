@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="dark:bg-[var(--color-footer)] text-[var(--color-text)] border-t border-gray-200 dark:border-[var(--color-primary)/30] mt-auto"
+    class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md text-gray-900 dark:text-white border-t border-gray-200 dark:border-gray-700 mt-auto shadow-lg"
   >
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
       <div class="md:flex md:justify-between">
@@ -28,18 +28,18 @@
             >
               Resources
             </h2>
-            <ul class="text-gray-600 dark:text-[var(--color-text)] font-medium">
+            <ul class="text-gray-600 dark:text-gray-400 font-medium">
               <li class="mb-4">
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-secondary)] transition-colors"
+                  class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
                   >EventApp Docs</a
                 >
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-secondary)] transition-colors"
+                  class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
                   >Tailwind CSS</a
                 >
               </li>
@@ -51,18 +51,18 @@
             >
               Follow us
             </h2>
-            <ul class="text-gray-600 dark:text-[var(--color-text)] font-medium">
+            <ul class="text-gray-600 dark:text-gray-400 font-medium">
               <li class="mb-4">
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-secondary)] transition-colors"
+                  class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
                   >Github</a
                 >
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-secondary)] transition-colors"
+                  class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
                   >Discord</a
                 >
               </li>
@@ -74,18 +74,18 @@
             >
               Legal
             </h2>
-            <ul class="text-gray-600 dark:text-[var(--color-text)] font-medium">
+            <ul class="text-gray-600 dark:text-gray-400 font-medium">
               <li class="mb-4">
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-secondary)] transition-colors"
+                  class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
                   >Privacy Policy</a
                 >
               </li>
               <li>
                 <a
                   href="#"
-                  class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-secondary)] transition-colors"
+                  class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
                   >Terms &amp; Conditions</a
                 >
               </li>
@@ -95,18 +95,16 @@
       </div>
 
       <hr
-        class="my-6 border-gray-200 dark:border-[var(--color-primary)/30] sm:mx-auto lg:my-8"
+        class="my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8"
       />
 
       <!-- Bottom Section -->
       <div class="sm:flex sm:items-center sm:justify-between">
-        <span
-          class="text-sm text-gray-600 dark:text-[var(--color-text)] sm:text-center"
-        >
+        <span class="text-sm text-gray-600 dark:text-gray-400 sm:text-center">
           © 2025
           <a
             href="/"
-            class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-secondary)] drop-shadow-[0_0_6px_var(--color-primary)] transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
             >EventApp™</a
           >. All Rights Reserved.
         </span>
@@ -114,7 +112,7 @@
           <!-- Social Icons -->
           <a
             href="#"
-            class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-primary)] transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 8 19">
               <path
@@ -127,7 +125,7 @@
           </a>
           <a
             href="#"
-            class="text-gray-600 dark:text-[var(--color-text)] hover:text-blue-600 dark:hover:text-[var(--color-primary)] transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] transition-colors"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 21 16">
               <path

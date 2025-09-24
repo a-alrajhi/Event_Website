@@ -7,26 +7,18 @@ import com.event_website.Request.AuthRequest;
 import com.event_website.Request.RegisterRequest;
 import com.event_website.Service.UserService;
 import com.event_website.Utils.JwtUtil;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -84,7 +76,7 @@ public class AuthController {
                         new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
                 );
 
-                String accessToken = jwtUtil.generateToken(request.getEmail(), 1000 * 60 * 15); // 15 min
+                String accessToken = jwtUtil.generateToken(request.getEmail(), 1000 * 60 * 60); // 15 min
                 HttpHeaders headers = new HttpHeaders();
                 headers.add("Authorization", "Bearer " + accessToken);
 
@@ -107,7 +99,7 @@ public class AuthController {
         User user = new User(registerRequest);
         userService.register(user);
 
-        String accessToken = jwtUtil.generateToken(user.getEmail(), 1000 * 60 * 20); // 20 min
+        String accessToken = jwtUtil.generateToken(user.getEmail(), 1000 * 60 * 60); // 20 min
         System.out.println("Auth successful!");
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);

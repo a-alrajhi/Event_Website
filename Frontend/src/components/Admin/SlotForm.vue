@@ -1,13 +1,5 @@
 <script setup>
 import { ref, computed, watch, watchEffect, onMounted } from "vue";
-import {
-  DatePicker,
-  InputText,
-  InputNumber,
-  Button,
-  Divider,
-  Select,
-} from "primevue";
 import { useCreateEventStore } from "../../stores/createEventStore";
 
 const props = defineProps({
@@ -28,22 +20,26 @@ onMounted(async () => {
   // Wait for ticket types before mapping existing slot data
   if (createEventStore.isEditMode) {
     if (createEventStore.slots.length > 0) {
-      slots.value = createEventStore.slots.map((slot) => ({
-        id: slot.id ?? null,
-        date: slot.date ? new Date(slot.date) : null,
-        startTime: slot.startTime ?? null,
-        endTime: slot.endTime ?? null,
-        ticketTypes: slot.ticketTypes.map((tt) => {
-          const matchingTT = createEventStore.ticketTypes.find(
-            (storeTT) => storeTT.id === tt.ttId
-          );
-          return {
-            id: matchingTT?.id ?? tt.ttId ?? null,
-            capacity: tt.capacity ?? 0,
-            price: matchingTT?.price ?? 0,
-          };
-        }),
-      }));
+      slots.value = createEventStore.slots.map((slot) => {
+        const dateObj = slot.date ? new Date(slot.date) : null;
+        return {
+          id: slot.id ?? null,
+          date: dateObj,
+          dateString: dateObj ? toLocalDateString(dateObj) : '',
+          startTime: slot.startTime ?? null,
+          endTime: slot.endTime ?? null,
+          ticketTypes: slot.ticketTypes.map((tt) => {
+            const matchingTT = createEventStore.ticketTypes.find(
+              (storeTT) => storeTT.id === tt.ttId
+            );
+            return {
+              id: matchingTT?.id ?? tt.ttId ?? null,
+              capacity: tt.capacity ?? 0,
+              price: matchingTT?.price ?? 0,
+            };
+          }),
+        };
+      });
     }
   } else {
     slots.value = [createEmptySlot()];
@@ -54,6 +50,7 @@ onMounted(async () => {
 function createEmptySlot() {
   return {
     date: null,
+    dateString: '',
     startTime: null,
     endTime: null,
     ticketTypes: [
@@ -209,111 +206,230 @@ function toLocalDateString(date) {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
+
+// Helper to update slot date from input
+function updateSlotDate(slot, dateString) {
+  if (dateString) {
+    slot.date = new Date(dateString);
+    slot.dateString = dateString;
+  } else {
+    slot.date = null;
+    slot.dateString = '';
+  }
+}
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <span class="text-primary/90 block">Slot Info</span>
+  <div class="flex flex-col gap-6">
+    <!-- Section Title -->
+    <div class="flex items-center gap-3">
+      <i class="pi pi-calendar text-xl" style="color: var(--color-primary);"></i>
+      <h3 class="text-xl font-semibold" style="color: var(--color-text);">
+        Event Slots & Ticket Types
+      </h3>
+    </div>
 
-    <div
-      v-for="(slot, slotIndex) in slots"
-      :key="slotIndex"
-      class="border rounded-lg border-solid border-primary/80 p-2 mb-4"
-    >
-      <h4 class="mb-2">Slot #{{ slotIndex + 1 }}</h4>
-      <span v-if="slot.id" class="text-xs text-gray-500"
-        >(ID: {{ slot.id }})</span
+    <!-- Slots Container -->
+    <div class="space-y-6">
+      <div
+        v-for="(slot, slotIndex) in slots"
+        :key="slotIndex"
+        class="admin-card"
       >
-
-      <!-- Date & Time -->
-      <div class="flex flex-col gap-3 mb-3">
-        <div class="flex gap-3">
-          <DatePicker
-            class="w-full flex-9"
-            v-model="slot.date"
-            placeholder="Select Date"
-            showIcon
-          />
-          <Button
-            icon="pi pi-times"
-            severity="danger"
+        <!-- Slot Header -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
+              style="background-color: var(--color-primary); color: var(--color-text);"
+            >
+              {{ slotIndex + 1 }}
+            </div>
+            <h4 class="text-lg font-semibold" style="color: var(--color-text);">
+              Slot #{{ slotIndex + 1 }}
+            </h4>
+            <span v-if="slot.id" class="text-xs px-2 py-1 rounded-full" style="background-color: var(--color-bg); color: var(--color-gray);">
+              ID: {{ slot.id }}
+            </span>
+          </div>
+          <button
             @click="removeSlot(slotIndex)"
             :disabled="slots.length === 1"
-          />
+            class="admin-btn-icon-danger"
+            :class="{ 'opacity-50 cursor-not-allowed': slots.length === 1 }"
+          >
+            <i class="pi pi-times"></i>
+          </button>
         </div>
-        <div class="flex gap-3">
-          <InputText
-            v-model="slot.startTime"
-            placeholder="Start Time (HH:mm)"
-          />
-          <InputText v-model="slot.endTime" placeholder="End Time (HH:mm)" />
+
+        <!-- Date & Time -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Event Date</label>
+            <input
+              type="date"
+              v-model="slot.dateString"
+              @input="updateSlotDate(slot, $event.target.value)"
+              class="admin-input"
+            />
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Start Time</label>
+            <input
+              v-model="slot.startTime"
+              type="time"
+              class="admin-input"
+              placeholder="HH:MM"
+            />
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">End Time</label>
+            <input
+              v-model="slot.endTime"
+              type="time"
+              class="admin-input"
+              placeholder="HH:MM"
+            />
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t my-4" style="border-color: var(--color-gray);"></div>
+
+        <!-- Ticket Types Section -->
+        <div class="mb-4">
+          <div class="flex items-center gap-3 mb-4">
+            <i class="pi pi-ticket text-lg" style="color: var(--color-primary);"></i>
+            <h5 class="text-lg font-medium" style="color: var(--color-text);">
+              Ticket Types
+            </h5>
+          </div>
+
+          <div class="space-y-4">
+            <div
+              v-for="(ticket, tIndex) in slot.ticketTypes"
+              :key="tIndex"
+              class="p-4 rounded-lg border"
+              style="background-color: var(--color-bg); border-color: var(--color-gray);"
+            >
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Ticket Type Selection -->
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Ticket Type</label>
+                  <select
+                    v-model="ticket.id"
+                    @change="onTicketTypeChange(ticket)"
+                    class="admin-select"
+                  >
+                    <option :value="null" disabled>Select ticket type</option>
+                    <option
+                      v-for="tt in getAvailableTTs(slot, ticket)"
+                      :key="tt.id"
+                      :value="tt.id"
+                    >
+                      {{ tt.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Capacity -->
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Capacity</label>
+                  <input
+                    v-model.number="ticket.capacity"
+                    type="number"
+                    min="1"
+                    class="admin-input"
+                    placeholder="Max attendees"
+                  />
+                </div>
+
+                <!-- Price (Read-only) -->
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Price (SAR)</label>
+                  <div class="flex items-center gap-2">
+                    <input
+                      :value="ticket.price"
+                      type="number"
+                      class="admin-input opacity-75"
+                      placeholder="Auto-filled"
+                      readonly
+                    />
+                    <button
+                      @click="removeTicketType(slot, tIndex)"
+                      :disabled="slot.ticketTypes.length === 1"
+                      class="admin-btn-icon-danger"
+                      :class="{ 'opacity-50 cursor-not-allowed': slot.ticketTypes.length === 1 }"
+                    >
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Ticket Type Button -->
+          <button
+            @click="addTicketType(slot)"
+            :disabled="getAvailableTTs(slot, { id: 0 }).length === 0"
+            class="admin-btn-secondary mt-4"
+            :class="{ 'opacity-50 cursor-not-allowed': getAvailableTTs(slot, { id: 0 }).length === 0 }"
+          >
+            <i class="pi pi-plus"></i>
+            Add Ticket Type
+          </button>
         </div>
       </div>
+    </div>
 
-      <Divider />
-
-      <!-- Ticket Types -->
-      <h4 class="text-md font-semibold mb-3">Ticket Types</h4>
-
-      <div
-        v-for="(ticket, tIndex) in slot.ticketTypes"
-        :key="tIndex"
-        class="flex flex-col gap-3 mb-3"
+    <!-- Add Slot Button -->
+    <div class="flex justify-center">
+      <button
+        @click="addSlot"
+        class="admin-btn-primary"
       >
-        <div class="flex gap-3">
-          <Select
-            v-model="ticket.id"
-            :options="getAvailableTTs(slot, ticket)"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Select Ticket Type"
-            class="w-full flex-9"
-            @change="onTicketTypeChange(ticket)"
-          />
-          <InputNumber
-            v-model="ticket.capacity"
-            placeholder="Capacity"
-            class="flex-1"
-            :min="1"
-          />
-        </div>
+        <i class="pi pi-plus"></i>
+        Add New Slot
+      </button>
+    </div>
 
-        <div class="flex gap-3 items-center">
-          <InputNumber
-            v-model="ticket.price"
-            inputId="price"
-            placeholder="Price in SAR"
-            mode="currency"
-            currency="SAR"
-            class="flex-3"
-            disabled
-          />
-          <Button
-            icon="pi pi-trash"
-            severity="secondary"
-            @click="removeTicketType(slot, tIndex)"
-            :disabled="slot.ticketTypes.length === 1"
-          />
+    <!-- Error Messages -->
+    <div v-if="hasDuplicateSlots || hasPastSlot" class="space-y-2">
+      <div
+        v-if="hasDuplicateSlots"
+        class="admin-toast error"
+      >
+        <div class="flex items-center gap-2">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>Duplicate slot detected (same date and start time)</span>
         </div>
       </div>
-
-      <Button
-        icon="pi pi-plus"
-        label="Add Ticket Type"
-        @click="addTicketType(slot)"
-        :disabled="getAvailableTTs(slot, { id: 0 }).length === 0"
-      />
-    </div>
-
-    <div class="flex justify-between items-center mt-4">
-      <Button icon="pi pi-plus" label="Add Slot" @click="addSlot" />
-    </div>
-
-    <div v-if="hasDuplicateSlots" class="text-red-500 mt-2">
-      Duplicate slot detected (same date and start time)
-    </div>
-    <div v-if="hasPastSlot" class="text-red-500 mt-2">
-      One or more slots are in the past
+      <div
+        v-if="hasPastSlot"
+        class="admin-toast error"
+      >
+        <div class="flex items-center gap-2">
+          <i class="pi pi-clock"></i>
+          <span>One or more slots are scheduled in the past</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@import "../../styles/admin.css";
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+</style>

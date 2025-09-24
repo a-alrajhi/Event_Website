@@ -4,19 +4,18 @@ Event Ticket Types Component - Handles ticket selection and quantity management
 @since: 9/15/2025
 @version: 1.0
 -->
-
 <template>
   <!-- Main Container -->
   <div
-    class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50"
+    class="relative min-h-screen bg-gradient-to-br from-white/90 to-white/70 dark:from-gray-800/90 dark:to-gray-900/70 backdrop-blur-md"
   >
     <div class="container mx-auto px-4 py-8">
       <!-- Header Section -->
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Select Your Tickets
         </h1>
-        <p class="text-gray-600">
+        <p class="text-gray-600 dark:text-gray-300">
           Choose the number of tickets you'd like to purchase
         </p>
       </div>
@@ -25,16 +24,8 @@ Event Ticket Types Component - Handles ticket selection and quantity management
       <!-- Ready to use component -->
       <div class="max-w-5xl mx-auto mb-12">
         <div
-          class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 overflow-hidden relative"
+          class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8 overflow-hidden relative"
         >
-          <!-- Background decoration -->
-          <div
-            class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-50 to-transparent rounded-bl-full opacity-50"
-          ></div>
-          <div
-            class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-50 to-transparent rounded-tr-full opacity-50"
-          ></div>
-
           <!-- Desktop Version -->
           <div
             class="hidden md:flex items-center justify-between relative z-10"
@@ -59,23 +50,25 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                 ></div>
               </div>
               <div class="mt-4 text-center">
-                <h3 class="font-bold text-gray-900 text-lg">
+                <h3 class="font-bold text-gray-900 dark:text-white text-lg">
                   Ticket Selection
                 </h3>
-                <p class="text-sm text-blue-600 font-medium">Current Step</p>
+                <p class="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                  Current Step
+                </p>
               </div>
             </div>
 
             <!-- Connector Line -->
-            <div class="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+            <div class="flex-1 h-0.5 bg-gray-200 dark:bg-gray-600 mx-4"></div>
 
             <!-- Step 2: Payment -->
             <div class="flex flex-col items-center">
               <div
-                class="w-16 h-16 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-md"
+                class="w-16 h-16 bg-white dark:bg-gray-700 border-4 border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center shadow-md"
               >
                 <svg
-                  class="w-8 h-8 text-gray-400"
+                  class="w-8 h-8 text-gray-400 dark:text-gray-300"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -89,18 +82,22 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                 </svg>
               </div>
               <div class="mt-4 text-center">
-                <h3 class="font-bold text-gray-500 text-lg">Payment</h3>
-                <p class="text-sm text-gray-400 font-medium">Next Step</p>
+                <h3 class="font-bold text-gray-500 dark:text-gray-300 text-lg">
+                  Payment
+                </h3>
+                <p class="text-sm text-gray-400 dark:text-gray-400 font-medium">
+                  Next Step
+                </p>
               </div>
             </div>
 
             <!-- Connector Line -->
-            <div class="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+            <div class="flex-1 h-0.5 bg-gray-200 dark:bg-gray-600 mx-4"></div>
 
             <!-- Step 3: Confirmation -->
             <div class="flex flex-col items-center">
               <div
-                class="w-16 h-16 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-md"
+                class="w-16 h-16 bg-white dark:bg-gray-700 border-4 border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center shadow-md"
               >
                 <svg
                   class="w-8 h-8 text-gray-400"
@@ -142,10 +139,12 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                 ></path>
               </svg>
             </div>
-            <h3 class="font-bold text-gray-900 text-xl mb-2">
+            <h3 class="font-bold text-gray-900 dark:text-white text-xl mb-2">
               Ticket Selection
             </h3>
-            <p class="text-sm text-blue-600 font-medium">Step 1 of 3</p>
+            <p class="text-sm text-blue-600 dark:text-blue-400 font-medium">
+              Step 1 of 3
+            </p>
           </div>
         </div>
       </div>
@@ -162,12 +161,12 @@ Event Ticket Types Component - Handles ticket selection and quantity management
         <!-- Error State -->
         <div
           v-else-if="error"
-          class="bg-red-50 border border-red-200 rounded-xl p-6 text-center"
+          class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/30 rounded-xl p-6 text-center"
         >
-          <div class="text-red-600 font-semibold mb-2">
+          <div class="text-red-600 dark:text-red-400 font-semibold mb-2">
             Oops! Something went wrong
           </div>
-          <p class="text-red-500">{{ error }}</p>
+          <p class="text-red-500 dark:text-red-400">{{ error }}</p>
         </div>
 
         <!-- Ticket List -->
@@ -176,7 +175,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
           <div
             v-for="ticketInfo in ticketTypes"
             :key="ticketInfo.id"
-            class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
           >
             <!-- Current Ticket Info Container -->
             <div class="p-6">
@@ -208,20 +207,23 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                     </div>
 
                     <div class="flex-1 min-w-0">
-                      <h3 class="text-lg font-bold text-gray-900 mb-1">
+                      <h3
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-1"
+                      >
                         {{ ticketInfo.name }}
                       </h3>
 
                       <!-- Ticket Description -->
-                      <p class="text-sm text-gray-600 mb-2">
+                      <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
                         {{ ticketInfo.name + " event ticket" }}
                       </p>
 
                       <!-- Ticket Price -->
                       <div class="flex items-center space-x-4">
-                        <span class="text-2xl font-bold text-blue-600">{{
-                          formatCurrency(ticketInfo.price)
-                        }}</span>
+                        <span
+                          class="text-2xl font-bold text-blue-600 dark:text-blue-400"
+                          >{{ formatCurrency(ticketInfo.price) }}</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -230,9 +232,9 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                 <!-- Quantity Selector -->
                 <div class="lg:flex-shrink-0">
                   <!-- Gray Container -->
-                  <div class="bg-gray-50 rounded-xl p-4">
+                  <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
                     <label
-                      class="block text-sm font-medium text-gray-700 mb-3 text-center"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 text-center"
                     >
                       Quantity
                     </label>
@@ -243,24 +245,25 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                       <button
                         @click="decrease(ticketInfo)"
                         :disabled="(ticketQuantities[ticketInfo.id] || 0) <= 0"
-                        class="w-10 h-10 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center hover:border-blue-500 hover:bg-blue-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <span class="text-gray-900">-</span>
+                        <span class="text-gray-900 dark:text-white">-</span>
                       </button>
 
                       <!-- Quantity Display -->
                       <div class="w-16 text-center">
-                        <span class="text-xl font-bold text-gray-900">{{
-                          ticketQuantities[ticketInfo.id] || 0
-                        }}</span>
+                        <span
+                          class="text-xl font-bold text-gray-900 dark:text-white"
+                          >{{ ticketQuantities[ticketInfo.id] || 0 }}</span
+                        >
                       </div>
                       <!-- Increase Button -->
                       <button
                         @click="increase(ticketInfo)"
                         :disabled="(ticketQuantities[ticketInfo.id] || 0) >= 50"
-                        class="w-10 h-10 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center hover:border-blue-500 hover:bg-blue-50 transition-colors duration-200"
+                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200"
                       >
-                        <span class="text-gray-900">+</span>
+                        <span class="text-gray-900 dark:text-white">+</span>
                       </button>
                     </div>
                   </div>
@@ -274,16 +277,18 @@ Event Ticket Types Component - Handles ticket selection and quantity management
         <!-- only show when tickets > 1 -->
         <div
           v-if="totalTickets > 0"
-          class="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200 hover:scale-[1.02] transition-all duration-500"
+          class="relative mt-8 bg-gradient-to-br from-white/90 to-white/70 dark:from-gray-800/90 dark:to-gray-900/70 backdrop-blur-md rounded-2xl border border-white/40 dark:border-gray-600/40 overflow-hidden hover:scale-[1.02] transition-all duration-500 p-6"
         >
           <div
             class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0"
           >
             <!-- Left side summary info -->
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Order Summary</h3>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                Order Summary
+              </h3>
 
-              <p class="text-sm text-gray-600">
+              <p class="text-sm text-gray-600 dark:text-gray-300">
                 {{ totalTickets }} ticket{{ totalTickets > 1 ? "s" : "" }}
                 selected
               </p>
@@ -291,10 +296,12 @@ Event Ticket Types Component - Handles ticket selection and quantity management
 
             <!-- Right side total price -->
             <div class="text-right">
-              <div class="text-2xl font-bold text-gray-900">
+              <div class="text-2xl font-bold text-gray-900 dark:text-white">
                 {{ formatCurrency(totalAmount) }}
               </div>
-              <div class="text-sm text-gray-600">Total Amount</div>
+              <div class="text-sm text-gray-600 dark:text-gray-300">
+                Total Amount
+              </div>
             </div>
           </div>
         </div>

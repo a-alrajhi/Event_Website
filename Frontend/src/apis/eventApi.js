@@ -6,7 +6,6 @@ Event API
  */
 import apis from "./axiosClient";
 
-// THIS METHOD SHOULD BE IN THE SERVICE FOLDER
 export async function getFullEventDetails(eventId) {
   // fetching all data in parallel
   const [eventDetails, ticketTypes, slots, location] = await Promise.all([

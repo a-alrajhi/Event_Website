@@ -28,6 +28,7 @@ public class TicketDTO {
   private Boolean checkedIn;
   private SlotTicketTypeCapacityDTO slotTicketTypeCapacityDTO;
   private SeatDTO seat;
+  private Integer userId;
 
   public static TicketDTO fromEntity(Ticket ticket) {
     if (ticket == null) return null;
@@ -43,6 +44,7 @@ public class TicketDTO {
       SeatDTO seatDTO = SeatDTO.fromEntity(ticket.getSeat());
       ticketDTO.setSeat(seatDTO);
     }
+    ticketDTO.setUserId(ticket.getUser().getId());
     return ticketDTO;
   }
 }

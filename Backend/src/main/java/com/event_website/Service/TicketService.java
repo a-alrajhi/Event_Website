@@ -3,6 +3,7 @@ package com.event_website.Service;
 import com.event_website.Entity.SlotTicketTypeCapacity;
 import com.event_website.Entity.Ticket;
 import com.event_website.Entity.TicketType;
+import com.event_website.Entity.User;
 import com.event_website.Exception.ResourceNotFoundException;
 import com.event_website.Repository.*;
 import com.event_website.Request.CreateTicketRequest;
@@ -59,6 +60,9 @@ public class TicketService {
             : TicketCodeGenerator.generateTicketCode();
     ticket.setTicketCode(code);
     ticket.setCheckedIn(false); // default
+    User user = userRepo.findById(req.getUserId())
+        .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    ticket.setUser(user);
 
     Ticket savedTicket = ticketRepo.save(ticket);
     return savedTicket;

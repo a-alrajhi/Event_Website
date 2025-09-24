@@ -1,10 +1,9 @@
 /* Import font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 
 /* ===============================
    Global Reset & Base
 =============================== */
-/*
 * {
     margin: 0;
     padding: 0;
@@ -17,208 +16,207 @@ body {
     color: #333;
     line-height: 1.5;
 }
-*/
 
 /* ===============================
    Auth Page Background
 =============================== */
 .auth-page {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    background: url('../assets/blvd1.png') no-repeat center center;
-    background-size: cover;
+  background: url("../assets/blvd1.png") no-repeat center center;
+  background-size: cover;
 
-    padding: 30px;
+  padding: 30px;
 }
 
 .auth-page::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
 }
 
 /* ===============================
    Auth Container
 =============================== */
 .auth-page .container {
-    position: relative;
-    z-index: 1;
-    max-width: 420px;
-    width: 100%;
-    background: #fff;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-    animation: fadeInUp 0.5s ease;
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  width: 100%;
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.5s ease;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===============================
    Title
 =============================== */
 .auth-page .title {
-    font-size: 26px;
-    font-weight: 600;
-    color: #333;
-    text-align: center;
-    margin-bottom: 25px;
-    position: relative;
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 25px;
+  position: relative;
 }
 
 .auth-page .title::before {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 3px;
-    background: #6366f1;
-    border-radius: 2px;
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: #6366f1;
+  border-radius: 2px;
 }
 
 /* ===============================
    Form Layout
 =============================== */
 .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 /* Input wrappers (for icons support) */
 .input-box {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .input-box i {
-    position: absolute;
-    left: 12px;
-    font-size: 18px;
-    color: #666;
+  position: absolute;
+  left: 12px;
+  font-size: 18px;
+  color: #666;
 }
 
 .input-box input {
-    width: 100%;
-    padding: 12px 14px 12px 40px;
-    border: none;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-    outline: none;
-    font-size: 15px;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  border: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  outline: none;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
 }
 
 .input-box input:focus,
 .input-box input:valid {
-    border-color: #4f46e5;
+  border-color: #4f46e5;
 }
 
 /* ===============================
    Error Message
 =============================== */
 .error-message {
-    color: #e11d48;
-    font-size: 14px;
-    text-align: center;
-    margin-top: -5px;
+  color: #e11d48;
+  font-size: 14px;
+  text-align: center;
+  margin-top: -5px;
 }
 
 /* ===============================
    Buttons
 =============================== */
 .button {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .button button,
 .button input {
-    width: 100%;
-    height: 50px;
-    background: linear-gradient(90deg, #4f46e5, #6366f1);
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 }
 
 .button button:hover,
 .button input:hover {
-    background: linear-gradient(90deg, #4338ca, #4f46e5);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+  background: linear-gradient(90deg, #4338ca, #4f46e5);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
 }
 
 .button button:focus,
 .button input:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
 }
 
 /* ===============================
    Footer Text
 =============================== */
 .auth-page .text {
-    margin-top: 18px;
-    text-align: center;
-    font-size: 14px;
-    color: #555;
+  margin-top: 18px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
 }
 
 .auth-page .text a,
 .auth-page .text label {
-    color: #4f46e5;
-    cursor: pointer;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.2s ease;
+  color: #4f46e5;
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .auth-page .text a:hover,
 .auth-page .text label:hover {
-    text-decoration: underline;
-    color: #4338ca;
+  text-decoration: underline;
+  color: #4338ca;
 }
 
 /* ===============================
    Responsive
 =============================== */
 @media (max-width: 480px) {
-    .auth-page .container {
-        padding: 30px 20px;
-    }
+  .auth-page .container {
+    padding: 30px 20px;
+  }
 
-    .auth-page .title {
-        font-size: 22px;
-    }
+  .auth-page .title {
+    font-size: 22px;
+  }
 
-    .button button,
-    .button input {
-        font-size: 15px;
-    }
+  .button button,
+  .button input {
+    font-size: 15px;
+  }
 }

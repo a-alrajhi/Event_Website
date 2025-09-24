@@ -5,6 +5,8 @@ Event API
 @version: 1.0
  */
 import apis from "./axiosClient";
+import { useAuthStore } from "../stores/authStore";
+import { usePaymentStore } from "../stores/paymentStore";
 
 /**
  * Getting event details from event id
@@ -22,4 +24,37 @@ export async function getEventSlots(eventId) {
 export async function getEventTicketTypes(eventId) {
   const response = await apis.get(`/ticket-type/event/${eventId}`);
   return response.data;
+}
+
+// @PostMapping("/create-ticket")
+
+/**
+ * Create tickets after payment
+ * @returns List<TicketDTO>
+ */
+export async function generateTickets() {
+  try {
+    const authStore = useAuthStore();
+    const paymentStore = usePaymentStore();
+
+    const user = await authStore.getUser();
+    if (!user) {
+      throw new Error("User is not logged in. Cannot generate tickets.");
+    }
+
+    const body = paymentStore.tickets.map((t) => ({
+      slotId: paymentStore.slotId,
+      ticketTypeId: t.id,
+      userId: user.id,
+      quantity: t.quantity,
+    }));
+
+    console.log("Sending generateTickets payload:", body);
+
+    const response = await apis.post(`/generate-tickets`, body);
+    return response.data; // List<TicketDTO>
+  } catch (error) {
+    console.error("Error creating ticket:", error);
+    throw error;
+  }
 }

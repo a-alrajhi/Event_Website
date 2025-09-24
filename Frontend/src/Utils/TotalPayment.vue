@@ -97,7 +97,7 @@
         type="submit"
         :class="applyButtonStyle"
       >
-        Pay Now
+        {{ buttonText }}
       </button>
     </div>
   </div>
@@ -111,22 +111,42 @@ import { useRouter } from "vue-router";
 const paymentStore = usePaymentStore();
 const router = useRouter();
 
+const baseClasses =
+  "w-full rounded-xl px-8 py-4 text-lg font-bold shadow-xl focus:outline-none focus:ring-4 transition-all duration-300 cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]";
+
+// button matching each payment method's branding
 const applyButtonStyle = computed(() => {
   switch (paymentStore.selectedPaymentMethod) {
     case "credit-card":
-      return `${baseClasses} bg-blue-600 hover:bg-blue-700 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800`;
+      return `${baseClasses} bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white focus:ring-blue-300 shadow-blue-500/25 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 dark:focus:ring-blue-800`;
 
     case "mada":
-      return `${baseClasses} bg-green-600 hover:bg-green-700 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800`;
+      return `${baseClasses} bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white focus:ring-emerald-300 shadow-emerald-500/25 dark:from-emerald-500 dark:to-green-500 dark:hover:from-emerald-600 dark:hover:to-green-600 dark:focus:ring-emerald-800`;
 
     case "apple-pay":
-      return `${baseClasses} bg-black hover:bg-gray-800 focus:ring-gray-300 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600`;
+      return `${baseClasses} bg-gradient-to-r from-gray-900 to-black hover:from-black hover:to-gray-800 text-white focus:ring-gray-400 shadow-gray-900/50 dark:from-gray-800 dark:to-gray-900 dark:hover:from-gray-700 dark:hover:to-gray-800 dark:focus:ring-gray-600`;
 
     case "stc-pay":
-      return `${baseClasses} bg-purple-600 hover:bg-purple-700 focus:ring-purple-300 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800`;
+      return `${baseClasses} bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white focus:ring-purple-300 shadow-purple-500/25 dark:from-purple-500 dark:to-violet-500 dark:hover:from-purple-600 dark:hover:to-violet-600 dark:focus:ring-purple-800`;
 
     default:
-      return `${baseClasses} bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-800`;
+      return `${baseClasses} bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white focus:ring-indigo-300 shadow-indigo-500/25 dark:from-indigo-500 dark:to-purple-500 dark:hover:from-indigo-600 dark:hover:to-purple-600 dark:focus:ring-indigo-800`;
+  }
+});
+
+// Dynamic button text based on payment method
+const buttonText = computed(() => {
+  switch (paymentStore.selectedPaymentMethod) {
+    case "credit-card":
+      return "Pay with Card";
+    case "mada":
+      return "Pay with Mada";
+    case "apple-pay":
+      return "Pay with Apple Pay";
+    case "stc-pay":
+      return "Pay with STC Pay";
+    default:
+      return "Pay Now";
   }
 });
 

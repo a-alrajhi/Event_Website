@@ -6,7 +6,6 @@ Event Payment Page - Handles payment processing and order summary
 -->
 
 <!-- EventPaymentPage -->
-
 <template>
   <!-- Main Container with glassmorphism background -->
   <div

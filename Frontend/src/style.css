@@ -3,23 +3,65 @@
 @theme {
   /* Accents */
   --color-primary: oklch(0.65 0.25 280); /* Vibrant purple */
-  --color-secondary: oklch(0.58 0.20 285); /* Softer purple */
+  --color-secondary: oklch(0.58 0.2 285); /* Softer purple */
   --color-hover: oklch(0.52 0.18 275); /* Darker hover state */
 
   /* Background layers */
-  --color-bg: oklch(0.20 0 270);
-  --color-card: oklch(0.20 0 270); /* Slightly lighter than bg */
-  --color-footer: oklch(0.10 0 270); /* Darker than bg, footer feel */
+  --color-bg: oklch(0.2 0 270);
+  --color-card: oklch(0.2 0 270); /* Slightly lighter than bg */
+  --color-footer: oklch(0.1 0 270); /* Darker than bg, footer feel */
 
   /* Text */
   --color-text: oklch(0.94 0.02 270); /* Almost white, slight cool tint */
-  --color-gray: oklch(0.70 0 270); /* Neutral gray for muted text */
+  --color-gray: oklch(0.7 0 270); /* Neutral gray for muted text */
 
   /* Semantic */
-  --color-error: oklch(0.60 0.25 25); /* Accessible reddish orange */
+  --color-error: oklch(0.6 0.25 25); /* Accessible reddish orange */
 
   /* Font */
   --font-poppins: "Poppins", sans-serif;
 }
 
-@import "tailwindcss";
+/* USE THIS FOR ANY CARD COMP */
+.event-card {
+  background: linear-gradient(
+    135deg,
+    rgba(249, 250, 251, 0.8) 0%,
+    rgba(255, 255, 255, 0.6) 100%
+  );
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(229, 231, 235, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .event-card {
+    background: linear-gradient(
+      135deg,
+      rgba(55, 65, 81, 0.8) 0%,
+      rgba(31, 41, 55, 0.6) 100%
+    );
+    border: 1px solid rgba(75, 85, 99, 0.3);
+  }
+}
+/* Main background*/
+body {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(
+      135deg,
+      rgba(31, 41, 55, 0.9) 0%,
+      rgba(17, 24, 39, 0.7) 100%
+    );
+  }
+}

@@ -86,12 +86,16 @@
       </dl>
     </div>
 
+    <!-- old payment button  -->
+    <!-- 
+            class="w-full rounded-lg bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-800 transition-all cursor-pointer" -->
+
     <!-- Footer Button -->
     <div id="payment-footer" class="mt-4">
       <button
         @click="goToConfirmationPage"
         type="submit"
-        class="w-full rounded-lg bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-800 transition-all cursor-pointer"
+        :class="applyButtonStyle"
       >
         Pay Now
       </button>
@@ -106,6 +110,25 @@ import { useRouter } from "vue-router";
 
 const paymentStore = usePaymentStore();
 const router = useRouter();
+
+const applyButtonStyle = computed(() => {
+  switch (paymentStore.selectedPaymentMethod) {
+    case "credit-card":
+      return `${baseClasses} bg-blue-600 hover:bg-blue-700 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800`;
+
+    case "mada":
+      return `${baseClasses} bg-green-600 hover:bg-green-700 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800`;
+
+    case "apple-pay":
+      return `${baseClasses} bg-black hover:bg-gray-800 focus:ring-gray-300 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600`;
+
+    case "stc-pay":
+      return `${baseClasses} bg-purple-600 hover:bg-purple-700 focus:ring-purple-300 dark:bg-purple-500 dark:hover:bg-purple-600 dark:focus:ring-purple-800`;
+
+    default:
+      return `${baseClasses} bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-800`;
+  }
+});
 
 const discountCode = ref("");
 const discountValue = ref(0);

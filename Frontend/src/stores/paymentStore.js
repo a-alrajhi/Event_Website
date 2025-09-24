@@ -31,6 +31,7 @@ export const usePaymentStore = defineStore("payment", {
       // recompute totals
       this.totalTickets = tickets.reduce((sum, t) => sum + t.quantity, 0);
       this.totalAmount = tickets.reduce((sum, t) => sum + t.subtotal, 0);
+      this.selectedPaymentMethod = "credit-card";
     },
 
     /**

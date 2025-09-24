@@ -76,9 +76,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 import PaymentMethods from "./PaymentMethods.vue";
 import PaymentCardForm from "./PaymentCardForm.vue";
+
+const selectedPaymentMethod = computed(() => {});
 
 const selectedPaymentMethod = ref("credit-card");
 </script>

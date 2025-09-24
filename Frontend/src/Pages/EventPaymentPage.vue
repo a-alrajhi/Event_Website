@@ -26,23 +26,32 @@ Event Payment Page - Handles payment processing and order summary
         <!-- Step 1: Ticket Selection (Completed) -->
         <div class="flex flex-col items-center">
           <div
-            class="w-16 h-16 bg-white border-4 border-gray-300 rounded-full flex items-center justify-center shadow-md"
+            class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-md"
           >
-            <svg class="w-8 h-8 text-gray-400" viewBox="0 0 32 32">
+            <svg
+              class="w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
-                fill="currentColor"
-                d="M28.46 9H27a1 1 0 0 0 0 2h1v12H12a2 2 0 0 0 0-.35 1 1 0 0 0-2 0 .35.35 0 0 1-.35.35h-5.3a.35.35 0 0 1-.35-.35v-11.3a.35.35 0 0 1 .35-.35h5.3a.35.35 0 0 1 .35.35 1 1 0 1 0 2 0 2 2 0 0 0 0-.35h11a1 1 0 0 0 0-2H11a1 1 0 0 0-.51.16A2.32 2.32 0 0 0 9.65 9h-5.3A2.35 2.35 0 0 0 2 11.35v11.3A2.35 2.35 0 0 0 4.35 25h5.3a2.32 2.32 0 0 0 .84-.16A1 1 0 0 0 11 25h17.46A1.54 1.54 0 0 0 30 23.46V10.54A1.54 1.54 0 0 0 28.46 9z"
-              />
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
             </svg>
           </div>
           <div class="mt-4 text-center">
-            <h3 class="font-bold text-gray-500 text-lg">Ticket Selection</h3>
-            <p class="text-sm text-gray-400 font-medium">Completed</p>
+            <h3 class="font-bold text-green-600 text-lg">Ticket Selection</h3>
+            <p class="text-sm text-green-500 font-medium">Completed</p>
           </div>
         </div>
 
         <!-- Connector Line -->
-        <div class="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+        <div
+          class="flex-1 h-1 bg-gradient-to-r from-green-400/60 to-blue-400/80 mx-6 rounded-full shadow-md"
+        ></div>
 
         <!-- Step 2: Payment (Active) -->
         <div class="flex flex-col items-center">
@@ -73,7 +82,7 @@ Event Payment Page - Handles payment processing and order summary
         </div>
 
         <!-- Connector Line -->
-        <div class="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+        <div class="flex-1 h-1 bg-gray-200 mx-6 rounded-full shadow-md"></div>
 
         <!-- Step 3: Confirmation -->
         <div class="flex flex-col items-center">
@@ -260,13 +269,17 @@ Event Payment Page - Handles payment processing and order summary
       <div class="hidden md:block w-px bg-gray-200"></div>
       <!-- Right Section (Payment Form) -->
       <div class="flex-1 bg-white rounded-xl shadow-md p-6">
-        <h2 class="text-xl font-bold mb-4">Payment Details</h2>
+        <h2 class="text-xl font-bold mb-4">Payment Methods</h2>
 
         <PaymentAccordion />
         <!-- Total Summary -->
         <TotalPayment />
       </div>
     </div>
+  </div>
+
+  <div class="mt-12">
+    <AppFooter />
   </div>
 </template>
 
@@ -281,8 +294,10 @@ import EventLocationMap from "../components/Event/EventLocationMap.vue";
 import SubRulesAndReminders from "../components/Event/SubRulesAndReminders.vue";
 import PaymentAccordion from "../Utils/PaymentAccordion.vue";
 import TotalPayment from "../Utils/TotalPayment.vue";
+import AppFooter from "../components/AppFooter/AppFooter.vue";
 
 const paymentStore = usePaymentStore();
+console.log("Carried Tickets from paymentStore: ", paymentStore.tickets);
 
 const selectedSlot = computed(() => {
   if (!paymentStore.event?.slots) return null;
@@ -315,5 +330,3 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 </script>
-
-<!-- End of EventPaymentPage File -->

@@ -1,7 +1,7 @@
 <template>
   <!-- Navbar -->
   <nav
-    class="bg-[var(--color-bg)] border-b border-gray-800 text-[var(--color-text)] shadow-md"
+    class="dark:bg-[var(--color-bg)] border-b dark:border-gray-800 text-[var(--color-text)] shadow-md"
   >
     <div
       class="max-w-screen-xl flex flex-col sm:flex-row sm:items-center justify-between mx-auto p-4 gap-4"
@@ -40,12 +40,12 @@
 
   <!-- Small Categories Navbar -->
   <section
-    class="bg-[var(--color-bg)] py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-800"
+    class="dark:bg-[var(--color-bg)] py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-800"
   >
     <div
       v-for="(category, index) in categories"
       :key="index"
-      class="flex flex-col items-center cursor-pointer transition text-[var(--color-text)] hover:text-[var(--color-primary)] min-w-[70px]"
+      class="flex flex-col items-center cursor-pointer transition dark:text-[var(--color-text)] hover:text-[var(--color-primary)] min-w-[70px]"
     >
       <component
         :is="category.icon"

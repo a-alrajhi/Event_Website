@@ -4,6 +4,7 @@
 @version: 1.0
 -->
 <template>
+  <Navbar />
   <div class="event-details-page px-4 py-6 max-w-7xl mx-auto">
     <div v-if="eventDetailsFetched">
       <EventBreadcrumb :pagePath="eventDetailsFetched" />
@@ -12,13 +13,20 @@
       <!-- Main content and sidebar -->
       <div class="flex flex-col lg:flex-row gap-6 mt-8">
         <div class="flex-1">
-          <EventMainContent :title="eventDetailsFetched.name" :subtitle="eventDetailsFetched.description" />
+          <EventMainContent
+            :title="eventDetailsFetched.name"
+            :subtitle="eventDetailsFetched.description"
+          />
           <EventRules :rules="eventDetailsFetched.rules" />
         </div>
 
         <div class="lg:w-[320px] xl:w-[400px] shrink-0 px-3 py-12">
-          <EventSidebar :startingPrice="eventDetailsFetched.startingPrice" :slots="eventDetailsFetched.slots"
-            :ticketTypes="eventDetailsFetched.ticketInfo" :eventId="eventDetailsFetched.id" />
+          <EventSidebar
+            :startingPrice="eventDetailsFetched.startingPrice"
+            :slots="eventDetailsFetched.slots"
+            :ticketTypes="eventDetailsFetched.ticketInfo"
+            :eventId="eventDetailsFetched.id"
+          />
         </div>
       </div>
 
@@ -29,15 +37,18 @@
 
       <!-- Similar Events -->
       <div class="mt-10">
-        <SimilarEvents v-if="eventDetailsFetched && eventDetailsFetched.categoryId"
-          :categoryId="eventDetailsFetched.categoryId" :curEventId="eventDetailsFetched.id" />
-
+        <SimilarEvents
+          v-if="eventDetailsFetched && eventDetailsFetched.categoryId"
+          :categoryId="eventDetailsFetched.categoryId"
+          :curEventId="eventDetailsFetched.id"
+        />
       </div>
     </div>
     <div v-else>
       <p class="text-gray-500">Loading event details...</p>
     </div>
   </div>
+  <AppFooter />
 </template>
 
 <script setup>
@@ -51,6 +62,8 @@ import EventSidebar from "../components/Event/EventSidebar.vue";
 import EventLocationMap from "../components/Event/EventLocationMap.vue";
 import SimilarEvents from "../components/Event/SimilarEvents.vue";
 import EventRules from "../components/Event/EventRules.vue";
+import AppFooter from "../components/AppFooter/AppFooter.vue";
+import Navbar from "../components/Navbar/Navbar.vue";
 
 const route = useRoute();
 const eventDetailsFetched = ref(null);

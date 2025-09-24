@@ -2,11 +2,11 @@
 Event Similar Events Component
 @author: Abdulrahman Al Rajhi
 @since: 9/15/2025
-@version: 1.0
+@version: 1.1 - Fixed light/dark mode classes
 -->
 <template>
   <div class="my-8">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
       Explore Similar Events!
     </h2>
 
@@ -29,22 +29,26 @@ Event Similar Events Component
         :key="event.id"
         class="h-auto py-2"
       >
-        <div class="bg-white shadow-md rounded-xl overflow-hidden">
+        <div
+          class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-[1.02] transition-all duration-300"
+        >
           <img
             :src="event.photoUrl"
             :alt="event.name"
             class="h-48 w-full object-cover"
           />
           <div class="p-4">
-            <h3 class="text-lg font-semibold text-gray-800">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
               {{ event.name }}
             </h3>
-            <p class="text-sm text-gray-600 line-clamp-2 mt-1">
+            <p
+              class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mt-1"
+            >
               {{ event.description }}
             </p>
             <RouterLink
               :to="`/event/${event.id}`"
-              class="cursor-pointer mt-3 inline-block text-sm text-blue-600 hover:underline"
+              class="cursor-pointer mt-3 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline"
             >
               View Event →
             </RouterLink>

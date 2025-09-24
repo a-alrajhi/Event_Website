@@ -56,7 +56,7 @@ Event Sidebar Component
     />
 
     <!-- horizontal line -->
-    <hr class="my-6 border-gray-300 border-gray-600" />
+    <hr class="my-6 border-gray-600" />
 
     <!-- Event's Date section -->
     <div class="mt-6 flex justify-between items-center w-full">

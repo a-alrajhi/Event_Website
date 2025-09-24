@@ -38,22 +38,24 @@
       <div
         v-for="(card, index) in cards"
         :key="index"
-        class="bg-[var(--color-card)] dark:bg-[var(--color-dark-card)] rounded-xl shadow-lg p-6 flex flex-col border border-[var(--color-primary)]/30 hover:shadow-[var(--color-primary)]/50 hover:scale-105 transition-transform duration-300"
+        class="event-card rounded-xl shadow-lg p-6 flex flex-col border border-[var(--color-primary)]/30 hover:shadow-[var(--color-primary)]/50 hover:scale-105 transition-transform duration-300"
       >
         <div class="flex items-center mb-4">
           <component
             :is="card.icon"
             class="w-6 h-6 text-[var(--color-primary)] drop-shadow-md me-3"
           />
-          <h3 class="text-lg md:text-xl font-semibold text-[var(--color-text)]">
+          <h3
+            class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white"
+          >
             {{ card.title }}
           </h3>
         </div>
-        <p class="text-[var(--color-gray)] flex-1 mb-4">
+        <p class="text-gray-600 dark:text-gray-400 flex-1 mb-4">
           {{ card.description }}
         </p>
         <button
-          class="mt-auto px-5 py-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:from-[var(--color-secondary)] hover:to-[var(--color-primary)] rounded-lg text-[var(--color-text)] font-medium shadow-md hover:shadow-[var(--color-primary)]/50 transition-all duration-300"
+          class="mt-auto px-5 py-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:from-[var(--color-secondary)] hover:to-[var(--color-primary)] rounded-lg text-white font-medium shadow-md hover:shadow-[var(--color-primary)]/50 transition-all duration-300"
         >
           Learn More
         </button>
@@ -75,7 +77,7 @@
 
     <!-- Contact Section -->
     <section
-      class="px-6 py-12 bg-[var(--color-bg)] flex flex-col items-center space-y-6"
+      class="px-6 py-12 bg-[var(--color-footer)] flex flex-col items-center space-y-6"
     >
       <h2
         class="text-2xl md:text-3xl font-bold text-[var(--color-primary)] drop-shadow-lg"

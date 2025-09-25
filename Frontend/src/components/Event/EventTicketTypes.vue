@@ -244,7 +244,10 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                       <!-- Decrease Button -->
                       <button
                         @click="decrease(ticketInfo)"
-                        :disabled="(ticketQuantities[ticketInfo.id] || 0) <= 0"
+                        :disabled="
+                          (ticketQuantities[ticketInfo.id] || 0) >=
+                          (remaining[ticketInfo.id] || 0)
+                        "
                         class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <span class="text-gray-900 dark:text-white">-</span>
@@ -260,7 +263,10 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                       <!-- Increase Button -->
                       <button
                         @click="increase(ticketInfo)"
-                        :disabled="(ticketQuantities[ticketInfo.id] || 0) >= 50"
+                        :disabled="
+                          (ticketQuantities[ticketInfo.id] || 0) >=
+                          remaining[ticketInfo.id]
+                        "
                         class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200"
                       >
                         <span class="text-gray-900 dark:text-white">+</span>
@@ -344,6 +350,7 @@ import { getAllTicketTypesForEvent } from "../../apis/eventApi";
 import { getFullEventDetails } from "../../apis/eventApi";
 import { usePaymentStore } from "../../stores/paymentStore";
 import AppFooter from "../AppFooter/AppFooter.vue";
+import { getSlotTicketCapacity } from "../../apis/slotsAndTicketTypes";
 
 const route = useRoute();
 const paymentStore = usePaymentStore();
@@ -360,6 +367,9 @@ const loading = ref(true);
 const error = ref(null);
 const router = useRouter();
 
+// remaining tickets
+const remaining = ref({});
+
 /**
  * Initialize component - fetch ticket types and event details
  */
@@ -373,6 +383,13 @@ onMounted(async () => {
     paymentStore.event = event;
 
     console.log("fetched ticket types:", ticketTypes.value);
+
+    // getting remaining
+    for (const t of ticketTypes.value) {
+      const cap = await getSlotTicketCapacity(slotId, t.id);
+      remaining.value[t.id] = cap.remainingTickets || cap.remaining || 50;
+    }
+    console.log("Remaining tickets per type:", remaining.value);
   } catch (err) {
     error.value = "Failed to load ticket types.";
     console.error(err);

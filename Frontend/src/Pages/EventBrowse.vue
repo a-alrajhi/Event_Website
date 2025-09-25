@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] font-[var(--font-poppins)]">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-[var(--font-poppins)]">
     <!-- Navbar Component -->
     <Navbar />
 
@@ -9,16 +9,16 @@
         <!-- Sidebar Filters -->
         <aside class="lg:w-80 space-y-6">
           <!-- Categories Filter -->
-          <div class="bg-[var(--color-card)]/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10">
+          <div class="event-card/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-semibold text-[var(--color-text)]">Categories</h2>
-              <span class="text-xs text-[var(--color-gray)] bg-[var(--color-primary)]/10 px-2 py-1 rounded-full">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Categories</h2>
+              <span class="text-xs text-gray-600 dark:text-gray-300 bg-[var(--color-primary)]/10 px-2 py-1 rounded-full">
                 {{ sidebarCategories.length }} available
               </span>
             </div>
 
             <div v-if="isLoading" class="space-y-3">
-              <div v-for="i in 4" :key="i" class="h-4 bg-[var(--color-bg)] rounded animate-pulse"></div>
+              <div v-for="i in 4" :key="i" class="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
             </div>
 
             <div v-else class="space-y-3 max-h-60 overflow-y-auto">
@@ -29,10 +29,10 @@
                   :inputId="cat"
                   class="accent-[var(--color-primary)]"
                 />
-                <span class="text-sm font-medium text-[var(--color-text)] group-hover:text-[var(--color-primary)] flex-1">
+                <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[var(--color-primary)] flex-1">
                   {{ cat }}
                 </span>
-                <span class="text-xs text-[var(--color-gray)] bg-[var(--color-bg)] px-2 py-1 rounded-full">
+                <span class="text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
                   {{ getCategoryCount(cat) }}
                 </span>
               </label>
@@ -42,7 +42,7 @@
           <!-- Price Filter -->
           <div v-if="!isLoading && priceRange.max > 0" class="bg-[var(--color-card)]/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-semibold text-[var(--color-text)]">Price Range</h2>
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Price Range</h2>
               <div class="bg-[var(--color-primary)]/10 px-3 py-1 rounded-full">
                 <span class="text-sm font-medium text-[var(--color-primary)]">
                   {{ currentPrice === 0 ? 'All' : `≤ SAR ${currentPrice}` }}
@@ -65,8 +65,8 @@
                 </span>
               </div>
 
-              <div class="bg-[var(--color-bg)]/50 rounded-xl p-3 text-center">
-                <span class="text-sm text-[var(--color-gray)]">
+              <div class="bg-gray-100/50 dark:bg-gray-800/50 rounded-xl p-3 text-center">
+                <span class="text-sm text-gray-600 dark:text-gray-300">
                   {{ getFilteredByPriceCount() }} events
                   {{ currentPrice === 0 ? 'in all price ranges' : `under SAR ${currentPrice}` }}
                 </span>
@@ -89,10 +89,10 @@
           <!-- Results Header -->
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
             <div>
-              <h2 class="text-2xl font-bold text-[var(--color-text)] mb-1">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                 Events in Saudi Arabia
               </h2>
-              <p class="text-[var(--color-gray)]">
+              <p class="text-gray-600 dark:text-gray-300">
                 <span class="font-medium">{{ filteredEvents.length }}</span> events found
                 <span v-if="selectedCategories.length > 0 || currentPrice > 0" class="text-[var(--color-primary)]">
                   (filtered)
@@ -101,7 +101,7 @@
             </div>
 
             <div class="flex items-center gap-4">
-              <div class="text-sm text-[var(--color-gray)]">
+              <div class="text-sm text-gray-600 dark:text-gray-300">
                 Price range: SAR 0 - SAR {{ priceRange.max }}
               </div>
             </div>
@@ -117,7 +117,7 @@
                 'px-4 py-2 rounded-full text-sm font-medium transition-all border',
                 selectedCategories.includes(cat)
                   ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)] shadow-lg'
-                  : 'bg-[var(--color-card)] text-[var(--color-text)] border-[var(--color-primary)]/30 hover:bg-[var(--color-primary)]/10'
+                  : 'event-card text-gray-900 dark:text-white border-[var(--color-primary)]/30 hover:bg-[var(--color-primary)]/10'
               ]"
             >
               {{ cat }} ({{ getCategoryCount(cat) }})
@@ -136,8 +136,8 @@
             <div class="w-20 h-20 bg-[var(--color-primary)]/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search class="w-8 h-8 text-[var(--color-primary)]" />
             </div>
-            <h3 class="text-xl font-semibold text-[var(--color-text)] mb-2">No events found</h3>
-            <p class="text-[var(--color-gray)] mb-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No events found</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
               Try adjusting your filters or search terms
             </p>
             <button

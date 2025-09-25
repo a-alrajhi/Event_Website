@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex flex-col space-y-4 font-[var(--font-poppins)]">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col space-y-4 font-[var(--font-poppins)]">
     
     <!-- Navbar -->
     <Navbar />
@@ -33,16 +33,16 @@
       <div
         v-for="(card, index) in cards"
         :key="index"
-        class="bg-[var(--color-card)] rounded-xl shadow-lg p-6 flex flex-col border border-[var(--color-primary)]/30 hover:shadow-[var(--color-primary)]/50 hover:scale-105 transition-transform duration-300"
+        class="event-card rounded-xl shadow-lg p-6 flex flex-col border border-[var(--color-primary)]/30 hover:shadow-[var(--color-primary)]/50 hover:scale-105 transition-transform duration-300"
       >
         <div class="flex items-center mb-4">
           <component :is="card.icon" class="w-6 h-6 text-[var(--color-primary)] drop-shadow-md me-3" />
-          <h3 class="text-lg md:text-xl font-semibold text-[var(--color-text)]">{{ card.title }}</h3>
+          <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white">{{ card.title }}</h3>
         </div>
-        <p class="text-[var(--color-gray)] flex-1 mb-4">{{ card.description }}</p>
+        <p class="text-gray-600 dark:text-gray-300 flex-1 mb-4">{{ card.description }}</p>
         <router-link
           :to="card.route"
-          class="mt-auto inline-block px-5 py-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:from-[var(--color-secondary)] hover:to-[var(--color-primary)] rounded-lg text-[var(--color-text)] font-medium shadow-md hover:shadow-[var(--color-primary)]/50 transition-all duration-300 text-center"
+          class="mt-auto inline-block px-5 py-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] hover:from-[var(--color-secondary)] hover:to-[var(--color-primary)] rounded-lg text-white font-medium shadow-md hover:shadow-[var(--color-primary)]/50 transition-all duration-300 text-center"
         >
           Explore
         </router-link>
@@ -61,47 +61,47 @@
     </div>
 
     <!-- Why Choose EventVision Section -->
-    <section class="px-6 py-16 bg-gradient-to-br from-[var(--color-card)]/50 to-[var(--color-bg)]">
+    <section class="px-6 py-16 bg-gradient-to-br from-white/50 to-gray-50 dark:from-gray-800/50 dark:to-gray-900">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Why Choose <span class="text-[var(--color-primary)]">EventVision</span>?
           </h2>
-          <p class="text-[var(--color-gray)] text-lg max-w-2xl mx-auto">
+          <p class="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
             Join thousands who trust EventVision for discovering and experiencing the best events in Saudi Arabia
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Feature 1 -->
-          <div class="flex flex-col items-center text-center p-6 bg-[var(--color-card)]/80 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+          <div class="flex flex-col items-center text-center p-6 event-card/80 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
             <div class="w-16 h-16 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-full flex items-center justify-center mb-4 shadow-lg">
               <Shield class="w-8 h-8 text-white" />
             </div>
-            <h3 class="text-xl font-semibold text-[var(--color-text)] mb-3">Trusted & Secure</h3>
-            <p class="text-[var(--color-gray)] leading-relaxed">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Trusted & Secure</h3>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
               Your bookings and payments are protected with bank-level security. Book with confidence knowing your data is safe.
             </p>
           </div>
 
           <!-- Feature 2 -->
-          <div class="flex flex-col items-center text-center p-6 bg-[var(--color-card)]/80 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+          <div class="flex flex-col items-center text-center p-6 event-card/80 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
             <div class="w-16 h-16 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-full flex items-center justify-center mb-4 shadow-lg">
               <Zap class="w-8 h-8 text-white" />
             </div>
-            <h3 class="text-xl font-semibold text-[var(--color-text)] mb-3">Instant Booking</h3>
-            <p class="text-[var(--color-gray)] leading-relaxed">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Instant Booking</h3>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
               Skip the queues and book instantly. Get your tickets delivered immediately to your phone - no waiting required.
             </p>
           </div>
 
           <!-- Feature 3 -->
-          <div class="flex flex-col items-center text-center p-6 bg-[var(--color-card)]/80 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+          <div class="flex flex-col items-center text-center p-6 event-card/80 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
             <div class="w-16 h-16 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-full flex items-center justify-center mb-4 shadow-lg">
               <Crown class="w-8 h-8 text-white" />
             </div>
-            <h3 class="text-xl font-semibold text-[var(--color-text)] mb-3">Premium Experience</h3>
-            <p class="text-[var(--color-gray)] leading-relaxed">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Premium Experience</h3>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
               Curated events from the best organizers in Saudi Arabia. Only quality experiences make it to our platform.
             </p>
           </div>
@@ -111,19 +111,19 @@
         <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div class="text-center">
             <div class="text-3xl md:text-4xl font-bold text-[var(--color-primary)] mb-2">50K+</div>
-            <p class="text-[var(--color-gray)]">Happy Customers</p>
+            <p class="text-gray-600 dark:text-gray-300">Happy Customers</p>
           </div>
           <div class="text-center">
             <div class="text-3xl md:text-4xl font-bold text-[var(--color-primary)] mb-2">1000+</div>
-            <p class="text-[var(--color-gray)]">Events Hosted</p>
+            <p class="text-gray-600 dark:text-gray-300">Events Hosted</p>
           </div>
           <div class="text-center">
             <div class="text-3xl md:text-4xl font-bold text-[var(--color-primary)] mb-2">25+</div>
-            <p class="text-[var(--color-gray)]">Cities Covered</p>
+            <p class="text-gray-600 dark:text-gray-300">Cities Covered</p>
           </div>
           <div class="text-center">
             <div class="text-3xl md:text-4xl font-bold text-[var(--color-primary)] mb-2">4.9★</div>
-            <p class="text-[var(--color-gray)]">Customer Rating</p>
+            <p class="text-gray-600 dark:text-gray-300">Customer Rating</p>
           </div>
         </div>
 

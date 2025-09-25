@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gradient-to-b from-[var(--color-footer)] to-[var(--color-bg)] text-[var(--color-text)] border-t border-[var(--color-primary)]/20 mt-auto">
+  <footer class="bg-gradient-to-b from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900 text-gray-900 dark:text-white border-t border-[var(--color-primary)]/20 mt-auto">
     <div class="mx-auto w-full max-w-screen-xl px-4 py-12 lg:py-16">
       <!-- Main Footer Content -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
@@ -17,18 +17,18 @@
               EventVision
             </span>
           </router-link>
-          <p class="text-[var(--color-gray)] mb-6 max-w-md leading-relaxed">
+          <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-md leading-relaxed">
             Discover and experience the best events in Saudi Arabia. From concerts and festivals to workshops and cultural experiences, EventVision connects you with unforgettable moments.
           </p>
 
           <!-- Newsletter Signup -->
           <div class="space-y-3">
-            <h3 class="text-lg font-semibold text-[var(--color-text)]">Stay Updated</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Stay Updated</h3>
             <div class="flex flex-col sm:flex-row gap-2">
               <input
                 type="email"
                 placeholder="Enter your email"
-                class="flex-1 px-4 py-2 bg-[var(--color-card)] border border-[var(--color-primary)]/30 rounded-lg text-[var(--color-text)] placeholder-[var(--color-gray)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
+                class="flex-1 px-4 py-2 event-card border border-[var(--color-primary)]/30 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
               />
               <button class="px-6 py-2 bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white rounded-lg font-medium transition-colors">
                 Subscribe
@@ -42,25 +42,25 @@
           <h3 class="text-lg font-semibold text-[var(--color-text)] mb-4">Quick Links</h3>
           <ul class="space-y-3">
             <li>
-              <router-link to="/" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
+              <router-link to="/" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
                 <Home class="w-4 h-4" />
                 Home
               </router-link>
             </li>
             <li>
-              <router-link to="/events" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
+              <router-link to="/events" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
                 <Calendar class="w-4 h-4" />
                 Events
               </router-link>
             </li>
             <li>
-              <router-link to="/faq" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
+              <router-link to="/faq" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
                 <HelpCircle class="w-4 h-4" />
                 FAQ
               </router-link>
             </li>
             <li>
-              <router-link to="/user-profile" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
+              <router-link to="/user-profile" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
                 <User class="w-4 h-4" />
                 Profile
               </router-link>
@@ -73,22 +73,22 @@
           <h3 class="text-lg font-semibold text-[var(--color-text)] mb-4">Support & Legal</h3>
           <ul class="space-y-3 mb-6">
             <li>
-              <a href="#" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors">
+              <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors">
                 Contact Support
               </a>
             </li>
             <li>
-              <a href="#" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors">
+              <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors">
                 Privacy Policy
               </a>
             </li>
             <li>
-              <a href="#" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors">
+              <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors">
                 Terms of Service
               </a>
             </li>
             <li>
-              <a href="#" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors">
+              <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-[var(--color-primary)] transition-colors">
                 Cookie Policy
               </a>
             </li>
@@ -96,11 +96,11 @@
 
           <!-- Social Media -->
           <div>
-            <h4 class="text-sm font-semibold text-[var(--color-text)] mb-3">Follow Us</h4>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Follow Us</h4>
             <div class="flex space-x-3">
               <a
                 href="#"
-                class="w-8 h-8 bg-[var(--color-card)] rounded-lg flex items-center justify-center text-[var(--color-gray)] hover:text-white hover:bg-[var(--color-primary)] transition-all"
+                class="w-8 h-8 event-card rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white hover:bg-[var(--color-primary)] transition-all"
                 title="Facebook"
               >
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -109,7 +109,7 @@
               </a>
               <a
                 href="#"
-                class="w-8 h-8 bg-[var(--color-card)] rounded-lg flex items-center justify-center text-[var(--color-gray)] hover:text-white hover:bg-[var(--color-primary)] transition-all"
+                class="w-8 h-8 event-card rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white hover:bg-[var(--color-primary)] transition-all"
                 title="Twitter"
               >
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@
               </a>
               <a
                 href="#"
-                class="w-8 h-8 bg-[var(--color-card)] rounded-lg flex items-center justify-center text-[var(--color-gray)] hover:text-white hover:bg-[var(--color-primary)] transition-all"
+                class="w-8 h-8 event-card rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white hover:bg-[var(--color-primary)] transition-all"
                 title="Instagram"
               >
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@
               </a>
               <a
                 href="#"
-                class="w-8 h-8 bg-[var(--color-card)] rounded-lg flex items-center justify-center text-[var(--color-gray)] hover:text-white hover:bg-[var(--color-primary)] transition-all"
+                class="w-8 h-8 event-card rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white hover:bg-[var(--color-primary)] transition-all"
                 title="LinkedIn"
               >
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@
 
       <!-- Bottom Section -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-        <div class="text-sm text-[var(--color-gray)]">
+        <div class="text-sm text-gray-600 dark:text-gray-300">
           © 2025 <span class="text-[var(--color-primary)] font-semibold">EventVision</span>. All rights reserved.
           <span class="block md:inline md:ml-2">Made with ❤️ in Saudi Arabia</span>
         </div>
@@ -156,9 +156,9 @@
           <a href="#" class="text-[var(--color-gray)] hover:text-[var(--color-primary)] transition-colors">
             Sitemap
           </a>
-          <div class="flex items-center gap-2 text-[var(--color-gray)]">
+          <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
             <Globe class="w-4 h-4" />
-            <select class="bg-transparent text-[var(--color-gray)] border-none text-sm focus:outline-none cursor-pointer">
+            <select class="bg-transparent text-gray-600 dark:text-gray-300 border-none text-sm focus:outline-none cursor-pointer">
               <option value="en">English</option>
               <option value="ar">العربية</option>
             </select>

@@ -49,13 +49,13 @@
             <!-- Dropdown Menu -->
             <div
               v-if="showDropdown"
-              class="absolute right-0 mt-2 w-48 bg-[var(--color-card)] rounded-xl shadow-lg border border-[var(--color-primary)]/20 z-50"
+              class="absolute right-0 mt-2 w-48 event-card rounded-xl shadow-lg border border-[var(--color-primary)]/20 z-50"
             >
               <div class="py-2">
                 <router-link
                   to="/user-profile"
                   @click="showDropdown = false"
-                  class="flex items-center gap-3 px-4 py-2 text-[var(--color-text)] hover:bg-[var(--color-primary)]/10 transition-colors"
+                  class="flex items-center gap-3 px-4 py-2 text-gray-900 dark:text-white hover:bg-[var(--color-primary)]/10 transition-colors"
                 >
                   <User class="w-4 h-4 text-[var(--color-primary)]" />
                   Profile
@@ -86,12 +86,12 @@
 
   <!-- Small Categories Navbar -->
   <section
-    class="dark:bg-[var(--color-bg)] py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-800"
+    class="bg-gray-50 dark:bg-gray-900 py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-800"
   >
     <div
       v-for="(category, index) in categories"
       :key="index"
-      class="flex flex-col items-center cursor-pointer transition dark:text-[var(--color-text)] hover:text-[var(--color-primary)] min-w-[70px]"
+      class="flex flex-col items-center cursor-pointer transition text-gray-900 dark:text-white hover:text-[var(--color-primary)] min-w-[70px]"
       @click="navigateTo(category.route)"
     >
       <component

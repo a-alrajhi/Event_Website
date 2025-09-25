@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "locations")
 public class Location {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -29,5 +32,8 @@ public class Location {
     @Column(name = "additional_info", length = Integer.MAX_VALUE)
     private String additionalInfo;
 
+    // One-to-many relationship with Event
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    private List<Event> events;  // The List will hold events related to the location
 
 }

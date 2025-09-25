@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -37,5 +38,6 @@ public interface TicketRepo extends JpaRepository<Ticket, Integer>, TicketCustom
       "SELECT COUNT(t) FROM Ticket t "
           + "WHERE t.slotTicketTypeCapacity.slot.id = :slotId "
           + "AND t.slotTicketTypeCapacity.ticketType.id = :ticketTypeId")
-  long countTicketsBySlotAndType(Integer slotId, Integer ticketTypeId);
+  long countTicketsBySlotAndType(
+      @Param("slotId") Integer slotId, @Param("ticketTypeId") Integer ticketTypeId);
 }

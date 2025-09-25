@@ -1,11 +1,6 @@
 package com.event_website.Controller;
 
-/**
- * @author Yazeed
- * This controller manages location-related API requests,
- * including creating, retrieving, updating, and deleting locations.
- */
-
+import com.event_website.Dto.EventDto;
 import com.event_website.Dto.LocationDTO;
 import com.event_website.Dto.ErrorDTO;
 import com.event_website.Service.LocationService;
@@ -60,8 +55,12 @@ public class LocationController {
             }
     )
     @GetMapping("/All")
-    public ResponseEntity<List<LocationDTO>> getAllLocations() {
-        List<LocationDTO> locations = locationService.getAllLocations();
+    public ResponseEntity<List<LocationDTO>> getAllLocations(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        // Pass the pagination parameters to the service
+        List<LocationDTO> locations = locationService.getAllLocations(page, size);
         return ResponseEntity.ok(locations);
     }
 
@@ -134,5 +133,16 @@ public class LocationController {
     public ResponseEntity<String> handleGeneralException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Something went wrong: " + e.getMessage());
+    }
+
+    // Get location by ID and its associated events
+    @GetMapping("/{id}/events")
+    public ResponseEntity<List<EventDto>> getEventsByLocationId(@PathVariable Integer id) {
+        try {
+            List<EventDto> events = locationService.getEventsByLocationId(id); // Fetch the events for the location
+            return ResponseEntity.ok(events);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Events not found for location with ID: " + id, ex);
+        }
     }
 }

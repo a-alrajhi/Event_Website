@@ -10,19 +10,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/capacities")
 @Tag(name = "Slot-TicketType Capacities", description = "Manage seat capacities for ticket types within slots")
 public class SlotTicketTypeCapacityController {
 
-    @Autowired
-    private SlotTicketTypeCapacityService capacityService;
+  @Autowired private SlotTicketTypeCapacityService capacityService;
 
     @Operation(
             summary = "Create capacity for a slot and ticket type",
@@ -83,4 +81,19 @@ public class SlotTicketTypeCapacityController {
 
         return ResponseEntity.ok(SlotTicketTypeCapacityDTO.fromEntity(capacity));
     }
+
+      @GetMapping("/slot/capacity")
+  public ResponseEntity<SlotTicketTypeCapacityDTO> getCapacityForTicketType(
+      @RequestParam Integer slotId, @RequestParam Integer ticketTypeId) {
+
+    SlotTicketTypeCapacity entity =
+        capacityService.getBySlotAndTicketTypeOrThrow(slotId, ticketTypeId);
+
+    SlotTicketTypeCapacityDTO dto = SlotTicketTypeCapacityDTO.fromEntity(entity);
+
+    int remaining = capacityService.getRemainingCapacity(slotId, ticketTypeId);
+    dto.setRemainingTickets(remaining);
+
+    return ResponseEntity.ok(dto);
+  }
 }

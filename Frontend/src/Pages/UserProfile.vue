@@ -81,12 +81,15 @@
 
 <script setup>
 import { reactive, ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
 import UserProfileInput from "../components/Auth/UserProfileInput.vue";
 import BookmarkCard from "../components/Cards/BookmarkCard.vue";
+import { getEvents } from "../apis/EventDetalisApi";
 import "../styles/userProfile.css";
 
 const authStore = useAuthStore();
+const router = useRouter();
 const loading = ref(false);
 const errorMessage = ref("");
 
@@ -99,15 +102,7 @@ const form = reactive({
 });
 
 const userData = ref(null);
-
-const bookmarks = ref([
-  {
-    id: 101,
-    title: "Here is the title",
-    description: "Here is the description",
-    image: "",
-  },
-]);
+const bookmarks = ref([]);
 
 onMounted(async () => {
   try {
@@ -116,10 +111,30 @@ onMounted(async () => {
     form.name = user.name || "";
     form.email = user.email || "";
     form.phoneNumber = user.phoneNumber || "";
+
+    // Load bookmarked events
+    await loadBookmarks();
   } catch (err) {
     console.error("Failed to fetch user data:", err);
   }
 });
+
+const loadBookmarks = async () => {
+  try {
+    const savedEventIds = JSON.parse(localStorage.getItem('savedEvents') || '[]');
+    if (savedEventIds.length === 0) {
+      bookmarks.value = [];
+      return;
+    }
+
+    // Fetch all events and filter by saved IDs
+    const allEvents = await getEvents();
+    bookmarks.value = allEvents.filter(event => savedEventIds.includes(event.id));
+  } catch (error) {
+    console.error('Failed to load bookmarks:', error);
+    bookmarks.value = [];
+  }
+};
 
 const handleSubmit = async () => {
   errorMessage.value = "";
@@ -155,11 +170,16 @@ const handleSubmit = async () => {
 };
 
 const removeBookmark = (id) => {
+  // Remove from local state
   bookmarks.value = bookmarks.value.filter((b) => b.id !== id);
-  alert(`Bookmark with event ID ${id} removed`);
+
+  // Remove from localStorage
+  const savedEventIds = JSON.parse(localStorage.getItem('savedEvents') || '[]');
+  const updatedIds = savedEventIds.filter(eventId => eventId !== id);
+  localStorage.setItem('savedEvents', JSON.stringify(updatedIds));
 };
 
 const bookNow = (eventId) => {
-  alert(`Redirecting to booking page for event #${eventId}`);
+  router.push(`/event/ticket-types/${eventId}`);
 };
 </script>

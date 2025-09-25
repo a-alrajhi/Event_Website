@@ -41,6 +41,22 @@ public class LocationDTO {
     @Schema(description = "Optional additional information about the location", example = "Main gate is near parking lot A")
     @Size(max = 10000, message = "Additional info is too long")
     private String additionalInfo;
+    @Schema(description = "List of events associated with this location")
+    private List<EventDto> events;  // Added list of events associated with the location
+
+    // Constructor for creating LocationDTO from a Location entity
+    public LocationDTO(Integer id, String name, String address, Double latitude, Double longitude, String additionalInfo, List<EventDto> events) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.additionalInfo = additionalInfo;
+        this.events = events;  // Initialize events list
+    }
+
+    // Default constructor for JSON deserialization
+    public LocationDTO() {}
 
     public Location toEntity() {
         Location location = new Location();

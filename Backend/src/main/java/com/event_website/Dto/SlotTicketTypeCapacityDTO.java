@@ -21,13 +21,16 @@ public class SlotTicketTypeCapacityDTO {
 
     @Schema(description = "Capacity allocated for the ticket type in the slot", example = "150")
     private Integer capacity;
+    
+    @Schema(description = "Remaining tickets that can be bought for this slot ticket capacity", example = "30")
+    private Integer remainingTickets;
 
-    public static SlotTicketTypeCapacityDTO fromEntity(SlotTicketTypeCapacity entity) {
-        SlotTicketTypeCapacityDTO dto = new SlotTicketTypeCapacityDTO();
-        dto.setId(entity.getId());
-        dto.setSlotId(entity.getSlot().getId());
-        dto.setTicketTypeId(entity.getTicketType().getId());
-        dto.setCapacity(entity.getCapacity());
-        return dto;
-    }
+  public static SlotTicketTypeCapacityDTO fromEntity(SlotTicketTypeCapacity entity) {
+    SlotTicketTypeCapacityDTO dto = new SlotTicketTypeCapacityDTO();
+    dto.setId(entity.getId());
+    dto.setSlotId(entity.getSlot().getId());
+    dto.setTicketTypeId(entity.getTicketType().getId());
+    dto.setCapacity(entity.getCapacity());
+    return dto;
+  }
 }

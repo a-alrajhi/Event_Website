@@ -15,13 +15,13 @@ import java.util.List;
 public class EventDtoDetalis {
 
     @Schema(description = "Unique identifier for the event", example = "101")
-    private Integer eventId;
+    private Integer id;
 
     @Schema(description = "Name of the event", example = "Tech Conference 2025")
-    private String eventName;
+    private String name;
 
     @Schema(description = "Description of the event", example = "An annual conference for tech enthusiasts.")
-    private String eventDescription;
+    private String description;
 
     @Schema(description = "URL to the event's main image or banner", example = "https://example.com/images/event.jpg")
     private String photoUrl;
@@ -30,5 +30,22 @@ public class EventDtoDetalis {
     private String categoryName;
 
     @Schema(description = "List of available ticket prices for the event", example = "[100.00, 150.50, 200.00]")
-    private List<BigDecimal> ticketPrices;
+    private List<BigDecimal> prices;  // Add list of ticket prices
+
+    @Schema(description = "Location name of the event", example = "[100.00, 150.50, 200.00]")
+    private String locationName;      // Add location name if needed
+
+    // Constructor to ensure compatibility with EventService
+    public EventDtoDetalis(Integer id, String name, String description, String photoUrl, String categoryName, List<BigDecimal> prices, String locationName) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.photoUrl = photoUrl;
+        this.categoryName = categoryName;
+        this.prices = prices;
+        this.locationName = locationName;
+    }
+
+    // Default constructor
+    public EventDtoDetalis() {}
 }

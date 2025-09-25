@@ -12,6 +12,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "events")
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -44,6 +45,6 @@ public class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "location_id")
-    private Location location;
+    private Location location;  // Many-to-One relationship with Location entity
 
 }

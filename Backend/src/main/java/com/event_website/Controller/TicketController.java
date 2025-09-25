@@ -2,6 +2,7 @@ package com.event_website.Controller;
 
 import com.event_website.Dto.TicketDTO;
 import com.event_website.Dto.ErrorDTO;
+import com.event_website.Dto.TicketWithSameTypeDTO;
 import com.event_website.Entity.Ticket;
 import com.event_website.Request.CreateTicketRequest;
 import com.event_website.Request.UpdateTicketRequest;
@@ -137,5 +138,12 @@ public class TicketController {
   public ResponseEntity<TicketDTO> checkIn(@PathVariable String code) {
     Ticket ticket = ticketService.checkInTicketByCode(code);
     return ResponseEntity.ok(TicketDTO.fromEntity(ticket));
+  }
+
+  @GetMapping("/user/{userId}/grouped-tickets")
+  public ResponseEntity<List<TicketWithSameTypeDTO>> getUserGroupedTickets(
+      @PathVariable Integer userId) {
+    List<TicketWithSameTypeDTO> groupedTickets = ticketService.getUserGroupedTickets(userId);
+    return ResponseEntity.ok(groupedTickets);
   }
 }

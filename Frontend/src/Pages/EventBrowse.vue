@@ -1,239 +1,216 @@
 <template>
   <div
-    class="flex flex-col font-poppins text-[var(--color-text)] min-h-screen bg-[var(--color-bg)] p-5 overflow-y-auto"
+    class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-[var(--font-poppins)]"
   >
-    <!-- Top Navigation -->
-    <nav
-      class="bg-[var(--color-card)]/80 backdrop-blur-xl border border-[var(--color-primary)]/20 shadow-lg rounded-2xl mb-6 p-6 sm:ml-64"
-    >
-      <!-- Desktop Layout -->
-      <div class="hidden sm:flex items-center justify-between gap-8">
-        <div class="flex items-center gap-8">
-          <!-- Logo -->
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-xl flex items-center justify-center"
-            >
-              <Calendar class="w-5 h-5 text-white" />
-            </div>
-            <span class="text-xl font-bold">EventHub</span>
-          </div>
+    <!-- Navbar Component -->
+    <Navbar />
 
-          <!-- Horizontal Categories -->
-          <div class="flex items-center gap-1">
-            <div
-              v-for="(category, index) in horizontalCategories"
-              :key="index"
-              class="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-all duration-200 hover:bg-[var(--color-primary)]/10 hover:scale-105 text-sm font-medium"
-            >
-              <component
-                :is="category.icon"
-                class="w-4 h-4 text-[var(--color-primary)]"
-              />
-              <span class="text-[var(--color-primary)]">{{
-                category.name
-              }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Search + Profile -->
-        <div class="flex items-center gap-4">
-          <div class="w-80">
-            <SearchBar class="w-full" @search="handleSearch" />
-          </div>
-          <div class="relative">
-            <img
-              class="w-11 h-11 rounded-full border-2 border-[var(--color-primary)]/50 hover:border-[var(--color-primary)] transition-all cursor-pointer"
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="Profile"
-            />
-            <div
-              class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[var(--color-card)]"
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mobile Layout -->
-      <div class="sm:hidden space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <div
-              class="w-8 h-8 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-lg flex items-center justify-center"
-            >
-              <Calendar class="w-4 h-4 text-white" />
-            </div>
-            <span class="text-lg font-bold">EventHub</span>
-          </div>
-          <img
-            class="w-9 h-9 rounded-full border-2 border-[var(--color-primary)]/50"
-            src="https://randomuser.me/api/portraits/men/32.jpg"
-            alt="Profile"
-          />
-        </div>
-        <SearchBar class="w-full" @search="handleSearch" />
-        <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar Filters -->
+        <aside class="lg:w-80 space-y-6">
+          <!-- Categories Filter -->
           <div
-            v-for="(category, index) in horizontalCategories"
-            :key="index"
-            class="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-primary)]/10 rounded-xl cursor-pointer transition-colors hover:bg-[var(--color-primary)]/20 text-xs font-medium whitespace-nowrap"
+            class="event-card/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10"
           >
-            <component
-              :is="category.icon"
-              class="w-3.5 h-3.5 text-[var(--color-primary)]"
-            />
-            <span class="text-[var(--color-primary)]">{{ category.name }}</span>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Sidebar + Main -->
-    <div class="flex">
-      <!-- Sidebar -->
-      <aside
-        class="hidden sm:flex flex-col fixed top-0 left-0 z-40 w-64 h-screen bg-[var(--color-card)]/90 backdrop-blur-xl border-r border-[var(--color-primary)]/20 shadow-xl"
-      >
-        <div
-          class="flex items-center gap-3 h-20 px-6 border-b border-[var(--color-primary)]/20"
-        >
-          <div
-            class="w-8 h-8 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-lg flex items-center justify-center"
-          >
-            <MapPin class="w-4 h-4 text-white" />
-          </div>
-          <h2 class="text-lg font-semibold">Filters</h2>
-        </div>
-
-        <div class="flex-1 px-6 py-6 space-y-8 overflow-y-auto">
-          <!-- Loading Spinner -->
-          <div v-if="isLoading" class="flex items-center justify-center py-8">
-            <div
-              class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary)]"
-            ></div>
-          </div>
-
-          <!-- Categories -->
-          <div v-if="!isLoading" class="space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-semibold uppercase tracking-wider">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                 Categories
-              </h3>
-              <span class="text-xs text-[var(--color-gray)]"
-                >{{ sidebarCategories.length }} found</span
+              </h2>
+              <span
+                class="text-xs text-gray-600 dark:text-gray-300 bg-[var(--color-primary)]/10 px-2 py-1 rounded-full"
               >
-            </div>
-
-            <div class="space-y-2">
-              <div v-for="cat in sidebarCategories" :key="cat" class="group">
-                <label
-                  class="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--color-primary)]/8 cursor-pointer transition-colors"
-                >
-                  <Checkbox
-                    v-model="selectedCategories"
-                    :value="cat"
-                    :inputId="cat"
-                  />
-                  <span
-                    class="text-sm font-medium group-hover:text-[var(--color-primary)]"
-                    >{{ cat }}</span
-                  >
-                  <span class="text-xs text-[var(--color-gray)] ml-auto">{{
-                    getCategoryCount(cat)
-                  }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Price Range -->
-          <div v-if="!isLoading && priceRange.max > 0" class="space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-semibold uppercase tracking-wider">
-                Price Range
-              </h3>
-              <span class="text-xs font-medium text-[var(--color-primary)]">
-                {{ currentPrice === 0 ? "All Prices" : `SAR ${currentPrice}` }}
+                {{ sidebarCategories.length }} available
               </span>
             </div>
-            <div class="p-4 rounded-xl bg-[var(--color-bg)]/50">
+
+            <div v-if="isLoading" class="space-y-3">
+              <div
+                v-for="i in 4"
+                :key="i"
+                class="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
+              ></div>
+            </div>
+
+            <div v-else class="space-y-3 max-h-60 overflow-y-auto">
+              <label
+                v-for="cat in sidebarCategories"
+                :key="cat"
+                class="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--color-primary)]/8 cursor-pointer transition-all group"
+              >
+                <Checkbox
+                  v-model="selectedCategories"
+                  :value="cat"
+                  :inputId="cat"
+                  class="accent-[var(--color-primary)]"
+                />
+                <span
+                  class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[var(--color-primary)] flex-1"
+                >
+                  {{ cat }}
+                </span>
+                <span
+                  class="text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full"
+                >
+                  {{ getCategoryCount(cat) }}
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Price Filter -->
+          <div
+            v-if="!isLoading && priceRange.max > 0"
+            class="bg-[var(--color-card)]/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                Price Range
+              </h2>
+              <div class="bg-[var(--color-primary)]/10 px-3 py-1 rounded-full">
+                <span class="text-sm font-medium text-[var(--color-primary)]">
+                  {{ currentPrice === 0 ? "All" : `≤ SAR ${currentPrice}` }}
+                </span>
+              </div>
+            </div>
+
+            <div class="space-y-4">
               <Slider
                 v-model="currentPrice"
                 :min="0"
                 :max="priceRange.max"
-                class="w-full mb-4"
+                class="w-full"
               />
+
               <div class="flex justify-between items-center text-sm">
-                <span class="text-[var(--color-gray)]">SAR 0 (All)</span>
-                <span class="font-medium text-[var(--color-primary)]">
+                <span class="text-[var(--color-gray)]">Free</span>
+                <span class="font-semibold text-[var(--color-primary)]">
+                  SAR {{ priceRange.max }}
+                </span>
+              </div>
+
+              <div
+                class="bg-gray-100/50 dark:bg-gray-800/50 rounded-xl p-3 text-center"
+              >
+                <span class="text-sm text-gray-600 dark:text-gray-300">
+                  {{ getFilteredByPriceCount() }} events
                   {{
-                    currentPrice === 0 ? "All Prices" : `SAR ${currentPrice}`
+                    currentPrice === 0
+                      ? "in all price ranges"
+                      : `under SAR ${currentPrice}`
                   }}
                 </span>
-                <span class="text-[var(--color-gray)]"
-                  >SAR {{ priceRange.max }}</span
-                >
-              </div>
-              <div class="mt-2 text-xs text-[var(--color-gray)] text-center">
-                {{ getFilteredByPriceCount() }} events
-                {{
-                  currentPrice === 0
-                    ? "shown (all price ranges)"
-                    : `under SAR ${currentPrice}`
-                }}
               </div>
             </div>
           </div>
-        </div>
-      </aside>
 
-      <!-- Main Content -->
-      <main class="flex-1 ml-0 sm:ml-64 p-6">
-        <div v-if="!isLoading" class="mb-6 flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold">Events in Saudi Arabia</h1>
-            <p class="text-[var(--color-gray)] mt-1">
-              {{ filteredEvents.length }} events found
-              <span
-                v-if="
-                  selectedCategories.length > 0 ||
-                  currentPrice > 0 ||
-                  searchInput
-                "
-              >
-                (filtered)
-              </span>
+          <!-- Clear Filters -->
+          <button
+            v-if="selectedCategories.length > 0 || currentPrice > 0"
+            @click="clearFilters"
+            class="w-full bg-[var(--color-error)]/10 hover:bg-[var(--color-error)]/20 text-[var(--color-error)] border border-[var(--color-error)]/30 rounded-xl p-3 transition-all font-medium"
+          >
+            Clear All Filters
+          </button>
+        </aside>
+
+        <!-- Events Grid -->
+        <section class="flex-1">
+          <!-- Results Header -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4"
+          >
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                Events in Saudi Arabia
+              </h2>
+              <p class="text-gray-600 dark:text-gray-300">
+                <span class="font-medium">{{ filteredEvents.length }}</span>
+                events found
+                <span
+                  v-if="selectedCategories.length > 0 || currentPrice > 0"
+                  class="text-[var(--color-primary)]"
+                >
+                  (filtered)
+                </span>
+              </p>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="text-sm text-gray-600 dark:text-gray-300">
+                Price range: SAR 0 - SAR {{ priceRange.max }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Category Chips -->
+          <div class="flex flex-wrap gap-2 mb-6">
+            <button
+              v-for="cat in sidebarCategories.slice(0, 6)"
+              :key="cat"
+              @click="toggleQuickCategory(cat)"
+              :class="[
+                'px-4 py-2 rounded-full text-sm font-medium transition-all border',
+                selectedCategories.includes(cat)
+                  ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)] shadow-lg'
+                  : 'event-card text-gray-900 dark:text-white border-[var(--color-primary)]/30 hover:bg-[var(--color-primary)]/10',
+              ]"
+            >
+              {{ cat }} ({{ getCategoryCount(cat) }})
+            </button>
+          </div>
+
+          <!-- Events Grid -->
+          <EnhancedEventCard
+            :events="filteredEvents"
+            :is-loading="isLoading"
+            @toggle-save="handleToggleSave"
+          />
+
+          <!-- No Results -->
+          <div
+            v-if="!isLoading && filteredEvents.length === 0"
+            class="text-center py-16"
+          >
+            <div
+              class="w-20 h-20 bg-[var(--color-primary)]/10 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <Search class="w-8 h-8 text-[var(--color-primary)]" />
+            </div>
+            <h3
+              class="text-xl font-semibold text-gray-900 dark:text-white mb-2"
+            >
+              No events found
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              Try adjusting your filters or search terms
             </p>
+            <button
+              @click="clearFilters"
+              class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white px-6 py-3 rounded-lg transition-colors"
+            >
+              Clear Filters
+            </button>
           </div>
-          <div class="text-sm text-[var(--color-gray)]">
-            Price range: SAR 0 - SAR {{ priceRange.max }}
-          </div>
-        </div>
-
-        <EnhancedEventCard :events="filteredEvents" :is-loading="isLoading" />
-      </main>
-    </div>
+        </section>
+      </div>
+    </main>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
-import { getEvents } from "../apis/EventDetalisApi";
+import Navbar from "../components/Navbar/Navbar.vue";
 import EnhancedEventCard from "../components/Cards/EnhancedEventCard.vue";
-import SearchBar from "../components/SearchBar/SearchBar.vue";
+import { Calendar, Search } from "lucide-vue-next";
 import Slider from "primevue/slider";
 import Checkbox from "primevue/checkbox";
-import {
-  Music,
-  Home,
-  Star,
-  Calendar,
-  Users,
-  MapPin,
-  Ticket,
-} from "lucide-vue-next";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { getEvents } from "../apis/EventDetalisApi";
+
+const route = useRoute();
+const router = useRouter();
 
 const events = ref([]);
 const isLoading = ref(true);
@@ -270,34 +247,51 @@ const fetchData = async () => {
       : { min: 0, max: 200 };
 
     currentPrice.value = 0;
-  } catch (e) {
-    console.error("Error loading events:", e);
+
+    // Apply category filter from URL query params
+    applyUrlFilters();
+  } catch (error) {
+    console.error("Error fetching data:", error);
   } finally {
     isLoading.value = false;
   }
 };
 
-onMounted(async () => {
-  await fetchData();
-
-  const categoryFromQuery = route.query.category;
+const applyUrlFilters = () => {
+  // Check for category in URL query params
+  const categoryParam = route.query.category;
   const searchQuery = route.query.q;
+  if (categoryParam && typeof categoryParam === "string") {
+    const categoryName =
+      categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1);
 
-  if (categoryFromQuery && typeof categoryFromQuery === "string") {
-    const match = sidebarCategories.value.find(
-      (cat) => cat.toLowerCase() === categoryFromQuery.toLowerCase()
+    // Find matching category (case insensitive)
+    const matchingCategory = sidebarCategories.value.find(
+      (cat) => cat.toLowerCase() === categoryParam.toLowerCase()
     );
-    if (match) selectedCategories.value = [match];
-  }
 
-  if (searchQuery && typeof searchQuery === "string") {
-    searchInput.value = searchQuery.trim();
-  }
-});
+    if (matchingCategory) {
+      selectedCategories.value = [matchingCategory];
+    }
 
-const handleSearch = (q) => {
-  searchInput.value = q;
+    if (searchQuery && typeof searchQuery === "string") {
+      searchInput.value = searchQuery.trim();
+    }
+  }
 };
+
+// Watch route changes to apply filters
+watch(
+  () => route.query,
+  () => {
+    if (!isLoading.value) {
+      applyUrlFilters();
+    }
+  },
+  { deep: true }
+);
+
+onMounted(fetchData);
 
 const filteredEvents = computed(() => {
   return events.value.filter((event) => {
@@ -317,18 +311,66 @@ const filteredEvents = computed(() => {
 const getCategoryCount = (category) =>
   events.value.filter((event) => event.category === category).length;
 
-const getFilteredByPriceCount = () =>
-  currentPrice.value === 0
+const getFilteredByPriceCount = () => {
+  return currentPrice.value === 0
     ? events.value.length
     : events.value.filter((event) => event.price <= currentPrice.value).length;
+};
+
+const clearFilters = () => {
+  selectedCategories.value = [];
+  currentPrice.value = 0;
+};
+
+const toggleQuickCategory = (category) => {
+  const index = selectedCategories.value.indexOf(category);
+  if (index > -1) {
+    selectedCategories.value.splice(index, 1);
+  } else {
+    selectedCategories.value.push(category);
+  }
+};
+
+const handleToggleSave = (data) => {
+  // Handle bookmark toggle if needed
+  console.log("Bookmark toggled:", data);
+};
 </script>
 
 <style scoped>
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Custom scrollbar for filter sidebar */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hover);
+}
+
+/* Smooth transitions */
+* {
+  transition-property:
+    background-color, border-color, color, fill, stroke, opacity, box-shadow,
+    transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 </style>

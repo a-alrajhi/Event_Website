@@ -10,12 +10,12 @@
       :key="i"
       class="event-card rounded-xl shadow-lg animate-pulse"
     >
-      <div class="w-full h-48 bg-gray-200 dark:bg-gray-600 rounded-t-xl"></div>
+      <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-t-xl"></div>
       <div class="p-4 space-y-3">
-        <div class="h-4 bg-gray-200 dark:bg-gray-600 rounded w-3/4"></div>
-        <div class="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/2"></div>
-        <div class="h-3 bg-gray-200 dark:bg-gray-600 rounded w-full"></div>
-        <div class="h-8 bg-gray-200 dark:bg-gray-600 rounded"></div>
+        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+        <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
       </div>
     </div>
   </div>
@@ -36,19 +36,13 @@
           @error="handleImageError"
         />
 
-        <!-- Overlay with quick actions -->
+        <!-- Overlay with single View Details button -->
         <div
-          class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2"
+          class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
         >
           <button
-            @click="$emit('quick-book', event)"
-            class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] px-4 py-2 rounded-lg font-medium transition-colors text-white"
-          >
-            Quick Book
-          </button>
-          <button
-            @click="$emit('view-details', event)"
-            class="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg font-medium transition-colors text-white border border-white/30"
+            @click.stop="navigateToDetails(event.id)"
+            class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] px-6 py-3 rounded-lg font-medium transition-colors text-white"
           >
             View Details
           </button>
@@ -58,11 +52,12 @@
         <button
           v-if="authStore.isLoggedIn()"
           @click="toggleSaved(event)"
+          @click.stop="toggleSaved(event)"
           :class="[
             'absolute top-3 right-3 p-2 rounded-full transition-all',
             savedEvents.includes(event.id)
-              ? 'bg-[var(--color-error)] text-[var(--color-text)]'
-              : 'bg-black/30 text-[var(--color-gray)] hover:bg-black/50',
+              ? 'bg-[var(--color-error)] text-white'
+              : 'bg-black/30 text-gray-400 hover:bg-black/50',
           ]"
         >
           <Heart
@@ -113,7 +108,7 @@
             <Star
               class="w-4 h-4 fill-[var(--color-primary)] text-[var(--color-primary)]"
             />
-            <span class="text-gray-600 dark:text-gray-400">{{
+            <span class="text-gray-600 dark:text-gray-300">{{
               event.rating
             }}</span>
           </div>
@@ -122,7 +117,7 @@
         <!-- Event Details -->
         <div class="space-y-2 mb-3">
           <div
-            class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+            class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
           >
             <Calendar
               class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0"
@@ -135,14 +130,14 @@
           </div>
 
           <div
-            class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+            class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
           >
             <MapPin class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0" />
             <span class="truncate">{{ event.venue }}</span>
           </div>
 
           <div
-            class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+            class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
           >
             <Users class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0" />
             <span>{{ event.attendees || 0 }} attending</span>
@@ -150,14 +145,14 @@
         </div>
 
         <!-- Event Description -->
-        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+        <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
           {{ event.description }}
         </p>
 
         <!-- Organizer Info -->
         <div
           v-if="event.organizer"
-          class="flex items-center gap-2 mb-3 text-xs text-gray-600 dark:text-gray-400"
+          class="flex items-center gap-2 mb-3 text-xs text-gray-600 dark:text-gray-300"
         >
           <img
             :src="event.organizer.avatar"
@@ -177,12 +172,12 @@
         <!-- Action Buttons -->
         <div class="flex gap-2">
           <button
-            @click="$emit('book-now', event)"
+            @click.stop="navigateToTickets(event.id)"
             :disabled="event.soldOut"
             :class="[
               'flex-1 py-2 px-4 rounded-lg font-medium transition-all text-center',
               event.soldOut
-                ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
                 : 'bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white hover:shadow-lg',
             ]"
           >
@@ -190,11 +185,11 @@
           </button>
 
           <button
-            @click="shareEvent(event)"
-            class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            @click.stop="shareEvent(event)"
+            class="p-2 border border-gray-300/30 dark:border-gray-600/30 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
             :title="`Share ${event.title}`"
           >
-            <Share2 class="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            <Share2 class="w-4 h-4 text-gray-600 dark:text-gray-300" />
           </button>
         </div>
       </div>
@@ -203,7 +198,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import {
   Heart,
   Share2,
@@ -222,7 +218,6 @@ const props = defineProps({
   events: {
     type: Array,
     default: () => [],
-    default: () => [],
   },
   isLoading: {
     type: Boolean,
@@ -230,17 +225,22 @@ const props = defineProps({
   },
 });
 
+// Router
+const router = useRouter();
+
 // State
 const savedEvents = ref([]);
 
 // Emits
-const emit = defineEmits([
-  "quick-book",
-  "view-details",
-  "book-now",
-  "toggle-save",
-  "clear-filters",
-]);
+const emit = defineEmits(["toggle-save"]);
+
+// Load saved events from localStorage
+onMounted(() => {
+  const saved = localStorage.getItem("savedEvents");
+  if (saved) {
+    savedEvents.value = JSON.parse(saved);
+  }
+});
 
 const authStore = useAuthStore();
 // Methods
@@ -258,16 +258,56 @@ const formatDate = (date) => {
   }
 };
 
+const navigateToDetails = (eventId) => {
+  router.push(`/event/${eventId}`);
+};
+
+const navigateToTickets = (eventId) => {
+  router.push(`/event/ticket-types/${eventId}`);
+};
+
 const toggleSaved = (event) => {
   const isSaved = savedEvents.value.includes(event.id);
   if (isSaved) {
     savedEvents.value = savedEvents.value.filter((id) => id !== event.id);
-    unbookmark(event.id);
   } else {
     savedEvents.value.push(event.id);
     bookmark(event.id);
   }
+
+  // Save to localStorage
+  localStorage.setItem("savedEvents", JSON.stringify(savedEvents.value));
+
   emit("toggle-save", { event, saved: !isSaved });
+};
+
+const shareEvent = async (event) => {
+  const shareData = {
+    title: event.title,
+    text: `Check out this event: ${event.title}`,
+    url: `${window.location.origin}/event/${event.id}`,
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(shareData.url);
+      // You could show a toast notification here
+      console.log("Event URL copied to clipboard!");
+    }
+  } catch (error) {
+    console.error("Error sharing event:", error);
+  }
+};
+
+const handleImageError = (e) => {
+  e.target.src =
+    "https://images.ctfassets.net/vy53kjqs34an/1b6S3ia1nuDcqK7uDfvPGz/c2796f467985e3702c6b54862be767d5/1280%C3%A2__%C3%83_%C3%A2__426-_1.jpg";
+};
+
+const handleAvatarError = (e) => {
+  e.target.src = "https://via.placeholder.com/40x40/4F46E5/ffffff?text=U";
 };
 </script>
 

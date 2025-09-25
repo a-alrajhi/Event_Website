@@ -10,6 +10,7 @@ import EventBrowse from "../Pages/EventBrowse.vue";
 import UserManagement from "../Pages/UserManagement.vue";
 import EventManagement from "../Pages/EventManagement.vue";
 import AdminStats from "../Pages/AdminStats.vue";
+import FAQ from "../Pages/FAQ.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -31,6 +32,9 @@ const routes = [
     name: "EventTicketTypes",
     component: EventTicketTypes,
   },
+
+  // FAQ
+  { path: "/faq", name: "FAQ", component: FAQ },
 
   // // Dashboard
   // {

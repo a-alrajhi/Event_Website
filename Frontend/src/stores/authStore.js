@@ -1,6 +1,6 @@
 import router from "../Router";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import axiosClient from "../apis/axiosClient";
 
 const ACCESS_TOKEN_KEY = "accessToken";
@@ -17,6 +17,7 @@ export const useAuthStore = defineStore("auth", () => {
   const setTokens = (newAccess, newRefresh) => {
     accessToken.value = newAccess;
     refreshToken.value = newRefresh;
+    isLoggedIn.value = !!newAccess;
 
     localStorage.setItem(ACCESS_TOKEN_KEY, newAccess);
     if (newRefresh) {
@@ -30,6 +31,7 @@ export const useAuthStore = defineStore("auth", () => {
   const clearTokens = () => {
     accessToken.value = null;
     refreshToken.value = null;
+    isLoggedIn.value = false;
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     delete axiosClient.defaults.headers.common["Authorization"];
@@ -37,7 +39,6 @@ export const useAuthStore = defineStore("auth", () => {
 
   const logout = () => {
     clearTokens();
-    isLoggedIn.value = false;
     router.push("/login");
   };
 
@@ -113,8 +114,13 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  // Computed property for better reactivity
+  const isAuthenticated = computed(() => {
+    return isLoggedIn.value && isTokenValid();
+  });
+
   return {
-    isLoggedIn,
+    isLoggedIn: isAuthenticated,
     error,
     loading,
     authUser,

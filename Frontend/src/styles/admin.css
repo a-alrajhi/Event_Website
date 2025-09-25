@@ -2,21 +2,21 @@
 
 /* Custom Scrollbar for admin panels */
 .admin-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-primary) var(--color-card);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-card);
 }
 
 .admin-scrollbar::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 .admin-scrollbar::-webkit-scrollbar-track {
-  background: var(--color-card);
+    background: var(--color-card);
 }
 
 .admin-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 3px;
+    background: var(--color-primary);
+    border-radius: 3px;
 }
 
 .admin-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -42,7 +42,7 @@
 }
 
 .admin-input::placeholder {
-  color: var(--color-gray);
+    color: var(--color-gray);
 }
 
 /* Custom select styling */
@@ -220,7 +220,7 @@
   transition: all 0.2s;
   background-color: var(--color-card);
   border-color: var(--color-gray);
-  
+
 }
 
 .admin-card:hover {
@@ -421,8 +421,8 @@
 }
 
 .admin-pagination-btn:hover {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .admin-pagination-btn.active {

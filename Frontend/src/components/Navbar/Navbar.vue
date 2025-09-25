@@ -1,7 +1,11 @@
 <template>
   <!-- Navbar -->
+
+  <!-- old nav styling -->
+  <!-- class="dark:bg-[var(--color-bg)] border-b dark:border-gray-800 text-[var(--color-text)] shadow-md"
+  > -->
   <nav
-    class="dark:bg-[var(--color-bg)] border-b dark:border-gray-800 text-[var(--color-text)] shadow-md"
+    class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white shadow-lg"
   >
     <div
       class="max-w-screen-xl flex flex-col sm:flex-row sm:items-center justify-between mx-auto p-4 gap-4"

@@ -76,9 +76,22 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { usePaymentStore } from "../stores/paymentStore";
 import PaymentMethods from "./PaymentMethods.vue";
 import PaymentCardForm from "./PaymentCardForm.vue";
 
-const selectedPaymentMethod = ref("credit-card");
+const paymentStore = usePaymentStore();
+const selectedPaymentMethod = ref(
+  paymentStore.selectedPaymentMethod || "credit-card"
+);
+
+// updating the store when payment method changes
+watch(
+  selectedPaymentMethod,
+  (newValue) => {
+    paymentStore.setPaymentMethod(newValue);
+  },
+  { immediate: true } // for not waiting until the first change
+);
 </script>

@@ -9,7 +9,7 @@ Ticket Component
   <div class="max-w-5xl mx-auto mt-8 px-4 relative">
     <!-- Ticket Card -->
     <div
-      class="relative bg-white/70 backdrop-blur-2xl rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-700 border border-white/30 overflow-hidden transform hover:-translate-y-2 hover:scale-[1.01] group"
+      class="relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-700 border border-white/30 dark:border-gray-700/50 overflow-hidden transform hover:-translate-y-2 hover:scale-[1.01] group"
       style="
         box-shadow:
           0 25px 50px -12px rgba(0, 0, 0, 0.15),
@@ -138,7 +138,7 @@ Ticket Component
 
             <!-- QR Code Container -->
             <div
-              class="relative bg-white/40 backdrop-blur-xl rounded-3xl p-8 border border-white/30 shadow-2xl"
+              class="relative bg-white/40 dark:bg-gray-700/40 backdrop-blur-xl rounded-3xl p-8 border border-white/30 dark:border-gray-600/50 shadow-2xl"
               style="
                 background: linear-gradient(
                   135deg,
@@ -189,8 +189,10 @@ Ticket Component
 
             <!-- Scan at Entrance -->
             <div class="mt-6 space-y-2">
-              <p class="text-lg font-bold text-gray-800">Scan at Entrance</p>
-              <p class="text-sm text-gray-600">
+              <p class="text-lg font-bold text-gray-800 dark:text-gray-200">
+                Scan at Entrance
+              </p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
                 Keep this accessible on your device
               </p>
               <div
@@ -215,7 +217,7 @@ Ticket Component
                   class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"
                 ></div>
                 <div
-                  class="relative bg-white/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                  class="relative bg-white/30 dark:bg-gray-700/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 dark:border-gray-600/50 shadow-lg hover:shadow-xl transition-all duration-300"
                   style="
                     background: linear-gradient(
                       135deg,
@@ -243,11 +245,13 @@ Ticket Component
                       </svg>
                     </div>
                     <label
-                      class="text-sm font-black text-blue-900 uppercase tracking-wide"
+                      class="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wide"
                       >Ticket Type</label
                     >
                   </div>
-                  <p class="text-lg font-black text-blue-950">
+                  <p
+                    class="text-lg font-black text-blue-950 dark:text-blue-200"
+                  >
                     {{ ticketType?.name || "Premium" }}
                   </p>
                 </div>
@@ -259,7 +263,7 @@ Ticket Component
                   class="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-green-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"
                 ></div>
                 <div
-                  class="relative bg-white/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                  class="relative bg-white/30 dark:bg-gray-700/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 dark:border-gray-600/50 shadow-lg hover:shadow-xl transition-all duration-300"
                   style="
                     background: linear-gradient(
                       135deg,
@@ -287,11 +291,13 @@ Ticket Component
                       </svg>
                     </div>
                     <label
-                      class="text-sm font-black text-emerald-900 uppercase tracking-wide"
+                      class="text-sm font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-wide"
                       >Price</label
                     >
                   </div>
-                  <p class="text-lg font-black text-emerald-950">
+                  <p
+                    class="text-lg font-black text-emerald-950 dark:text-emerald-200"
+                  >
                     {{ ticketType?.price || "N/A" }} SAR
                   </p>
                 </div>
@@ -303,7 +309,7 @@ Ticket Component
                   class="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-violet-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"
                 ></div>
                 <div
-                  class="relative bg-white/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                  class="relative bg-white/30 dark:bg-gray-700/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 dark:border-gray-600/50 shadow-lg hover:shadow-xl transition-all duration-300"
                   style="
                     background: linear-gradient(
                       135deg,
@@ -331,12 +337,12 @@ Ticket Component
                       </svg>
                     </div>
                     <label
-                      class="text-sm font-black text-purple-900 uppercase tracking-wide"
+                      class="text-sm font-black text-purple-900 dark:text-purple-300 uppercase tracking-wide"
                       >Ticket Code</label
                     >
                   </div>
                   <p
-                    class="text-lg font-mono font-black text-purple-950 break-all"
+                    class="text-lg font-mono font-black text-purple-950 dark:text-purple-200 break-all"
                   >
                     {{ ticket.ticketCode }}
                   </p>
@@ -349,7 +355,7 @@ Ticket Component
                   class="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"
                 ></div>
                 <div
-                  class="relative bg-white/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                  class="relative bg-white/30 dark:bg-gray-700/30 backdrop-blur-xl rounded-2xl p-6 border border-white/40 dark:border-gray-600/50 shadow-lg hover:shadow-xl transition-all duration-300"
                   style="
                     background: linear-gradient(
                       135deg,
@@ -377,7 +383,7 @@ Ticket Component
                       </svg>
                     </div>
                     <label
-                      class="text-sm font-black text-green-900 uppercase tracking-wide"
+                      class="text-sm font-black text-green-900 dark:text-green-300 uppercase tracking-wide"
                       >Status</label
                     >
                   </div>
@@ -385,7 +391,10 @@ Ticket Component
                     <div
                       class="w-3 h-3 bg-green-500 rounded-full mr-3 animate-pulse shadow-lg shadow-green-500/50"
                     ></div>
-                    <span class="text-lg font-black text-green-950">Valid</span>
+                    <span
+                      class="text-lg font-black text-green-950 dark:text-green-200"
+                      >Valid</span
+                    >
                   </div>
                 </div>
               </div>
@@ -397,7 +406,7 @@ Ticket Component
                 class="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-orange-400/20 rounded-2xl blur-xl"
               ></div>
               <div
-                class="relative bg-white/25 backdrop-blur-xl border border-white/40 rounded-2xl p-6 shadow-lg"
+                class="relative bg-white/25 dark:bg-gray-700/25 backdrop-blur-xl border border-white/40 dark:border-gray-600/50 rounded-2xl p-6 shadow-lg"
                 style="
                   background: linear-gradient(
                     135deg,
@@ -423,10 +432,14 @@ Ticket Component
                     </svg>
                   </div>
                   <div>
-                    <h4 class="text-lg font-black text-amber-900 mb-2">
+                    <h4
+                      class="text-lg font-black text-amber-900 dark:text-amber-300 mb-2"
+                    >
                       Premium Access Instructions
                     </h4>
-                    <p class="text-amber-800 leading-relaxed">
+                    <p
+                      class="text-amber-800 dark:text-amber-200 leading-relaxed"
+                    >
                       Present this QR code at the venue entrance. Ensure your
                       device is charged and the screen brightness is adequate
                       for scanning. Screenshots are acceptable as backup.
@@ -442,7 +455,7 @@ Ticket Component
       <!-- card footer -->
       <!-- main footer container -->
       <div
-        class="relative bg-white/20 backdrop-blur-xl px-10 py-6 border-t border-white/30"
+        class="relative bg-white/20 dark:bg-gray-800/20 backdrop-blur-xl px-10 py-6 border-t border-white/30 dark:border-gray-600/50"
         style="
           background: linear-gradient(
             135deg,
@@ -456,7 +469,7 @@ Ticket Component
           class="flex flex-col sm:flex-row items-center justify-between gap-6"
         >
           <!-- Timestamp -->
-          <div class="flex items-center text-gray-700">
+          <div class="flex items-center text-gray-700 dark:text-gray-300">
             <div
               class="bg-gray-500/80 backdrop-blur-sm rounded-lg p-2 mr-3 shadow-lg"
             >

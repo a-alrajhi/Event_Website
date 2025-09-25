@@ -1,6 +1,5 @@
 package com.event_website.Dto;
 
-
 import com.event_website.Entity.Category;
 import com.event_website.Entity.Event;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,6 @@ public class EventDto {
     private Boolean hasAssignedSeating;
     private Integer categoryId;
 
-
     public static EventDto fromEntity(Event event) {
         if (event == null) return null;
 
@@ -39,7 +37,6 @@ public class EventDto {
         }
         return dto;
     }
-
 
     public Event toEntity(Category category) {
         Event event = new Event();

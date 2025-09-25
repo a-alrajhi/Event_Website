@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "categories")
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -29,4 +32,7 @@ public class Category {
     @Column(name = "ar_description", length = Integer.MAX_VALUE)
     private String arDescription;
 
+    // One-to-many relationship with Event
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Event> events;  // This list will hold events related to the category
 }

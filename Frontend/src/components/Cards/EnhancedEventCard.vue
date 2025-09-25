@@ -56,6 +56,7 @@
 
         <!-- Save/Like Button -->
         <button
+          v-if="authStore.isLoggedIn()"
           @click="toggleSaved(event)"
           :class="[
             'absolute top-3 right-3 p-2 rounded-full transition-all',
@@ -213,11 +214,14 @@ import {
   Star,
   Check,
 } from "lucide-vue-next";
+import { bookmark, unbookmark } from "../../apis/bookmarkapi";
+import { useAuthStore } from "../../stores/authStore";
 
 // Props
 const props = defineProps({
   events: {
     type: Array,
+    default: () => [],
     default: () => [],
   },
   isLoading: {
@@ -238,6 +242,7 @@ const emit = defineEmits([
   "clear-filters",
 ]);
 
+const authStore = useAuthStore();
 // Methods
 const formatDate = (date) => {
   if (!date) return "TBD";
@@ -257,8 +262,10 @@ const toggleSaved = (event) => {
   const isSaved = savedEvents.value.includes(event.id);
   if (isSaved) {
     savedEvents.value = savedEvents.value.filter((id) => id !== event.id);
+    unbookmark(event.id);
   } else {
     savedEvents.value.push(event.id);
+    bookmark(event.id);
   }
   emit("toggle-save", { event, saved: !isSaved });
 };

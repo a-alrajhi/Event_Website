@@ -51,10 +51,11 @@
       :key="index"
       class="flex flex-col items-center cursor-pointer transition dark:text-[var(--color-text)] hover:text-[var(--color-primary)] min-w-[70px]"
     >
-      <component
-        :is="category.icon"
-        class="w-6 h-6 mb-1 text-[var(--color-primary)] drop-shadow-md"
-      />
+      <router-link :to="category.route"
+        ><component
+          :is="category.icon"
+          class="w-6 h-6 mb-1 text-[var(--color-primary)] drop-shadow-md"
+      /></router-link>
       <span class="text-xs sm:text-sm font-medium text-center">{{
         category.name
       }}</span>
@@ -64,6 +65,7 @@
 
 <script>
 import SearchBar from "../SearchBar/SearchBar.vue";
+import { RouterLink } from "vue-router";
 import {
   Music,
   Home,
@@ -80,13 +82,13 @@ export default {
   data() {
     return {
       categories: [
-        { name: "Home", icon: Home },
-        { name: "Music", icon: Music },
-        { name: "Stars", icon: Star },
-        { name: "Events", icon: Calendar },
-        { name: "Community", icon: Users },
-        { name: "Locations", icon: MapPin },
-        { name: "Tickets", icon: Ticket },
+        { name: "Home", icon: Home, route: "/" },
+        { name: "Music", icon: Music, route: "/events?category=music" },
+        { name: "Stars", icon: Star, route: "/" },
+        { name: "Events", icon: Calendar, route: "/events" },
+        { name: "Community", icon: Users, route: "/" },
+        { name: "Locations", icon: MapPin, route: "/" },
+        { name: "Tickets", icon: Ticket, route: "/" },
       ],
     };
   },

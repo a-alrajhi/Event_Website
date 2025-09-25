@@ -28,4 +28,7 @@ public interface BookmarkRepo extends JpaRepository<Bookmark, Integer> {
     """)
     List<EventStatDTO> findTopBookmarkedEvents(Pageable pageable);
 
+    List<Bookmark> findAllByUser_Id(Integer user_id);
+
+    void deleteByUser_IdAndEvent_Id(Integer userId, Integer eventId);
 }

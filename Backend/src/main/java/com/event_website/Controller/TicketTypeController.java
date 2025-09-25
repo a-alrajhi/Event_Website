@@ -1,6 +1,7 @@
 package com.event_website.Controller;
 
 import com.event_website.Dto.TicketTypeDTO;
+import com.event_website.Dto.ErrorDTO;
 import com.event_website.Entity.Slot;
 import com.event_website.Entity.SlotTicketTypeCapacity;
 import com.event_website.Entity.TicketType;
@@ -9,66 +10,63 @@ import com.event_website.Request.UpdateTicketTypeRequest;
 import com.event_website.Service.SlotService;
 import com.event_website.Service.SlotTicketTypeCapacityService;
 import com.event_website.Service.TicketTypeService;
-import java.util.List;
-import java.util.Optional;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * REST controller for managing ticket type endpoints.
- *
- * <p>Provides HTTP APIs to create, retrieve, update, delete, and search ticket types.
- *
- * <p>Communicates with the TicketTypeService and maps between entity and DTO representations.
- *
- * <p>Endpoints: - GET /ticket-type/all → getAll() - GET /ticket-type/{id} → findById() - GET
- * /ticket-type/search?type= → findByType() - POST /ticket-type/create → createTicketType() - PUT
- * /ticket-type/update/{id} → updateTicketType() - DELETE /ticket-type/delete/{id} →
- * deleteTicketType()
- *
- * @author Abdulrahman Al Rajhi
- * @since 10-09-2025
- * @version 1.0
- */
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/ticket-type")
+@Tag(name = "Ticket Types", description = "APIs for managing ticket types (create, update, retrieve, delete)")
 public class TicketTypeController {
-  @Autowired TicketTypeService ttService;
 
-  @Autowired SlotTicketTypeCapacityService sTicketCapService;
+  @Autowired
+  TicketTypeService ttService;
 
-  @Autowired SlotService slotService;
+  @Autowired
+  SlotTicketTypeCapacityService sTicketCapService;
 
+  @Autowired
+  SlotService slotService;
+
+  @Operation(
+          summary = "Get ticket types for an event",
+          description = "Retrieves all ticket types associated with all slots under a specific event.",
+          responses = {
+                  @ApiResponse(responseCode = "200", description = "Ticket types retrieved",
+                          content = @Content(schema = @Schema(implementation = TicketTypeDTO.class)))
+          }
+  )
   @GetMapping("/event/{id}")
   public ResponseEntity<List<TicketTypeDTO>> getAllTicketTypesForEvent(@PathVariable Integer id) {
-    // 1. get the slot from the service --> returns SLOTS
     List<Slot> eventSlots = slotService.findByEventId(id);
-
-    // 2. Get all slots id
     List<Integer> slotsIds = eventSlots.stream().map(Slot::getId).toList();
 
     List<SlotTicketTypeCapacity> slots = sTicketCapService.getBySlotIds(slotsIds);
-    List<TicketTypeDTO> filteredTicketTypes =
-        slots.stream()
+    List<TicketTypeDTO> filteredTicketTypes = slots.stream()
             .map(SlotTicketTypeCapacity::getTicketType)
             .distinct()
             .map(TicketTypeDTO::fromEntity)
             .toList();
 
-    // 3. get the capacity arr and filter
     return ResponseEntity.ok(filteredTicketTypes);
   }
 
-  // GET - Getting all types
+  @Operation(
+          summary = "Get all ticket types",
+          description = "Fetches all ticket types in the system.",
+          responses = {
+                  @ApiResponse(responseCode = "200", description = "Ticket types retrieved successfully",
+                          content = @Content(schema = @Schema(implementation = TicketTypeDTO.class)))
+          }
+  )
   @GetMapping("/all")
   public ResponseEntity<List<TicketTypeDTO>> getAll() {
     List<TicketType> tt = ttService.getAllTicketTypes();
@@ -76,40 +74,82 @@ public class TicketTypeController {
     return ResponseEntity.ok(ttDTO);
   }
 
-  //   GET - Get type by id
+  @Operation(
+          summary = "Get ticket type by ID",
+          description = "Fetches a ticket type using its unique ID.",
+          responses = {
+                  @ApiResponse(responseCode = "200", description = "Ticket type found",
+                          content = @Content(schema = @Schema(implementation = TicketTypeDTO.class))),
+                  @ApiResponse(responseCode = "404", description = "Ticket type not found",
+                          content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+          }
+  )
   @GetMapping("/{id}")
   public ResponseEntity<TicketTypeDTO> findById(@PathVariable Integer id) {
     TicketType tt = ttService.getTicketTypeById(id);
     return ResponseEntity.ok(TicketTypeDTO.fromEntity(tt));
   }
 
-  // GET - Find by type
+  @Operation(
+          summary = "Search ticket type by name",
+          description = "Finds a ticket type using its name (exact match).",
+          responses = {
+                  @ApiResponse(responseCode = "200", description = "Ticket type found",
+                          content = @Content(schema = @Schema(implementation = TicketTypeDTO.class))),
+                  @ApiResponse(responseCode = "404", description = "Ticket type not found",
+                          content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+          }
+  )
   @GetMapping("/search")
   public ResponseEntity<TicketTypeDTO> findByType(@RequestParam String type) {
     Optional<TicketType> tt = ttService.findTicketTypeByName(type);
-    if (tt.isPresent()) {
-      return ResponseEntity.ok(TicketTypeDTO.fromEntity(tt.get()));
-    } else {
-      return ResponseEntity.notFound().build();
-    }
+    return tt.map(ticketType -> ResponseEntity.ok(TicketTypeDTO.fromEntity(ticketType)))
+            .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  // POST - Create a ticket type
+  @Operation(
+          summary = "Create a ticket type",
+          description = "Creates a new ticket type with the given name and price.",
+          responses = {
+                  @ApiResponse(responseCode = "200", description = "Ticket type created successfully",
+                          content = @Content(schema = @Schema(implementation = TicketTypeDTO.class))),
+                  @ApiResponse(responseCode = "400", description = "Invalid input",
+                          content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+          }
+  )
   @PostMapping("/create")
   public ResponseEntity<TicketTypeDTO> createTicketType(@RequestBody CreateTicketTypeRequest req) {
     TicketType tt = ttService.createTicketType(req);
     return ResponseEntity.ok(TicketTypeDTO.fromEntity(tt));
   }
 
-  // PUT - Update a ticket type
+  @Operation(
+          summary = "Update a ticket type",
+          description = "Updates an existing ticket type with new data.",
+          responses = {
+                  @ApiResponse(responseCode = "200", description = "Ticket type updated successfully",
+                          content = @Content(schema = @Schema(implementation = TicketTypeDTO.class))),
+                  @ApiResponse(responseCode = "404", description = "Ticket type not found",
+                          content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+          }
+  )
   @PutMapping("/update/{id}")
   public ResponseEntity<TicketTypeDTO> updateTicketType(
-      @PathVariable Integer id, @RequestBody UpdateTicketTypeRequest req) {
+          @PathVariable Integer id,
+          @RequestBody UpdateTicketTypeRequest req) {
     TicketType tt = ttService.updateTicketType(id, req);
     return ResponseEntity.ok(TicketTypeDTO.fromEntity(tt));
   }
 
-  // DELETE - delete a ticket type
+  @Operation(
+          summary = "Delete a ticket type",
+          description = "Deletes a ticket type based on its ID.",
+          responses = {
+                  @ApiResponse(responseCode = "204", description = "Ticket type deleted successfully"),
+                  @ApiResponse(responseCode = "404", description = "Ticket type not found",
+                          content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+          }
+  )
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<Void> deleteTicketType(@PathVariable Integer id) {
     ttService.deleteTicketType(id);

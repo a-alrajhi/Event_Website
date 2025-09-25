@@ -8,7 +8,7 @@ const route = useRoute();
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <div v-if="route.fullPath.includes('/admin')">
+    <div v-if="route.path.split('/')[1] === 'admin'">
       <AdminLayoutWrapper />
     </div>
     <main class="flex-grow" v-else>

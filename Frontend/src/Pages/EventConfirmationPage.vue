@@ -435,12 +435,20 @@ Event Confirmation Page
       </div>
 
       <!-- iterating through the returned ticketDTO list and show them  -->
-      <div
+      <!-- <div
         v-for="ticket in newlyGeneratedTickets"
         :key="ticket.id"
         class="mt-6"
       >
         <TicketComponent :ticket="ticket" />
+      </div> -->
+
+      <div
+        v-for="group in groupedTickets"
+        :key="group.groupedTicketCode"
+        class="mt-6"
+      >
+        <TicketComponent :groupedTickets="group" />
       </div>
     </div>
     <div class="mt-12">
@@ -451,23 +459,69 @@ Event Confirmation Page
 
 <script setup>
 import { usePaymentStore } from "../stores/paymentStore";
+import { useAuthStore } from "../stores/authStore";
+
 import { computed, ref, onMounted } from "vue";
 import dayjs from "dayjs";
 import EventLocationMap from "../components/Event/EventLocationMap.vue";
 import TicketComponent from "../components/Event/TicketComponent.vue";
 import AppFooter from "../components/AppFooter/AppFooter.vue";
+import { getUserGroupedTickets } from "../apis/slotsAndTicketTypes";
 
 import { generateTickets } from "../apis/slotsAndTicketTypes";
+
 // getting new generated tickets from response
-const newlyGeneratedTickets = ref([]);
-
-onMounted(async () => {
-  newlyGeneratedTickets.value = await generateTickets();
-  console.log("Generated Tickets: ", newlyGeneratedTickets.value);
-});
-
+const groupedTickets = ref([]);
 const paymentStore = usePaymentStore();
 console.log("Carried Tickets from paymentStore: ", paymentStore.tickets);
+
+onMounted(async () => {
+  try {
+    // Generate new tickets
+    await generateTickets();
+
+    // user info
+    const authStore = useAuthStore();
+    const user = await authStore.getUser();
+
+    // get all historical user grouped tickets
+    const allGroupedTickets = await getUserGroupedTickets(user.id);
+
+    // filter to show only tickets that match what was just purchased
+    const purchasedTicketTypeIds = paymentStore.tickets.map((t) => t.id);
+    const curSlotId = Number(paymentStore.slotId); // Ensure it's a number
+
+    // filter grouped tickets to only include current purchase
+    groupedTickets.value = allGroupedTickets
+      .filter((group) => {
+        // matching slotId and typeId
+        const groupSlotId = Number(group.slotTicketTypeCapacityDTO?.slotId);
+        const groupTicketTypeId = Number(
+          group.slotTicketTypeCapacityDTO?.ticketTypeId
+        );
+
+        const matchesSlot = groupSlotId === curSlotId;
+        const matchesTicketType =
+          purchasedTicketTypeIds.includes(groupTicketTypeId);
+
+        return matchesSlot && matchesTicketType;
+      })
+      .map((group) => {
+        // finding the actual purchased quantity for this ticket type
+        const purchasedTicket = paymentStore.tickets.find(
+          (t) => t.id === group.slotTicketTypeCapacityDTO?.ticketTypeId
+        );
+
+        // overriding the count with the actual purchased quantity
+        return {
+          ...group,
+          count: purchasedTicket?.quantity || group.count,
+        };
+      });
+  } catch (error) {
+    console.error("Error in confirmation page:", error);
+  }
+});
 
 const selectedSlot = computed(() => {
   if (!paymentStore.event?.slots) return null;

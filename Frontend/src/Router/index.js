@@ -77,17 +77,7 @@ const routes = [
   // FAQ
   { path: "/faq", name: "FAQ", component: FAQ },
 
-  // // Dashboard
-  // {
-  //   path: "/Home",
-  //   name: "Home",
-  //   component: Home,
-  //   meta: { requiresAuth: true },
-  // }, // ✅ new
-
-  // { path: "/admin-form", name: "Admin Forms", component: AdminForms },
-  { path: "/admin/users", name: "User Management", component: UserManagement },
-  {
+ {
     path: "/admin/resources",
     name: "Resource Management",
     component: EventManagement,

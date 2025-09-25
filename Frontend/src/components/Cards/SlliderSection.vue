@@ -23,7 +23,7 @@
           class="event-card border border-gray-300/30 dark:border-gray-600/30 rounded-2xl overflow-hidden shadow-[0_10px_25px_var(--color-primary)/40] transition duration-300"
         >
         <RouterLink
-        :to="'/event/'+event.id">
+        :to="'/events/'+event.id">
           
           
           <div class="flex justify-center overflow-hidden">

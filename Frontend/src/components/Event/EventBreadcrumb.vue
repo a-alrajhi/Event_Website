@@ -14,9 +14,9 @@ Event Breadcrumb Component
         class="flex flex-wrap items-center space-x-1 rtl:space-x-reverse w-full min-w-0"
       >
         <li class="inline-flex items-center">
-          <a
-            href="#"
-            class="group inline-flex items-center text-sm font-semibold text-gray-800 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+          <button
+            @click="navigateToHome"
+            class="group inline-flex items-center text-sm font-semibold text-gray-800 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 cursor-pointer"
           >
             <div
               class="relative p-1.5 bg-blue-50 dark:bg-blue-900/30 rounded-lg mr-2 group-hover:bg-blue-100 dark:group-hover:bg-blue-800/40 transition-colors duration-200"
@@ -34,7 +34,7 @@ Event Breadcrumb Component
               </svg>
             </div>
             Home
-          </a>
+          </button>
         </li>
         <li>
           <div class="flex items-center">
@@ -53,15 +53,15 @@ Event Breadcrumb Component
                 d="m1 9 4-4-4-4"
               />
             </svg>
-            <a
-              href="#"
-              class="group ms-2 text-sm font-semibold text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 relative"
+            <button
+              @click="navigateToEvents"
+              class="group ms-2 text-sm font-semibold text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 relative cursor-pointer"
             >
               Events
               <span
                 class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"
               ></span>
-            </a>
+            </button>
           </div>
         </li>
         <li class="min-w-0 flex-1">
@@ -150,6 +150,7 @@ Event Breadcrumb Component
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   pagePath: {
@@ -157,6 +158,19 @@ const props = defineProps({
     required: true,
   },
 });
+
+const router = useRouter();
+
+/**
+ * Navigation functions
+ */
+const navigateToHome = () => {
+  router.push('/');
+};
+
+const navigateToEvents = () => {
+  router.push('/events');
+};
 
 /**
  * Handle the share button click event.

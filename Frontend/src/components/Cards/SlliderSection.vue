@@ -17,15 +17,20 @@
         class="rounded-2xl shadow-[0_0_25px_var(--color-primary)/50] px-5 sm:px-10 pb-6"
       >
         <SwiperSlide
+
           v-for="event in featuredEvents"
           :key="event.id"
           class="event-card border border-gray-300/30 dark:border-gray-600/30 rounded-2xl overflow-hidden shadow-[0_10px_25px_var(--color-primary)/40] transition duration-300"
         >
+        <RouterLink
+        :to="'/event/'+event.id">
+          
+          
           <div class="flex justify-center overflow-hidden">
             <img
-              :src="event.image"
-              :alt="event.title"
-              class="w-full h-74 object-cover transform transition-transform duration-500"
+            :src="event.image"
+            :alt="event.title"
+            class="w-full h-74 object-cover transform transition-transform duration-500"
             />
           </div>
 
@@ -49,6 +54,7 @@
               {{ formatDate(event.date) }}
             </span>
           </div>
+        </RouterLink>
         </SwiperSlide>
       </Swiper>
     </div>

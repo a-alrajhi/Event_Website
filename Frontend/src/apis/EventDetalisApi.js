@@ -11,20 +11,21 @@ export const getEvents = async () => {
     const response = await axiosClient.get(`/Event/details?page=0&size=10`);
     cachedEvents =
       response.data?.content?.map((item) => ({
-        id: item.eventId,
-        title: item.eventName,
-        description: item.eventDescription,
-        price: item.ticketPrices?.[0] || 0,
+        id: item.id,
+        title: item.name,
+        description: item.description,
+        price: item.prices && item.prices.length ? Math.min(...item.prices) : 0,
         image:
           item.photoUrl ||
           "https://images.ctfassets.net/vy53kjqs34an/1b6S3ia1nuDcqK7uDfvPGz/c2796f467985e3702c6b54862be767d5/1280%C3%A2__%C3%83_%C3%A2__426-_1.jpg",
         category: item.categoryName,
-        venue: item.venue || "Saudi Arabia",
-        date: item.eventDate || "2025-10-15",
-        time: item.eventTime || "TBD",
+        venue: item.locationName || "Saudi Arabia",
+        date: item.date || "2025-10-15",
+        dates: item.dates || null,
+        time: item.time || "TBD",
         attendees: item.attendees || Math.floor(Math.random() * 500) + 50,
         rating: item.rating || (Math.random() * 2 + 3).toFixed(1),
-        spotsLeft: item.spotsLeft || Math.floor(Math.random() * 100) + 10,
+        spotsLeft: item.remaining || Math.floor(Math.random() * 100) + 10,
         soldOut: item.soldOut || false,
       })) || [];
 

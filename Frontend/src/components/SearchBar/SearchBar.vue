@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const emit = defineEmits(["search"]);
@@ -44,11 +44,11 @@ const query = ref("");
 const route = useRoute();
 const router = useRouter();
 
-const isOnEventsPage = route.name === "Events";
+const isOnEventsPage = computed(() => route.name === "Events");
 console.log(isOnEventsPage);
 
 const onInput = () => {
-  if (isOnEventsPage) {
+  if (isOnEventsPage.value) {
     emit("search", query.value.trim());
   }
 };
@@ -57,7 +57,7 @@ const onSubmit = () => {
   const q = query.value.trim();
   if (!q) return;
 
-  if (isOnEventsPage) {
+  if (isOnEventsPage.value) {
     emit("search", q);
   } else {
     router.push({ name: "Events", query: { q } });

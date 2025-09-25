@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * DTO class to represent location data, including validation rules
  * and Swagger schema annotations for documentation.
@@ -17,7 +19,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Schema(description = "Data Transfer Object for Location details")
 public class LocationDTO {
 
@@ -52,11 +53,8 @@ public class LocationDTO {
         this.latitude = latitude;
         this.longitude = longitude;
         this.additionalInfo = additionalInfo;
-        this.events = events;  // Initialize events list
+        this.events = events;
     }
-
-    // Default constructor for JSON deserialization
-    public LocationDTO() {}
 
     public Location toEntity() {
         Location location = new Location();

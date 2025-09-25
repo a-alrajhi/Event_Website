@@ -121,13 +121,8 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  // Computed property for better reactivity
-  const isAuthenticated = computed(() => {
-    return isLoggedIn.value && isTokenValid();
-  });
-
   return {
-    isLoggedIn: isAuthenticated,
+    isLoggedIn,
     error,
     loading,
     authUser,

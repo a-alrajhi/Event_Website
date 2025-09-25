@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -32,20 +34,21 @@ public class EventDtoDetalis {
     @Schema(description = "List of available ticket prices for the event", example = "[100.00, 150.50, 200.00]")
     private List<BigDecimal> prices;  // Add list of ticket prices
 
-    @Schema(description = "Location name of the event", example = "[100.00, 150.50, 200.00]")
-    private String locationName;      // Add location name if needed
+    @Schema(description = "Location name of the event", example = "KAFD Opera House")
+    private String locationName; // Add location name if needed
 
-    // Constructor to ensure compatibility with EventService
-    public EventDtoDetalis(Integer id, String name, String description, String photoUrl, String categoryName, List<BigDecimal> prices, String locationName) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.photoUrl = photoUrl;
-        this.categoryName = categoryName;
-        this.prices = prices;
-        this.locationName = locationName;
-    }
+    @Schema(description = "Starting date of the event", example = "2025-10-9")
+    private LocalDate date;
 
-    // Default constructor
-    public EventDtoDetalis() {}
+    @Schema(description = "all dates of the event", example = "[2025-10-9,2025-10-10]")
+    private List<LocalDate> dates;
+
+    @Schema(description = "Starting time of the event", example = "12:30")
+    private String time;
+
+    @Schema(description = "Remaining seats of the first slot the event", example = "20")
+    private Integer remaining;
+
+    @Schema(description = "Overall attendees", example = "200")
+    private Integer attendees;
 }

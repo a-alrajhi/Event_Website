@@ -51,7 +51,6 @@
         <!-- Save/Like Button -->
         <button
           v-if="authStore.isLoggedIn()"
-          @click="toggleSaved(event)"
           @click.stop="toggleSaved(event)"
           :class="[
             'absolute top-3 right-3 p-2 rounded-full transition-all',
@@ -137,10 +136,18 @@
           </div>
 
           <div
+            v-if="event.attendees > 20 || event.spotsLeft < 20"
             class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
           >
             <Users class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0" />
             <span>{{ event.attendees || 0 }} attending</span>
+          </div>
+          <div
+            v-else
+            class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+          >
+            <Users class="w-4 h-4 text-[var(--color-primary)] flex-shrink-0" />
+            <span>Book this event early!</span>
           </div>
         </div>
 
@@ -267,18 +274,15 @@ const navigateToTickets = (eventId) => {
 };
 
 const toggleSaved = (event) => {
-  const isSaved = savedEvents.value.includes(event.id);
-  if (isSaved) {
-    savedEvents.value = savedEvents.value.filter((id) => id !== event.id);
+  const index = savedEvents.value.indexOf(event.id);
+  if (index > -1) {
+    savedEvents.value.splice(index, 1);
+    unbookmark(event.id);
   } else {
     savedEvents.value.push(event.id);
     bookmark(event.id);
   }
-
-  // Save to localStorage
   localStorage.setItem("savedEvents", JSON.stringify(savedEvents.value));
-
-  emit("toggle-save", { event, saved: !isSaved });
 };
 
 const shareEvent = async (event) => {

@@ -55,7 +55,7 @@ public class BookmarkController {
     )
     @PostMapping("/create")
     public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) {
-        try {
+
             User user = securityUtil.getCurrentUser();
             int userId = bookmarkDTO.getUserId() != null ? bookmarkDTO.getUserId() : user.getId();
             bookmarkDTO.setUserId(userId);
@@ -68,10 +68,6 @@ public class BookmarkController {
             );
 
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            // Your global exception handler should handle this, but documented here for Swagger
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 
     @Operation(
@@ -119,13 +115,8 @@ public class BookmarkController {
     )
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteBookmark(@PathVariable Integer id) {
-        try {
             bookmarkService.deleteBookmarkById(id);
             return new ResponseEntity<>("Bookmark deleted successfully", HttpStatus.OK);
-        } catch (RuntimeException e) {
-            // Again, global handler will normally catch this
-            return new ResponseEntity<>("Failed to delete Bookmark", HttpStatus.BAD_REQUEST);
-        }
     }
 
     @DeleteMapping("/delete")

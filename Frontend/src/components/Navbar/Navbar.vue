@@ -40,12 +40,12 @@
       <div class="flex items-center space-x-4 flex-wrap sm:flex-nowrap">
         <!-- Search -->
         <div class="flex-1 min-w-[200px] mt-2 sm:mt-0">
-          <SearchBar />
+          <SearchBar @search="handleSearch" />
         </div>
 
         <!-- Profile Photo or Login Button -->
         <div class="relative">
-          <div v-if="authStore.isLoggedIn" class="relative">
+          <div v-if="authStore.isLoggedIn()" class="relative">
             <button
               @click="showDropdown = !showDropdown"
               class="w-10 h-10 rounded-full border-2 border-[var(--color-primary)] hover:border-[var(--color-hover)] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
@@ -119,7 +119,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../../stores/authStore";
 import SearchBar from "../SearchBar/SearchBar.vue";
 import { RouterLink } from "vue-router";
@@ -156,6 +156,16 @@ const navigateTo = (route) => {
 const handleLogout = () => {
   showDropdown.value = false;
   authStore.logout();
+};
+
+const route = useRoute();
+
+const handleSearch = (query) => {
+  if (route.name === "Events") {
+    router.replace({ name: "Events", query: { q: query } });
+  } else {
+    router.push({ name: "Events", query: { q: query } });
+  }
 };
 
 // Close dropdown when clicking outside

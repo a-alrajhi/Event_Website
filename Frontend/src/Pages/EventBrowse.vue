@@ -220,17 +220,6 @@ const currentPrice = ref(0);
 const sidebarCategories = ref([]);
 const searchInput = ref("");
 
-const route = useRoute();
-
-const horizontalCategories = [
-  { name: "Home", icon: Home },
-  { name: "Music", icon: Music },
-  { name: "Stars", icon: Star },
-  { name: "Events", icon: Calendar },
-  { name: "Locations", icon: MapPin },
-  { name: "Tickets", icon: Ticket },
-];
-
 const fetchData = async () => {
   isLoading.value = true;
   try {
@@ -291,6 +280,16 @@ watch(
   { deep: true }
 );
 
+watch(
+  () => route.query.q,
+  (newQ) => {
+    if (typeof newQ === "string") {
+      searchInput.value = newQ.trim();
+    }
+  },
+  { immediate: true }
+);
+
 onMounted(fetchData);
 
 const filteredEvents = computed(() => {
@@ -320,6 +319,8 @@ const getFilteredByPriceCount = () => {
 const clearFilters = () => {
   selectedCategories.value = [];
   currentPrice.value = 0;
+  router.replace({ name: "Events" });
+  searchInput.value = "";
 };
 
 const toggleQuickCategory = (category) => {

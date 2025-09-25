@@ -47,7 +47,7 @@ Event Similar Events Component
               {{ event.description }}
             </p>
             <RouterLink
-              :to="`/event/${event.id}`"
+              :to="`/events/${event.id}`"
               class="cursor-pointer mt-3 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline"
             >
               View Event →

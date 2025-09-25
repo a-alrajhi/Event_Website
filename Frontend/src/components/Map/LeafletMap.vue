@@ -1,5 +1,6 @@
 <template>
   <div class="leaflet-map-container">
+    <Navbar />
     <div id="map" class="map-style"></div>
 
     <div v-if="showEventList && events.length > 0" class="event-list-popup">
@@ -22,6 +23,7 @@ import "leaflet.markercluster";
 import icon from '../../assets/icon.png';
 import { useRouter } from 'vue-router';
 import EventList from '../Misc/EventList.vue';
+import Navbar from '../Navbar/Navbar.vue';
 
 const router = useRouter();
 const initialMap = ref(null);
@@ -92,7 +94,7 @@ onMounted(() => {
 }
 
 .map-style {
-  height: 100%;
+  height: calc(100vh - 80px);
   width: 100%;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

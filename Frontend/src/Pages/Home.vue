@@ -51,7 +51,7 @@
     <SlliderSection :events="events" :is-loading="isLoading" />
 
     <!-- Best Events Section -->
-    <h2 class="text-3xl font-bold text-center text-[var(--color-primary)] drop-shadow-[0_0_10px_var(--color-primary)]">
+    <h2 class="text-3xl font-bold text-center text-[var(--color-primary)] drop-shadow-[0_0_5px_var(--color-primary)]">
       Best Events
     </h2>
     <div class="px-6">

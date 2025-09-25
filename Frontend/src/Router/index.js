@@ -16,6 +16,7 @@ import FAQ from "../Pages/FAQ.vue";
 
 // Components
 import EventTicketTypes from "../components/Event/EventTicketTypes.vue";
+import LeafletMap from "../components/Map/LeafletMap.vue";
 
 const routes = [
   // Main Routes
@@ -48,22 +49,22 @@ const routes = [
     component: EventBrowse,
   },
   {
-    path: "/event/:id",
+    path: "/events/:id",
     name: "EventDetails",
     component: EventDetailsPage,
   },
   {
-    path: "/event/ticket-types/:eventId",
+    path: "/events/ticket-types/:eventId",
     name: "EventTicketTypes",
     component: EventTicketTypes,
   },
   {
-    path: "/event/:eventId/confirmation",
+    path: "/events/:eventId/confirmation",
     name: "EventConfirmation",
     component: EventConfirmationPage,
   },
   {
-    path: "/event/:eventId/payment",
+    path: "/events/:eventId/payment",
     name: "EventPaymentPage",
     component: EventPaymentPage,
   },
@@ -76,6 +77,9 @@ const routes = [
   },
   // FAQ
   { path: "/faq", name: "FAQ", component: FAQ },
+
+  //LocationMap
+  { path: "/location", name: "Location", component: LeafletMap},
 
  {
     path: "/admin/resources",

@@ -127,19 +127,45 @@ const router = useRouter();
 const showSlotDialog = ref(false);
 
 function handleBookNow() {
-  if (props.slots.length === 1) {
+  console.log("handleBookNow called");
+  console.log("Event ID:", props.eventId);
+  console.log("Slots:", props.slots);
+  console.log("Slots length:", props.slots?.length);
+
+  if (props.slots && props.slots.length === 1) {
+    console.log("Single slot detected, navigating to ticket page with slot:", props.slots[0]);
     goToTicketPage(props.slots[0]); // go directly to ticket page
+  } else if (props.slots && props.slots.length > 1) {
+    console.log("Multiple slots detected, showing slot dialog");
+    showSlotDialog.value = true; // show slot picker for multiple slots
   } else {
-    showSlotDialog.value = true;
+    console.log("No slots available, navigating to ticket types page");
+    // No slots available, go directly to ticket types page
+    router.push({
+      name: "EventTicketTypes",
+      params: { eventId: String(props.eventId) }
+    });
   }
 }
 
 function goToTicketPage(selectedSlot) {
-  if (!selectedSlot?.id) return;
+  console.log("goToTicketPage called with slot:", selectedSlot);
+  console.log("Event ID for navigation:", props.eventId);
 
+  if (!selectedSlot?.id) {
+    console.log("No valid slot ID, going to ticket types page without slot");
+    // If no valid slot, go to ticket types page without slot
+    router.push({
+      name: "EventTicketTypes",
+      params: { eventId: String(props.eventId) }
+    });
+    return;
+  }
+
+  console.log("Navigating with slot ID:", selectedSlot.id);
   router.push({
     name: "EventTicketTypes",
-    params: { eventId: props.eventId },
+    params: { eventId: String(props.eventId) },
     query: { slotId: selectedSlot.id },
   });
 }

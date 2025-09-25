@@ -198,7 +198,35 @@ const navigateToDetails = (eventId) => {
 };
 
 const navigateToTickets = (eventId) => {
-  router.push(`/events/ticket-types/${eventId}`);
+  handleBookNow(eventId);
+};
+
+const handleBookNow = (eventId) => {
+  const event = props.events.find(e => e.id === eventId);
+  const slots = event?.slots || [];
+
+  if (slots.length === 1) {
+    goToTicketPage(slots[0], eventId);
+  } else if (slots.length > 1) {
+    // If event has multiple slots, navigate to event details to show slot picker
+    navigateToDetails(eventId);
+  } else {
+    // If no slots, go directly to ticket types page
+    router.push(`/events/ticket-types/${eventId}`);
+  }
+};
+
+const goToTicketPage = (selectedSlot, eventId) => {
+  if (!selectedSlot?.id) {
+    router.push(`/events/ticket-types/${eventId}`);
+    return;
+  }
+
+  router.push({
+    name: "EventTicketTypes",
+    params: { eventId },
+    query: { slotId: selectedSlot.id },
+  });
 };
 
 const toggleSaved = (event) => {
@@ -219,7 +247,7 @@ const shareEvent = async (event) => {
   const shareData = {
     title: event.title,
     text: `Check out this event: ${event.title}`,
-    url: `${window.location.origin}/event/${event.id}`
+    url: `${window.location.origin}/events/${event.id}`
   };
 
   try {

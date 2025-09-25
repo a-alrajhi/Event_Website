@@ -33,7 +33,7 @@
         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <button
             @click.stop="navigateToDetails(event.id)"
-            class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] px-6 py-3 rounded-lg font-medium transition-colors text-white"
+            class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] px-6 py-3 rounded-lg font-medium transition-colors text-white cursor-pointer"
           >
             View Details
           </button>
@@ -43,11 +43,11 @@
         <button
           @click.stop="toggleSaved(event)"
           :class="[
-            'absolute top-3 right-3 p-2 rounded-full transition-all',
-            savedEvents.includes(event.id) ? 'bg-[var(--color-error)] text-white' : 'bg-black/30 text-gray-400 hover:bg-black/50'
+            'absolute top-3 right-3 p-2 rounded-full transition-all cursor-pointer',
+            savedEvents.includes(event.id || event.eventId || event._id) ? 'bg-[var(--color-error)] text-white' : 'bg-black/30 text-gray-400 hover:bg-black/50'
           ]"
         >
-          <Heart :class="['w-4 h-4', savedEvents.includes(event.id) && 'fill-current']" />
+          <Heart :class="['w-4 h-4', savedEvents.includes(event.id || event.eventId || event._id) && 'fill-current']" />
         </button>
 
         <!-- Price Badge -->
@@ -125,7 +125,7 @@
               'flex-1 py-2 px-4 rounded-lg font-medium transition-all text-center',
               event.soldOut
                 ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
-                : 'bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white hover:shadow-lg'
+                : 'bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white hover:shadow-lg cursor-pointer'
             ]"
           >
             {{ event.soldOut ? 'Sold Out' : 'Book Now' }}
@@ -133,7 +133,7 @@
 
           <button
             @click.stop="shareEvent(event)"
-            class="p-2 border border-gray-300/30 dark:border-gray-600/30 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
+            class="p-2 border border-gray-300/30 dark:border-gray-600/30 rounded-lg hover:bg-[var(--color-hover)] transition-colors cursor-pointer"
             :title="`Share ${event.title}`"
           >
             <Share2 class="w-4 h-4 text-gray-600 dark:text-gray-300" />
@@ -176,6 +176,20 @@ onMounted(() => {
   if (saved) {
     savedEvents.value = JSON.parse(saved);
   }
+
+  // Debug events data
+  console.log('=== EVENT DEBUGGING ===');
+  console.log('Total events:', props.events?.length || 0);
+  console.log('Events array:', props.events);
+
+  if (props.events && props.events.length > 0) {
+    console.log('First event:', props.events[0]);
+    console.log('First event keys:', Object.keys(props.events[0]));
+    console.log('First event ID:', props.events[0].id);
+    console.log('First event eventId:', props.events[0].eventId);
+  } else {
+    console.log('No events found!');
+  }
 });
 
 // Methods
@@ -194,19 +208,38 @@ const formatDate = (date) => {
 };
 
 const navigateToDetails = (eventId) => {
+  console.log('Navigate to details - eventId:', eventId);
+  if (!eventId) {
+    console.error('Cannot navigate - eventId is undefined!');
+    return;
+  }
   router.push(`/event/${eventId}`);
 };
 
 const navigateToTickets = (eventId) => {
+  console.log('Navigate to tickets - eventId:', eventId);
+  if (!eventId) {
+    console.error('Cannot navigate to tickets - eventId is undefined!');
+    return;
+  }
   router.push(`/event/ticket-types/${eventId}`);
 };
 
 const toggleSaved = (event) => {
-  const isSaved = savedEvents.value.includes(event.id);
+  console.log('Toggle saved - event:', event);
+  const eventId = event.id || event.eventId || event._id;
+  console.log('Toggle saved - eventId:', eventId);
+
+  if (!eventId) {
+    console.error('Cannot toggle saved - no valid eventId found!');
+    return;
+  }
+
+  const isSaved = savedEvents.value.includes(eventId);
   if (isSaved) {
-    savedEvents.value = savedEvents.value.filter(id => id !== event.id);
+    savedEvents.value = savedEvents.value.filter(id => id !== eventId);
   } else {
-    savedEvents.value.push(event.id);
+    savedEvents.value.push(eventId);
   }
 
   // Save to localStorage

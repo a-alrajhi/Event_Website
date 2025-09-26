@@ -22,8 +22,7 @@ watchEffect(() => {
       <div class="forms">
         <div class="form-content">
           <div class="form-box">
-            <!-- Title -->
-            <div class="title">{{ login ? "Login" : "Register" }}</div>
+            <!-- Removed title -->
 
             <!-- Form -->
             <AuthForm

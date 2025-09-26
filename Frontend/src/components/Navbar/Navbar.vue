@@ -77,7 +77,7 @@
             to="/login"
             class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
-            Login
+          
           </router-link>
         </div>
       </div>

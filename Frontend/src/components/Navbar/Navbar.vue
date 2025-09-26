@@ -5,7 +5,7 @@
   <!-- class="dark:bg-[var(--color-bg)] border-b dark:border-gray-800 text-[var(--color-text)] shadow-md"
   > -->
   <nav
-    class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white shadow-lg"
+    class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white shadow-lg sticky top-0 z-50"
   >
     <div
       class="max-w-screen-xl flex flex-col sm:flex-row sm:items-center justify-between mx-auto p-4 gap-4"
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Profile Photo or Login Button -->
-        <div class="relative">
+        <div class="relative z-[99999]" data-profile-dropdown>
           <div v-if="authStore.isLoggedIn" class="relative">
             <button
               @click="showDropdown = !showDropdown"
@@ -49,7 +49,7 @@
             <!-- Dropdown Menu -->
             <div
               v-if="showDropdown"
-              class="absolute right-0 mt-2 w-48 event-card rounded-xl shadow-lg border border-[var(--color-primary)]/20 z-50"
+              class="absolute right-0 mt-2 w-48 event-card rounded-xl shadow-lg  z-[9999]"
             >
               <div class="py-2">
                 <router-link
@@ -86,7 +86,7 @@
 
   <!-- Small Categories Navbar -->
   <section
-    class="bg-gray-50 dark:bg-gray-900 py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-800"
+    class="bg-gray-50 dark:bg-gray-900 py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-800 sticky top-[73px] z-40"
   >
     <div
       v-for="(category, index) in categories"
@@ -147,7 +147,9 @@ const handleLogout = () => {
 
 // Close dropdown when clicking outside
 const handleClickOutside = (event) => {
-  if (!event.target.closest('.relative')) {
+  // Check if the click is outside the profile dropdown container
+  const profileContainer = event.target.closest('[data-profile-dropdown]');
+  if (!profileContainer && showDropdown.value) {
     showDropdown.value = false;
   }
 };

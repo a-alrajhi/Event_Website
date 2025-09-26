@@ -42,17 +42,23 @@
         <!-- Save/Like Button -->
         <button
           @click.stop="toggleSaved(event)"
+          :disabled="!authStore.isLoggedIn"
           :class="[
             'absolute top-3 right-3 p-2 rounded-full transition-all',
-            savedEvents.includes(event.id) ? 'bg-[var(--color-error)] text-white' : 'bg-black/30 text-gray-400 hover:bg-black/50'
+            !authStore.isLoggedIn
+              ? 'bg-gray-300/50 text-gray-400 cursor-not-allowed'
+              : savedEvents.includes(event.id)
+                ? 'bg-[var(--color-error)] text-white hover:bg-[var(--color-error)]/80'
+                : 'bg-black/30 text-gray-400 hover:bg-black/50 hover:text-white'
           ]"
+          :title="!authStore.isLoggedIn ? 'Please login to save events' : (savedEvents.includes(event.id) ? 'Remove from favorites' : 'Add to favorites')"
         >
           <Heart :class="['w-4 h-4', savedEvents.includes(event.id) && 'fill-current']" />
         </button>
 
         <!-- Price Badge -->
         <div class="absolute top-3 left-3 bg-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-bold text-white shadow-lg">
-          {{ event.price === 0 ? 'FREE' : `SAR ${event.price}` }}
+          {{ formatPrice(event) }}
         </div>
 
         <!-- Category Badge -->
@@ -147,6 +153,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../../stores/authStore';
 import { Heart, Share2, MapPin, Calendar, Clock, Users, Star, Check } from 'lucide-vue-next';
 
 // Props
@@ -161,8 +168,9 @@ const props = defineProps({
   }
 });
 
-// Router
+// Router and Auth
 const router = useRouter();
+const authStore = useAuthStore();
 
 // State
 const savedEvents = ref([]);
@@ -193,6 +201,25 @@ const formatDate = (date) => {
   }
 };
 
+const formatPrice = (event) => {
+  if (event.price === 0) return 'FREE';
+
+  // If there's a price range with multiple prices, show range
+  if (event.priceRange && event.priceRange.length > 1) {
+    const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
+    if (prices.length > 1) {
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      if (min !== max) {
+        return `SAR ${min} - ${max}`;
+      }
+    }
+  }
+
+  // Default single price display
+  return `SAR ${event.price}`;
+};
+
 const navigateToDetails = (eventId) => {
   router.push(`/events/${eventId}`);
 };
@@ -205,10 +232,8 @@ const handleBookNow = (eventId) => {
   const event = props.events.find(e => e.id === eventId);
   const slots = event?.slots || [];
 
-  if (slots.length === 1) {
-    goToTicketPage(slots[0], eventId);
-  } else if (slots.length > 1) {
-    // If event has multiple slots, navigate to event details to show slot picker
+  if (slots.length > 0) {
+    // If event has slots, go to event details page (which contains EventSidebar)
     navigateToDetails(eventId);
   } else {
     // If no slots, go directly to ticket types page
@@ -216,20 +241,19 @@ const handleBookNow = (eventId) => {
   }
 };
 
-const goToTicketPage = (selectedSlot, eventId) => {
-  if (!selectedSlot?.id) {
-    router.push(`/events/ticket-types/${eventId}`);
+// Note: goToTicketPage function removed as it's no longer needed
+// EventSidebar.vue now handles slot selection and routing
+
+const toggleSaved = (event) => {
+  // Check if user is logged in
+  if (!authStore.isLoggedIn) {
+    // Show a notification or redirect to login
+    if (confirm('You need to login to save events. Would you like to login now?')) {
+      router.push('/login');
+    }
     return;
   }
 
-  router.push({
-    name: "EventTicketTypes",
-    params: { eventId },
-    query: { slotId: selectedSlot.id },
-  });
-};
-
-const toggleSaved = (event) => {
   const isSaved = savedEvents.value.includes(event.id);
   if (isSaved) {
     savedEvents.value = savedEvents.value.filter(id => id !== event.id);
@@ -241,6 +265,9 @@ const toggleSaved = (event) => {
   localStorage.setItem('savedEvents', JSON.stringify(savedEvents.value));
 
   emit('toggle-save', { event, saved: !isSaved });
+
+  // Show a brief notification
+  console.log(isSaved ? 'Event removed from favorites!' : 'Event added to favorites!');
 };
 
 const shareEvent = async (event) => {

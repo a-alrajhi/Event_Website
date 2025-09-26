@@ -40,7 +40,7 @@
           </div>
 
           <!-- Price Filter -->
-          <div v-if="!isLoading && priceRange.max > 0" class="bg-[var(--color-card)]/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10">
+          <div v-if="!isLoading && priceRange.max > 0" class="event-card/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Price Range</h2>
               <div class="bg-[var(--color-primary)]/10 px-3 py-1 rounded-full">
@@ -180,8 +180,24 @@ const fetchData = async () => {
     const eventsData = await getEvents();
     events.value = eventsData;
     sidebarCategories.value = [...new Set(eventsData.map(event => event.category))].filter(Boolean);
-    const prices = eventsData.map(event => event.price).filter(price => price > 0);
-    priceRange.value = prices.length ? { min: 0, max: Math.ceil(Math.max(...prices) * 1.2) } : { min: 0, max: 200 };
+    // Calculate price range from all event prices including price ranges
+    const allPrices = [];
+    eventsData.forEach(event => {
+      if (event.priceRange && event.priceRange.length > 0) {
+        // Add all prices from the price range
+        event.priceRange.forEach(p => {
+          const price = parseFloat(p);
+          if (price > 0) allPrices.push(price);
+        });
+      } else if (event.price > 0) {
+        // Fallback to single price
+        allPrices.push(event.price);
+      }
+    });
+
+    priceRange.value = allPrices.length ?
+      { min: 0, max: Math.ceil(Math.max(...allPrices) * 1.2) } :
+      { min: 0, max: 200 };
     currentPrice.value = 0;
 
     // Apply category filter from URL query params
@@ -222,7 +238,24 @@ onMounted(fetchData);
 const filteredEvents = computed(() => {
   return events.value.filter(event => {
     const categoryMatch = selectedCategories.value.length === 0 || selectedCategories.value.includes(event.category);
-    const priceMatch = currentPrice.value === 0 || event.price <= currentPrice.value;
+
+    let priceMatch = true;
+    if (currentPrice.value > 0) {
+      // For events with price ranges, check if ANY price in the range is within the filter
+      if (event.priceRange && event.priceRange.length > 0) {
+        const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
+        if (prices.length > 0) {
+          // Event matches if it has any price at or below the filter
+          priceMatch = Math.min(...prices) <= currentPrice.value;
+        } else {
+          priceMatch = true; // Free events always match
+        }
+      } else {
+        // Fallback to single price
+        priceMatch = event.price <= currentPrice.value;
+      }
+    }
+
     return categoryMatch && priceMatch;
   });
 });
@@ -232,7 +265,21 @@ const getCategoryCount = (category) => {
 };
 
 const getFilteredByPriceCount = () => {
-  return currentPrice.value === 0 ? events.value.length : events.value.filter(event => event.price <= currentPrice.value).length;
+  if (currentPrice.value === 0) return events.value.length;
+
+  return events.value.filter(event => {
+    // For events with price ranges, check if ANY price in the range is within the filter
+    if (event.priceRange && event.priceRange.length > 0) {
+      const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
+      if (prices.length > 0) {
+        return Math.min(...prices) <= currentPrice.value;
+      }
+      return true; // Free events always match
+    } else {
+      // Fallback to single price
+      return event.price <= currentPrice.value;
+    }
+  }).length;
 };
 
 const clearFilters = () => {

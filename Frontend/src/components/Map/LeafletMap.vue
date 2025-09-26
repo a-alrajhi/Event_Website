@@ -1,6 +1,6 @@
 <template>
+  <Navbar />
   <div class="leaflet-map-container">
-    <Navbar />
     <div id="map" class="map-style"></div>
 
     <div v-if="showEventList && events.length > 0" class="event-list-popup">
@@ -87,14 +87,11 @@ onMounted(() => {
 <style scoped>
 .leaflet-map-container {
   position: relative;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
 .map-style {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 140px);
   width: 100%;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

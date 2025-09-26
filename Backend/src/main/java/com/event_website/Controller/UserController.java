@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = UserDTO.class)))
             }
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> findAll(@RequestParam(required = false) Integer page,
                                                  @RequestParam(required = false) Integer pageLimit) {
@@ -63,6 +65,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             }
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Integer id) {
         UserDTO user = UserDTO.fromEntity(
@@ -82,6 +85,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             }
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/tickets")
     public ResponseEntity<List<TicketDTO>> findTicketsById(@PathVariable Integer id) {
         return ResponseEntity.ok(ticketService.getUserTickets(id).stream()
@@ -100,6 +104,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             }
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<UserDTO> create(@RequestBody RegisterRequest registerRequest) throws Exception {
         User user = new User(registerRequest);
@@ -118,6 +123,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             }
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@RequestBody UpdateUserRequest updateUserRequest,
                                           @PathVariable Integer id) throws Exception {
@@ -139,6 +145,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             }
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<UserDTO> delete(@PathVariable Integer id) throws Exception {
         User user = userService.delete(id);

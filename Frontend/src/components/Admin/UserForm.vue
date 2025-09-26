@@ -11,20 +11,27 @@ const email = ref("");
 const password = ref("");
 const name = ref("");
 const phoneNumber = ref("");
-
+const role = ref("")
 const errors = ref({});
 const originalValues = ref({});
+
+const roles = [
+  { label: "ADMIN", value: "ADMIN" },
+  { label: "USER", value: "USER" },
+];
 
 const loadUser = (user) => {
   email.value = user.email ?? "";
   password.value = user.password ?? "";
   name.value = user.name ?? "";
   phoneNumber.value = user.phoneNumber ?? "";
+  role.value = user.role ?? 'USER'
   originalValues.value = {
     email: email.value,
     password: password.value,
     name: name.value,
     phoneNumber: phoneNumber.value,
+    role: role.value
   };
 };
 
@@ -105,13 +112,14 @@ const validate = async () => {
 };
 
 // Validate whenever any field changes
-watch([email, password, name, phoneNumber], () => {
+watch([email, password, name, phoneNumber, role], () => {
   userStore.selectedUser = {
     ...userStore.selectedUser,
     email: email.value,
     password: password.value,
     name: name.value,
     phoneNumber: phoneNumber.value,
+    role: role.value
   };
   validate();
 });
@@ -119,8 +127,8 @@ watch([email, password, name, phoneNumber], () => {
 
 <template>
   <div class="flex flex-col gap-3">
-    <span class="text-primary/90 block mb-4 ml-1">User Info</span>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <span class="text-primary/90 block mb-6">User Info</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 mb-6">
       <div>
         <FloatLabel>
           <InputText
@@ -175,6 +183,23 @@ watch([email, password, name, phoneNumber], () => {
         <small v-if="errors.phoneNumber" class="text-red-500">{{
           errors.phoneNumber
         }}</small>
+      </div>
+      <div class="">
+        <select
+          v-model="role"
+          class="w-full p-3 rounded-lg border-2 border-gray-400 text-gray-900 bg-white dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:outline-none focus:border-primary focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900 cursor-pointer"
+        >
+          <option
+            :value="'ADMIN'"
+          >
+            {{ 'ADMIN' }}
+          </option>
+          <option
+            :value="'USER'"
+          >
+            {{ 'USER' }}
+          </option>
+        </select>
       </div>
     </div>
   </div>

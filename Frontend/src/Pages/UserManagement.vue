@@ -175,10 +175,11 @@ const userCreatePage = [UserForm];
       <!-- Table -->
       <div v-else class="admin-table">
         <!-- Table Header -->
-        <div class="grid grid-cols-4 gap-4 admin-table-header">
+        <div class="grid grid-cols-5 gap-4 admin-table-header">
           <div>Name</div>
           <div>Email</div>
           <div>Phone</div>
+          <div>Role</div>
           <div class="text-center">Actions</div>
         </div>
 
@@ -201,7 +202,7 @@ const userCreatePage = [UserForm];
         <div
           v-for="(user, index) in paginatedUsers"
           :key="user.id || index"
-          class="grid grid-cols-4 gap-4 items-center admin-table-cell admin-table-row"
+          class="grid grid-cols-5 gap-4 items-center admin-table-cell admin-table-row"
         >
           <div>
             <div class="font-medium">{{ user.name || 'N/A' }}</div>
@@ -211,6 +212,13 @@ const userCreatePage = [UserForm];
           </div>
           <div class="text-sm" style="color: var(--color-gray);">{{ user.email || 'N/A' }}</div>
           <div class="text-sm">{{ user.phoneNumber || 'N/A' }}</div>
+          <div class="text-sm">
+          <span
+            :class="`px-2 py-1 rounded-full text-md font-medium ${user.role == 'USER' ? 'bg-green-500' : 'bg-amber-500'}`"
+          >
+            {{ user.role }}
+          </span>
+          </div>
           <div class="flex justify-center gap-2">
             <button
               @click="() => startEdit(user)"

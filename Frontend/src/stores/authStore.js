@@ -9,6 +9,7 @@ const REFRESH_TOKEN_KEY = "refreshToken";
 export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref(localStorage.getItem(ACCESS_TOKEN_KEY) || null);
   const refreshToken = ref(localStorage.getItem(REFRESH_TOKEN_KEY) || null);
+  const role = ref(localStorage.getItem("role") || null)
   const error = ref(null);
   const loading = ref(false);
   const userData = ref(null); // Store user data here
@@ -51,6 +52,8 @@ export const useAuthStore = defineStore("auth", () => {
     refreshToken.value = null;
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem("role");
+    localStorage.removeItem("savedEvents");
     delete axiosClient.defaults.headers.common["Authorization"];
   };
 
@@ -68,6 +71,7 @@ export const useAuthStore = defineStore("auth", () => {
       const res = await axiosClient.post(uri, form);
       const { accessToken: newAccess, refreshToken: newRefresh } = res.data;
       setTokens(newAccess, newRefresh || null);
+      await getUser();
       redirectToPast();
     } catch (err) {
       error.value = err.response?.data?.message || "Authentication failed";
@@ -88,6 +92,7 @@ export const useAuthStore = defineStore("auth", () => {
 
       const res = await axiosClient.get("/profile/");
       userData.value = res.data; // Store user data in userData
+      localStorage.setItem('role', res.data.role); // set the role in local storage
       return res.data;
     } catch (err) {
       error.value = err.response?.data?.message || "Failed to fetch user";
@@ -127,6 +132,7 @@ export const useAuthStore = defineStore("auth", () => {
     isLoggedIn,
     error,
     loading,
+    role,
     authUser,
     logout,
     getUser,

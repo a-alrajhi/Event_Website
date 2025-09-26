@@ -12,9 +12,10 @@ const links = [
     path: "/admin/statistics",
     icon: "pi pi-chart-bar",
   },
+  { label: "Home", path: "/", icon: "pi pi-home" },
 ];
 
-const isActive = (path) => route.path.startsWith(path);
+const isActive = (path) => route.path == path
 </script>
 
 <template>
@@ -29,7 +30,7 @@ const isActive = (path) => route.path.startsWith(path);
 
   <!-- Navigation -->
   <nav class="flex-1 p-4">
-    <ul class="flex flex-col gap-2">
+    <ul class="flex flex-col gap-3">
       <li
         v-for="link in links"
         :key="link.path"

@@ -56,6 +56,15 @@
                   <User class="w-4 h-4 text-[var(--color-primary)]" />
                   Profile
                 </router-link>
+                <router-link
+                  to="/admin/statistics"
+                  v-if="authStore.role == 'ADMIN'"
+                  @click="showDropdown = false"
+                  class="flex items-center gap-3 px-4 py-2 text-gray-900 dark:text-white hover:bg-[var(--color-primary)]/10 transition-colors"
+                >
+                  <ShieldUser class="w-4 h-4 text-[var(--color-primary)]" />
+                  Admin Dashboard
+                </router-link>
                 <hr class="border-[var(--color-primary)]/20 my-1" />
                 <button
                   @click="handleLogout"
@@ -115,6 +124,7 @@ import {
   Star,
   Users,
   LogOut,
+  ShieldUser
 } from "lucide-vue-next";
 
 const router = useRouter();

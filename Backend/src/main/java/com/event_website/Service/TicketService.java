@@ -1,8 +1,8 @@
 package com.event_website.Service;
 
+import com.event_website.Dto.TicketWithSameTypeDTO;
 import com.event_website.Entity.SlotTicketTypeCapacity;
 import com.event_website.Entity.Ticket;
-import com.event_website.Entity.TicketType;
 import com.event_website.Entity.User;
 import com.event_website.Exception.ResourceNotFoundException;
 import com.event_website.Repository.*;
@@ -10,6 +10,8 @@ import com.event_website.Request.CreateTicketRequest;
 import com.event_website.Request.UpdateTicketRequest;
 import com.event_website.Utils.TicketCodeGenerator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,20 @@ public class TicketService {
 
   @Autowired private SlotTicketTypeCapacityRepo slotTicketTypeCapacityRepo;
 
+  public List<TicketWithSameTypeDTO> getUserGroupedTickets(Integer userId) {
+    userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+    List<Ticket> tickets = ticketRepo.findByUserId(userId);
+
+    Map<String, List<Ticket>> groupedTicket = // getting all ticket with same type
+        tickets.stream()
+            .collect(
+                Collectors.groupingBy(
+                    t -> t.getSlotTicketTypeCapacity().getTicketType().getName()));
+
+    return groupedTicket.values().stream().map(TicketWithSameTypeDTO::fromEntity).toList();
+  }
+
   public List<Ticket> getAllTickets() {
     return ticketRepo.findAll();
   }
@@ -50,7 +66,10 @@ public class TicketService {
     SlotTicketTypeCapacity slotTicketTypeCapacity =
         slotTicketTypeCapacityRepo
             .findById(req.getSlotTicketTypeCapacityId())
-            .orElseThrow(() -> new ResourceNotFoundException("Association between slot and ticketType not found"));
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Association between slot and ticketType not found"));
 
     Ticket ticket = new Ticket();
     ticket.setSlotTicketTypeCapacity(slotTicketTypeCapacity);
@@ -60,8 +79,10 @@ public class TicketService {
             : TicketCodeGenerator.generateTicketCode();
     ticket.setTicketCode(code);
     ticket.setCheckedIn(false); // default
-    User user = userRepo.findById(req.getUserId())
-        .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    User user =
+        userRepo
+            .findById(req.getUserId())
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     ticket.setUser(user);
 
     Ticket savedTicket = ticketRepo.save(ticket);
@@ -80,8 +101,12 @@ public class TicketService {
 
     if (req.getSlotTicketTypeCapacityId() != null) {
       ticket.setSlotTicketTypeCapacity(
-              slotTicketTypeCapacityRepo.findById(req.getSlotTicketTypeCapacityId()).orElseThrow(() -> new ResourceNotFoundException("Association between slot and ticketType not found"))
-      );
+          slotTicketTypeCapacityRepo
+              .findById(req.getSlotTicketTypeCapacityId())
+              .orElseThrow(
+                  () ->
+                      new ResourceNotFoundException(
+                          "Association between slot and ticketType not found")));
     }
 
     if (req.getTicketCode() != null) {

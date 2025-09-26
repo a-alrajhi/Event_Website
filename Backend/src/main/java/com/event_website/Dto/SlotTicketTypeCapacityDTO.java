@@ -7,18 +7,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SlotTicketTypeCapacityDTO {
-    private Integer id;
-    private Integer slotId;
-    private Integer ticketTypeId;
-    private Integer capacity;
+  private Integer id;
+  private Integer slotId;
+  private Integer ticketTypeId;
+  private Integer capacity;
+  private Integer remainingTickets;
 
-    public static SlotTicketTypeCapacityDTO fromEntity(SlotTicketTypeCapacity entity) {
-        SlotTicketTypeCapacityDTO dto = new SlotTicketTypeCapacityDTO();
-        dto.setId(entity.getId());
-        dto.setSlotId(entity.getSlot().getId());
-        dto.setTicketTypeId(entity.getTicketType().getId());
-        dto.setCapacity(entity.getCapacity());
-        return dto;
-    }
+  public static SlotTicketTypeCapacityDTO fromEntity(SlotTicketTypeCapacity entity) {
+    SlotTicketTypeCapacityDTO dto = new SlotTicketTypeCapacityDTO();
+    dto.setId(entity.getId());
+    dto.setSlotId(entity.getSlot().getId());
+    dto.setTicketTypeId(entity.getTicketType().getId());
+    dto.setCapacity(entity.getCapacity());
+    return dto;
+  }
 }
-

@@ -34,6 +34,9 @@ public class UpdateUserRequest {
     @Schema(description = "User's password", example = "newSecret123", nullable = true)
     private String password;
 
+    @Schema(description = "User's role", example = "USER", nullable = true)
+    private String role;
+
     /**
      * Merges non-null updateRequest fields into the existingUser entity.
      *
@@ -53,6 +56,9 @@ public class UpdateUserRequest {
         }
         if (updateRequest.getPassword() != null) {
             existingUser.setPassword(updateRequest.getPassword());
+        }
+        if (updateRequest.getName() != null) {
+            existingUser.setRole(updateRequest.getRole());
         }
 
         return existingUser;

@@ -37,6 +37,9 @@ public class UserDTO {
     @Schema(description = "User's tickets grouped by type")
     private List<TicketWithSameTypeDTO> groupedTickets;
 
+    @Schema(description = "User role", example = "USER")
+    private String role;
+
     public static UserDTO fromEntity(User user) {
         if (user == null) return null;
 
@@ -45,6 +48,7 @@ public class UserDTO {
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
         userDto.setPhoneNumber(user.getPhoneNumber());
+        userDto.setRole(user.getRole());
         return userDto;
     }
 }

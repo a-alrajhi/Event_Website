@@ -158,6 +158,22 @@
             </button>
           </div>
 
+          <div v-if="!isLoading" class="event-card/90 mb-6">
+            <div class="flex flex-wrap gap-y-3 overflow-x-auto scrollbar-hide justify-between">
+              <DateCard
+                v-for="date in upcomingDates"
+                :key="date.toISOString()"
+                :date="date"
+                :model-value="selectedDate"
+                @select="(date) => {
+                  selectedDate = selectedDate && selectedDate.toDateString() === date.toDateString() 
+                    ? null 
+                    : date
+                }"
+              />
+            </div>
+          </div>
+
           <!-- Events Grid -->
           <EnhancedEventCard
             :events="filteredEvents"
@@ -205,6 +221,7 @@ import Checkbox from "primevue/checkbox";
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getEvents } from "../apis/EventDetalisApi";
+import DateCard from "../components/Cards/DateCard.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -216,6 +233,18 @@ const priceRange = ref({ min: 0, max: 200 });
 const currentPrice = ref(0);
 const sidebarCategories = ref([]);
 const searchInput = ref("");
+const selectedDate = ref(null);
+
+const upcomingDates = computed(() => {
+  const dates = [];
+  const today = new Date();
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    dates.push(d);
+  }
+  return dates;
+});
 
 const fetchData = async () => {
   try {
@@ -300,31 +329,33 @@ onMounted(fetchData);
 
 const filteredEvents = computed(() => {
   return events.value.filter(event => {
-    const categoryMatch = selectedCategories.value.length === 0 || selectedCategories.value.includes(event.category);
+    const categoryMatch =
+      selectedCategories.value.length === 0 || selectedCategories.value.includes(event.category);
+
     const searchMatch =
       !searchInput.value ||
       event.title.toLowerCase().includes(searchInput.value.toLowerCase());
 
     let priceMatch = true;
     if (currentPrice.value > 0) {
-      // For events with price ranges, check if ANY price in the range is within the filter
       if (event.priceRange && event.priceRange.length > 0) {
         const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
-        if (prices.length > 0) {
-          // Event matches if it has any price at or below the filter
-          priceMatch = Math.min(...prices) <= currentPrice.value;
-        } else {
-          priceMatch = true; // Free events always match
-        }
+        priceMatch = prices.length ? Math.min(...prices) <= currentPrice.value : true;
       } else {
-        // Fallback to single price
         priceMatch = event.price <= currentPrice.value;
       }
     }
 
-    return categoryMatch && priceMatch  && searchMatch;
+    let dateMatch = true;
+    if (selectedDate.value && event.dates && event.dates.length > 0) {
+      const selectedStr = selectedDate.value.toDateString();
+      dateMatch = event.dates.some(d => new Date(d).toDateString() === selectedStr);
+    }
+
+    return categoryMatch && priceMatch && searchMatch && dateMatch;
   });
 });
+
 
 const getCategoryCount = (category) =>
   events.value.filter((event) => event.category === category).length;
@@ -352,6 +383,7 @@ const clearFilters = () => {
   currentPrice.value = 0;
   router.replace({ name: "Events" });
   searchInput.value = "";
+  selectedDate.value = ""
 };
 
 const toggleQuickCategory = (category) => {

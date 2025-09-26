@@ -11,6 +11,7 @@ import com.event_website.Repository.EventRepo;
 import com.event_website.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,8 +58,22 @@ public class BookmarkService {
                 .collect(Collectors.toList());
     }
 
+    public List<BookmarkDTO> getAllBookmarksByUser(int user_id) {
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUser_Id(user_id);
+        return bookmarks.stream()
+                .map(bookmark -> new BookmarkDTO(
+                        bookmark.getId(),
+                        bookmark.getEvent().getId(),
+                        bookmark.getUser().getId()))
+                .collect(Collectors.toList());
+    }
+
     public void deleteBookmarkById(Integer bookmarkId) {
         bookmarkRepository.deleteById(bookmarkId);
+    }
+    @Transactional
+    public void deleteBookmarkByUserAndEvent(Integer user_id, Integer event_id) {
+        bookmarkRepository.deleteByUser_IdAndEvent_Id(user_id, event_id);
     }
 
 }

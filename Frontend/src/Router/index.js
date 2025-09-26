@@ -74,22 +74,25 @@ const routes = [
     path: "/admin/users",
     name: "User Management",
     component: UserManagement,
+    meta: { requiresAuth: true },
   },
   // FAQ
   { path: "/faq", name: "FAQ", component: FAQ },
 
   //LocationMap
-  { path: "/location", name: "Location", component: LeafletMap},
+  { path: "/location", name: "Location", component: LeafletMap },
 
- {
+  {
     path: "/admin/resources",
     name: "Resource Management",
     component: EventManagement,
+    meta: { requiresAuth: true },
   },
   {
     path: "/admin/statistics",
     name: "Admin Statistics",
     component: AdminStats,
+    meta: { requiresAuth: true },
   },
 ];
 

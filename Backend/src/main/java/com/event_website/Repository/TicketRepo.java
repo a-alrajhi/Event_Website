@@ -40,4 +40,6 @@ public interface TicketRepo extends JpaRepository<Ticket, Integer>, TicketCustom
           + "AND t.slotTicketTypeCapacity.ticketType.id = :ticketTypeId")
   long countTicketsBySlotAndType(
       @Param("slotId") Integer slotId, @Param("ticketTypeId") Integer ticketTypeId);
+
+  List<Ticket> findAllBySlotTicketTypeCapacity_Id(Integer slotTicketTypeCapacity_id);
 }

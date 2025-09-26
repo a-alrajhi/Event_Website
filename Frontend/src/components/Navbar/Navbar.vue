@@ -5,18 +5,29 @@
   <!-- class="dark:bg-[var(--color-bg)] border-b dark:border-gray-800 text-[var(--color-text)] shadow-md"
   > -->
   <nav
-    class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white shadow-lg"
+    class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white shadow-lg sticky top-0 z-50"
   >
     <div
       class="max-w-screen-xl flex flex-col sm:flex-row sm:items-center justify-between mx-auto p-4 gap-4"
     >
       <!-- Logo -->
-      <router-link to="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-        <div class="w-8 h-8 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-hover)] rounded-lg flex items-center justify-center shadow-lg">
-          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17 12h-5v5h5v-5zM16 6V4l-2-2h-4L8 4v2H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-3zM10 4h4v2h-4V4zm9 15H5V8h14v11z"/>
-            <circle cx="9" cy="12" r="1"/>
-            <circle cx="15" cy="15" r="1"/>
+      <router-link
+        to="/"
+        class="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+      >
+        <div
+          class="w-8 h-8 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-hover)] rounded-lg flex items-center justify-center shadow-lg"
+        >
+          <svg
+            class="w-5 h-5 text-white"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M17 12h-5v5h5v-5zM16 6V4l-2-2h-4L8 4v2H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-3zM10 4h4v2h-4V4zm9 15H5V8h14v11z"
+            />
+            <circle cx="9" cy="12" r="1" />
+            <circle cx="15" cy="15" r="1" />
           </svg>
         </div>
         <span
@@ -29,12 +40,12 @@
       <div class="flex items-center space-x-4 flex-wrap sm:flex-nowrap">
         <!-- Search -->
         <div class="flex-1 min-w-[200px] mt-2 sm:mt-0">
-          <SearchBar />
+          <SearchBar @search="handleSearch" />
         </div>
 
         <!-- Profile Photo or Login Button -->
-        <div class="relative">
-          <div v-if="authStore.isLoggedIn" class="relative">
+        <div class="relative z-[99999]" data-profile-dropdown>
+          <div v-if="authStore.isLoggedIn()" class="relative">
             <button
               @click="showDropdown = !showDropdown"
               class="w-10 h-10 rounded-full border-2 border-[var(--color-primary)] hover:border-[var(--color-hover)] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
@@ -49,7 +60,7 @@
             <!-- Dropdown Menu -->
             <div
               v-if="showDropdown"
-              class="absolute right-0 mt-2 w-48 event-card rounded-xl shadow-lg border border-[var(--color-primary)]/20 z-50"
+              class="absolute right-0 mt-2 w-48 event-card rounded-xl shadow-lg  z-[9999]"
             >
               <div class="py-2">
                 <router-link
@@ -86,7 +97,7 @@
 
   <!-- Small Categories Navbar -->
   <section
-    class="bg-gray-50 dark:bg-gray-900 py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-800"
+    class="bg-gray-50 dark:bg-gray-900 py-3 px-4 sm:px-6 flex justify-start sm:justify-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-800 sticky top-[73px] z-40"
   >
     <div
       v-for="(category, index) in categories"
@@ -94,10 +105,11 @@
       class="flex flex-col items-center cursor-pointer transition text-gray-900 dark:text-white hover:text-[var(--color-primary)] min-w-[70px]"
       @click="navigateTo(category.route)"
     >
-      <component
-        :is="category.icon"
-        class="w-6 h-6 mb-1 text-[var(--color-primary)] drop-shadow-md"
-      />
+      <router-link :to="category.route"
+        ><component
+          :is="category.icon"
+          class="w-6 h-6 mb-1 text-[var(--color-primary)] drop-shadow-md"
+      /></router-link>
       <span class="text-xs sm:text-sm font-medium text-center">{{
         category.name
       }}</span>
@@ -106,10 +118,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/authStore';
+import { ref, onMounted, onUnmounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "../../stores/authStore";
 import SearchBar from "../SearchBar/SearchBar.vue";
+import { RouterLink } from "vue-router";
 import {
   Home,
   Calendar,
@@ -145,19 +158,31 @@ const handleLogout = () => {
   authStore.logout();
 };
 
+const route = useRoute();
+
+const handleSearch = (query) => {
+  if (route.name === "Events") {
+    router.replace({ name: "Events", query: { q: query } });
+  } else {
+    router.push({ name: "Events", query: { q: query } });
+  }
+};
+
 // Close dropdown when clicking outside
 const handleClickOutside = (event) => {
-  if (!event.target.closest('.relative')) {
+  // Check if the click is outside the profile dropdown container
+  const profileContainer = event.target.closest('[data-profile-dropdown]');
+  if (!profileContainer && showDropdown.value) {
     showDropdown.value = false;
   }
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
+  document.addEventListener("click", handleClickOutside);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+  document.removeEventListener("click", handleClickOutside);
 });
 </script>
 

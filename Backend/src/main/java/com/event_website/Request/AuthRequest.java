@@ -15,11 +15,14 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @Validated
 @NoArgsConstructor
-@Schema(description = "Login request with email and password")
+@Schema(name = "AuthRequest", description = "Login request with email and password")
 public class AuthRequest {
+
     @NotNull
+    @Size(min = 6, message = "Password must be at least 6 characters")
     @Schema(description = "The user's password", example = "secret123")
     private String password;
+
     @NotNull
     @Email
     @Schema(description = "The user's email address", example = "user@example.com")
@@ -27,6 +30,7 @@ public class AuthRequest {
 
     @Override
     public String toString() {
-        return email;
+        // Return email only for safety
+        return "AuthRequest{email='" + email + "'}";
     }
 }

@@ -1,5 +1,6 @@
 package com.event_website.Dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +13,21 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Detailed view of an event including slots, category, location, and pricing. Admin only")
 public class DetailedEventDto {
-    EventDto event;
-    List<SlotDTO> slots;
-    String category;
-    String Location;
-    BigDecimal price;
+
+    @Schema(description = "Basic event information")
+    private EventDto event;
+
+    @Schema(description = "List of available time slots for the event")
+    private List<SlotDTO> slots;
+
+    @Schema(description = "Category or type of the event", example = "Music Concert")
+    private String category;
+
+    @Schema(description = "Location where the event takes place", example = "Riyadh, Saudi Arabia")
+    private String Location;
+
+    @Schema(description = "Minimum price of tickets available for this event", example = "49.99")
+    private BigDecimal price;
 }

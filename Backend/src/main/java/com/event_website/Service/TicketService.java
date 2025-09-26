@@ -42,6 +42,8 @@ public class TicketService {
   @Autowired private UserRepo userRepo;
 
   @Autowired private SlotTicketTypeCapacityRepo slotTicketTypeCapacityRepo;
+    @Autowired
+    private SlotService slotService;
 
   public List<TicketWithSameTypeDTO> getUserGroupedTickets(Integer userId) {
     userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -141,5 +143,12 @@ public class TicketService {
   public List<Ticket> getUserTickets(Integer id) {
     userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     return ticketRepo.findByUserId(id);
+  }
+
+  public List<Ticket> getEventTickets(Integer eventId) {
+    return slotService.findByEventId(eventId).stream()
+            .flatMap(slot -> slotTicketTypeCapacityRepo.getAllBySlot_Id(slot.getId()).stream())
+            .flatMap(capacity -> ticketRepo.findAllBySlotTicketTypeCapacity_Id(capacity.getId()).stream())
+            .toList();
   }
 }

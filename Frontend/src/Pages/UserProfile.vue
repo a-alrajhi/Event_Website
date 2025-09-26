@@ -1,19 +1,34 @@
 <template>
-  <div>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Navbar -->
     <Navbar />
 
-    <div class="profile-wrapper">
-      <div class="overlay">
-        <!-- Main Profile Page -->
-        <div class="user-profile-page">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Update Profile -->
-            <div class="md:col-span-1">
-              <div class="card profile-card">
-                <div class="card-header">
-                  <h2 class="card-title">Update Profile</h2>
-                </div>
+    <!-- Hero Section -->
+    <div class="relative via-[var(--color-secondary)] to-[var(--color-hover)] py-16">
+      <div class="absolute inset-0 bg-black/10"></div>
+      <div class="relative container mx-auto px-6">
+        <div class="text-center text-white">
+          <div class="w-24 h-24 bg-white/20 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-white/30">
+            <User class="w-12 h-12 text-white" />
+          </div>
+          <h1 class="text-4xl font-bold mb-2">{{ userData?.name || 'User Profile' }}</h1>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-12">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Update Profile -->
+        <div class="lg:col-span-1">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 h-fit">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-600">
+              <div class="w-10 h-10 bg-[var(--color-primary)]/10 rounded-full flex items-center justify-center">
+                <Settings class="w-5 h-5 text-[var(--color-primary)]" />
+              </div>
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Update Profile</h2>
+            </div>
 
                 <form class="auth-form" @submit.prevent="handleSubmit">
                   <UserProfileInput
@@ -60,51 +75,61 @@
                     minlength="6"
                   />
 
-                  <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+            <p v-if="errorMessage" class="text-red-500 text-sm mb-4">{{ errorMessage }}</p>
 
-                  <div class="button-container">
-                    <button type="submit" class="submit-btn" :disabled="loading">
-                      <span v-if="loading">Updating...</span>
-                      <span v-else>Update Profile</span>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- Bookmarks Section -->
-            <div class="md:col-span-2">
-              <div class="card bookmarks-card">
-                <div class="card-header">
-                  <h2 class="card-title">My Bookmarks</h2>
-                </div>
-
-                <div class="bookmarks-section">
-                  <p v-if="bookmarks.length === 0" class="no-bookmarks">
-                    There are no bookmarks yet.
-                  </p>
-
-                  <div v-else class="bookmarks-grid">
-                    <BookmarkCard
-                      v-for="bookmark in bookmarks"
-                      :key="bookmark.id"
-                      :bookmark="bookmark"
-                      @remove-bookmark="removeBookmark"
-                      @book-now="bookNow"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button type="submit" class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed" :disabled="loading">
+              <span v-if="loading" class="flex items-center justify-center gap-2">
+                <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Updating...
+              </span>
+              <span v-else>Update Profile</span>
+            </button>
+          </form>
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer-wrapper">
-          <AppFooter />
+        <!-- Bookmarks Section -->
+        <div class="lg:col-span-2">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-600">
+              <div class="w-10 h-10 bg-[var(--color-error)]/10 rounded-full flex items-center justify-center">
+                <Heart class="w-5 h-5 text-[var(--color-error)]" />
+              </div>
+              <div class="flex-1">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">My Bookmarks</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ bookmarks.length }} saved events</p>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-if="bookmarks.length === 0" class="text-center py-12">
+              <div class="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Heart class="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No bookmarks yet</h3>
+              <p class="text-gray-600 dark:text-gray-400 mb-4">Start exploring events and save your favorites!</p>
+              <button @click="$router.push('/events')" class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white px-6 py-2 rounded-lg transition-colors">
+                Browse Events
+              </button>
+            </div>
+
+            <!-- Bookmarks Grid -->
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <BookmarkCard
+                v-for="bookmark in bookmarks"
+                :key="bookmark.id"
+                :bookmark="bookmark"
+                @remove-bookmark="removeBookmark"
+                @book-now="bookNow"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <AppFooter />
   </div>
 </template>
 
@@ -112,6 +137,7 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
+import { User, Settings, Heart } from "lucide-vue-next";
 import Navbar from "../components/Navbar/Navbar.vue";
 import AppFooter from "../components/AppFooter/AppFooter.vue";
 import UserProfileInput from "../components/Auth/UserProfileInput.vue";
@@ -226,191 +252,20 @@ const bookNow = (eventId) => {
 </script>
 
 <style scoped>
-.profile-wrapper {
-  background-image: url("https://www.timeoutriyadh.com/cloud/timeoutriyadh/2022/10/23/riyadh-season-opening-ceremony-fireworks.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  min-height: 100vh;
-  width: 100%;
-  position: relative;
-}
-
-.overlay {
-  background: rgba(255, 255, 255, 0.9);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.user-profile-page {
-  max-width: 90rem;
-  margin: 3rem auto;
-  padding: 2rem 1.5rem;
-  flex: 1;
-}
-
-.grid {
-  display: grid;
-  gap: 2rem;
-}
-
-.grid-cols-1 {
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 768px) {
-  .md\:grid-cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .md\:col-span-1 {
-    grid-column: span 1;
-  }
-  
-  .md\:col-span-2 {
-    grid-column: span 2;
-  }
-}
-
-.card {
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 1.2rem;
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: 0.6rem;
-}
-
-.card-title {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #111827;
-  letter-spacing: -0.3px;
-  margin: 0;
-}
-
-.profile-card {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.bookmarks-card {
-  min-height: 30rem;
-}
-
 .auth-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.button-container {
-  margin-top: 0.5rem;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(to right, #2563eb, #1d4ed8);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.submit-btn:hover:not(:disabled) {
-  background: linear-gradient(to right, #1d4ed8, #1e40af);
-  transform: translateY(-1px);
-}
-
-.submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.error-message {
-  color: #dc2626;
-  font-size: 0.85rem;
-  margin: 0;
-}
-
-.bookmarks-section {
-  width: 100%;
-}
-
-.no-bookmarks {
-  color: #6b7280;
-  font-size: 0.95rem;
-  text-align: center;
-  padding: 2rem;
-  margin: 0;
-}
-
-.bookmarks-grid {
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 768px) {
-  .bookmarks-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* Animation for loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media (min-width: 1024px) {
-  .bookmarks-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .bookmarks-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.footer-wrapper {
-  margin-top: 2rem;
-  background: #ffffff;
-  border-top: 1px solid #e5e7eb;
-  border-radius: 0.75rem 0.75rem 0 0;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 767px) {
-  .user-profile-page {
-    padding: 1rem;
-    margin: 1rem auto;
-  }
-  
-  .profile-card {
-    max-width: 100%;
-  }
-  
-  .grid {
-    gap: 1.5rem;
-  }
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 </style>

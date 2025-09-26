@@ -18,7 +18,7 @@
       <!-- Default (like similar events list) -->
       <RouterLink
         v-if="variant === 'default'"
-        :to="`/event/${event.id}`"
+        :to="`/events/${event.id}`"
         class="cursor-pointer mt-3 inline-block text-sm text-blue-600 hover:underline"
       >
         View Event →

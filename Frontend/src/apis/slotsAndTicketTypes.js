@@ -58,3 +58,26 @@ export async function generateTickets() {
     throw error;
   }
 }
+
+/**
+ * Get grouped tickets for a user
+ * @param {number} userId
+ * @returns List<TicketWithSameTypeDTO>
+ */
+export async function getUserGroupedTickets(userId) {
+  const response = await apis.get(`/ticket/user/${userId}/grouped-tickets`);
+  return response.data;
+}
+
+/**
+ * Get capacity + remaining tickets for a given slot and ticket type
+ * @param {number} slotId
+ * @param {number} ticketTypeId
+ * @returns {Promise<Object>} SlotTicketTypeCapacityDTO
+ */
+export async function getSlotTicketCapacity(slotId, ticketTypeId) {
+  const response = await apis.get(`/capacities/slot/capacity`, {
+    params: { slotId, ticketTypeId },
+  });
+  return response.data; // { id, slotId, ticketTypeId, capacity, remainingTickets }
+}

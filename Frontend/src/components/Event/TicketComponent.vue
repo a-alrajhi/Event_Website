@@ -88,10 +88,15 @@ Ticket Component
                 <h3
                   class="text-xl font-black text-white drop-shadow-lg tracking-tight"
                 >
-                  {{ ticketType?.name || "Premium Event Ticket" }}
+                  x{{ groupedTickets.count }}
+                  {{
+                    ticketType?.ticketType?.name ||
+                    groupedTickets.ticketType ||
+                    "Premium Event Ticket"
+                  }}
                 </h3>
                 <p class="text-white/80 text-sm font-medium">
-                  Exclusive Access
+                  {{ groupedTickets.userName }}
                 </p>
               </div>
             </div>
@@ -109,7 +114,7 @@ Ticket Component
                     class="w-2 h-2 bg-green-400 rounded-full animate-pulse"
                   ></div>
                   <span class="text-white font-mono font-bold tracking-wider">{{
-                    ticket.ticketCode
+                    groupedTicketCode
                   }}</span>
                 </div>
               </div>
@@ -175,7 +180,7 @@ Ticket Component
               </div>
 
               <VQrcode
-                :value="ticket.ticketCode"
+                :value="qrCodeValue"
                 :size="200"
                 class="mx-auto relative z-10"
                 :options="{
@@ -252,7 +257,11 @@ Ticket Component
                   <p
                     class="text-lg font-black text-blue-950 dark:text-blue-200"
                   >
-                    {{ ticketType?.name || "Premium" }}
+                    {{
+                      ticketType?.ticketType?.name ||
+                      groupedTickets.ticketType ||
+                      "Premium"
+                    }}
                   </p>
                 </div>
               </div>
@@ -298,7 +307,8 @@ Ticket Component
                   <p
                     class="text-lg font-black text-emerald-950 dark:text-emerald-200"
                   >
-                    {{ ticketType?.price || "N/A" }} SAR
+                    {{ ticketType?.ticketType?.price || "N/A" }} SAR ×
+                    {{ groupedTickets.count }}
                   </p>
                 </div>
               </div>
@@ -344,7 +354,7 @@ Ticket Component
                   <p
                     class="text-lg font-mono font-black text-purple-950 dark:text-purple-200 break-all"
                   >
-                    {{ ticket.ticketCode }}
+                    {{ groupedTicketCode }}
                   </p>
                 </div>
               </div>
@@ -562,18 +572,33 @@ import { computed } from "vue";
 
 const paymentStore = usePaymentStore();
 
+/**
+ * {
+  "ticketType": "VIP",
+  "count": 3,
+  "ticketCodeList": ["TKT-AAA", "TKT-BBB", "TKT-CCC"],
+  "groupedTicketCode": "GRP-XYZ123",
+  "slotTicketTypeCapacityDTO": { ... },
+  "userId": 1,
+  "userName": "John Doe",
+  "ticketCapacity": 200,
+  "remainingTickets": 197
+}
+ */
+
 const props = defineProps({
-  ticket: {
+  groupedTickets: {
     type: Object,
     required: true,
   },
 });
 
-const ticketType = computed(() => {
-  return paymentStore.tickets.find(
-    (t) => t.id === props.ticket.slotTicketTypeCapacityDTO.ticketTypeId
-  );
-});
+const ticketType = computed(() => props.groupedTickets.ticketType);
+const groupedTicketCode = computed(
+  () => props.groupedTickets.groupedTicketCode
+);
+
+const qrCodeValue = computed(() => props.groupedTickets.groupedTicketCode);
 
 /**
  * Handle the share button click event.

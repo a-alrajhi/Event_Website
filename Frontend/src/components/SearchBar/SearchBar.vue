@@ -48,8 +48,9 @@ const isOnEventsPage = computed(() => route.name === "Events");
 console.log(isOnEventsPage);
 
 const onInput = () => {
+  const q = query.value.trim();
   if (isOnEventsPage.value) {
-    emit("search", query.value.trim());
+    router.replace({ name: "Events", query: { q } });
   }
 };
 

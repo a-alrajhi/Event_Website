@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col space-y-4 font-[var(--font-poppins)]">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col font-[var(--font-poppins)]">
     
     <!-- Navbar -->
     <Navbar />
@@ -29,7 +29,7 @@
     </section>
 
     <!-- Info Cards Section -->
-    <section class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
       <div
         v-for="(card, index) in cards"
         :key="index"
@@ -50,18 +50,22 @@
     </section>
 
     <!-- Slider / Featured Events -->
-    <SlliderSection :events="events" :is-loading="isLoading" />
+    <div class="mt-8">
+      <SlliderSection :events="events" :is-loading="isLoading" />
+    </div>
 
     <!-- Best Events Section -->
-    <h2 class="text-3xl font-bold text-center text-[var(--color-primary)] drop-shadow-[0_0_10px_var(--color-primary)]">
-      Best Events
-    </h2>
-    <div class="px-6">
-      <EnhancedEventCard :events="bestEvents" :is-loading="isLoading" />
+    <div class="mt-8">
+      <h2 class="text-3xl font-bold text-center text-[var(--color-primary)] drop-shadow-[0_0_10px_var(--color-primary)]">
+        Best Events
+      </h2>
+      <div class="px-6 mt-6">
+        <EnhancedEventCard :events="bestEvents" :is-loading="isLoading" />
+      </div>
     </div>
 
     <!-- Why Choose EventVision Section -->
-    <section class="px-6 py-16 bg-gradient-to-br from-white/50 to-gray-50 dark:from-gray-800/50 dark:to-gray-900">
+    <section class="px-6 py-16 bg-gradient-to-br from-white/50 to-gray-50 dark:from-gray-800/50 dark:to-gray-900 mt-8">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">

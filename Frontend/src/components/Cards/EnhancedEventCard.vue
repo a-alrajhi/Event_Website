@@ -50,14 +50,17 @@
 
         <!-- Save/Like Button -->
         <button
-          v-if="authStore.isLoggedIn()"
           @click.stop="toggleSaved(event)"
+          :disabled="!authStore.isLoggedIn()"
           :class="[
             'absolute top-3 right-3 p-2 rounded-full transition-all',
-            savedEvents.includes(event.id)
-              ? 'bg-[var(--color-error)] text-white'
-              : 'bg-black/30 text-gray-400 hover:bg-black/50',
+            !authStore.isLoggedIn()
+              ? 'bg-gray-300/50 text-gray-400 cursor-not-allowed'
+              : savedEvents.includes(event.id)
+                ? 'bg-[var(--color-error)] text-white hover:bg-[var(--color-error)]/80'
+                : 'bg-black/30 text-gray-400 hover:bg-black/50 hover:text-white'
           ]"
+          :title="!authStore.isLoggedIn ? 'Please login to save events' : (savedEvents.includes(event.id) ? 'Remove from favorites' : 'Add to favorites')"
         >
           <Heart
             :class="[
@@ -68,10 +71,8 @@
         </button>
 
         <!-- Price Badge -->
-        <div
-          class="absolute top-3 left-3 bg-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-bold text-white shadow-lg"
-        >
-          {{ event.price === 0 ? "FREE" : `SAR ${event.price}` }}
+        <div class="absolute top-3 left-3 bg-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-bold text-white shadow-lg">
+          {{ formatPrice(event) }}
         </div>
 
         <!-- Category Badge -->
@@ -232,8 +233,9 @@ const props = defineProps({
   },
 });
 
-// Router
+// Router and Auth
 const router = useRouter();
+const authStore = useAuthStore();
 
 // State
 const savedEvents = ref([]);
@@ -261,19 +263,82 @@ const formatDate = (date) => {
       weekday: "short",
     });
   } catch {
-    return "TBD";
+    return 'TBD';
   }
 };
 
+const formatPrice = (event) => {
+  if (event.price === 0) return 'FREE';
+
+  // If there's a price range with multiple prices, show range
+  if (event.priceRange && event.priceRange.length > 1) {
+    const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
+    if (prices.length > 1) {
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      if (min !== max) {
+        return `SAR ${min} - ${max}`;
+      }
+    }
+  }
+
+  // Default single price display
+  return `SAR ${event.price}`;
+};
+
+const formatPrice = (event) => {
+  if (event.price === 0) return 'FREE';
+
+  // If there's a price range with multiple prices, show range
+  if (event.priceRange && event.priceRange.length > 1) {
+    const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
+    if (prices.length > 1) {
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      if (min !== max) {
+        return `SAR ${min} - ${max}`;
+      }
+    }
+  }
+
+  // Default single price display
+  return `SAR ${event.price}`;
+};
+
 const navigateToDetails = (eventId) => {
-  router.push(`/event/${eventId}`);
+  router.push(`/events/${eventId}`);
 };
 
 const navigateToTickets = (eventId) => {
-  router.push(`/event/ticket-types/${eventId}`);
+  handleBookNow(eventId);
 };
 
+const handleBookNow = (eventId) => {
+  const event = props.events.find(e => e.id === eventId);
+  const slots = event?.slots || [];
+
+  if (slots.length > 0) {
+    // If event has slots, go to event details page (which contains EventSidebar)
+    navigateToDetails(eventId);
+  } else {
+    // If no slots, go directly to ticket types page
+    router.push(`/events/ticket-types/${eventId}`);
+  }
+};
+
+// Note: goToTicketPage function removed as it's no longer needed
+// EventSidebar.vue now handles slot selection and routing
+
 const toggleSaved = (event) => {
+  // Check if user is logged in
+  if (!authStore.isLoggedIn) {
+    // Show a notification or redirect to login
+    if (confirm('You need to login to save events. Would you like to login now?')) {
+      router.push('/login');
+    }
+    return;
+  }
+
   const index = savedEvents.value.indexOf(event.id);
   if (index > -1) {
     savedEvents.value.splice(index, 1);
@@ -282,14 +347,18 @@ const toggleSaved = (event) => {
     savedEvents.value.push(event.id);
     bookmark(event.id);
   }
-  localStorage.setItem("savedEvents", JSON.stringify(savedEvents.value));
+
+  // Save to localStorage
+  localStorage.setItem('savedEvents', JSON.stringify(savedEvents.value));
+
+  //emit('toggle-save', { event, saved: !isSaved });
 };
 
 const shareEvent = async (event) => {
   const shareData = {
     title: event.title,
     text: `Check out this event: ${event.title}`,
-    url: `${window.location.origin}/event/${event.id}`,
+    url: `${window.location.origin}/events/${event.id}`
   };
 
   try {

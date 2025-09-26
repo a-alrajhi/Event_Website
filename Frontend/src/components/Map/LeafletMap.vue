@@ -1,4 +1,5 @@
 <template>
+  <Navbar />
   <div class="leaflet-map-container">
     <div id="map" class="map-style"></div>
 
@@ -22,6 +23,7 @@ import "leaflet.markercluster";
 import icon from '../../assets/icon.png';
 import { useRouter } from 'vue-router';
 import EventList from '../Misc/EventList.vue';
+import Navbar from '../Navbar/Navbar.vue';
 
 const router = useRouter();
 const initialMap = ref(null);
@@ -85,14 +87,11 @@ onMounted(() => {
 <style scoped>
 .leaflet-map-container {
   position: relative;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
 .map-style {
-  height: 100%;
+  height: calc(100vh - 140px);
   width: 100%;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

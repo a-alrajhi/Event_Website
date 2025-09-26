@@ -131,10 +131,28 @@
                 >
                   (filtered)
                 </span>
+                <span v-if="totalPages > 1" class="text-gray-500 dark:text-gray-400">
+                  • Page {{ currentPage }} of {{ totalPages }}
+                </span>
               </p>
             </div>
 
             <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Show:
+                </label>
+                <select
+                  v-model="itemsPerPage"
+                  @change="currentPage = 1"
+                  class="px-3 py-1 rounded-lg border text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+                <span class="text-sm text-gray-600 dark:text-gray-300">per page</span>
+              </div>
               <div class="text-sm text-gray-600 dark:text-gray-300">
                 Price range: SAR 0 - SAR {{ priceRange.max }}
               </div>
@@ -176,10 +194,102 @@
 
           <!-- Events Grid -->
           <EnhancedEventCard
-            :events="filteredEvents"
+            :events="paginatedEvents"
             :is-loading="isLoading"
             @toggle-save="handleToggleSave"
           />
+
+          <!-- Pagination -->
+          <div v-if="!isLoading && totalPages > 1" class="mt-12">
+            <!-- Pagination Container -->
+            <div class="event-card/80 backdrop-blur-sm rounded-2xl p-6 mx-auto max-w-fit shadow-lg border border-[var(--color-primary)]/20">
+              <!-- Pagination Controls -->
+              <div class="flex items-center justify-center gap-3">
+                <!-- Previous Button -->
+                <button
+                  @click="currentPage = Math.max(1, currentPage - 1)"
+                  :disabled="currentPage === 1"
+                  :class="[
+                    'px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 shadow-sm',
+                    currentPage === 1
+                      ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed opacity-50'
+                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
+                  ]"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                  <span class="hidden sm:inline">Previous</span>
+                </button>
+
+                <!-- Page Numbers -->
+                <div class="flex items-center gap-2">
+                  <!-- First page and ellipsis -->
+                  <template v-if="currentPage > 3">
+                    <button
+                      @click="currentPage = 1"
+                      class="w-11 h-11 rounded-xl font-semibold transition-all duration-300 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105 shadow-sm"
+                    >
+                      1
+                    </button>
+                    <span v-if="currentPage > 4" class="px-1 text-gray-400 dark:text-gray-500 font-medium">•••</span>
+                  </template>
+
+                  <!-- Visible page range -->
+                  <button
+                    v-for="page in getVisiblePages()"
+                    :key="page"
+                    @click="currentPage = page"
+                    :class="[
+                      'w-11 h-11 rounded-xl font-semibold transition-all duration-300 shadow-sm',
+                      currentPage === page
+                        ? 'bg-[var(--color-primary)] text-white shadow-lg scale-110 ring-2 ring-[var(--color-primary)]/30'
+                        : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
+                    ]"
+                  >
+                    {{ page }}
+                  </button>
+
+                  <!-- Last page and ellipsis -->
+                  <template v-if="currentPage < totalPages - 2">
+                    <span v-if="currentPage < totalPages - 3" class="px-1 text-gray-400 dark:text-gray-500 font-medium">•••</span>
+                    <button
+                      @click="currentPage = totalPages"
+                      class="w-11 h-11 rounded-xl font-semibold transition-all duration-300 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105 shadow-sm"
+                    >
+                      {{ totalPages }}
+                    </button>
+                  </template>
+                </div>
+
+                <!-- Next Button -->
+                <button
+                  @click="currentPage = Math.min(totalPages, currentPage + 1)"
+                  :disabled="currentPage === totalPages"
+                  :class="[
+                    'px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 shadow-sm',
+                    currentPage === totalPages
+                      ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed opacity-50'
+                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
+                  ]"
+                >
+                  <span class="hidden sm:inline">Next</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Pagination Info -->
+              <div class="mt-4 text-center">
+                <div class="text-sm text-gray-600 dark:text-gray-300">
+                  Showing <span class="font-semibold text-[var(--color-primary)]">{{ currentPageInfo.start }}</span>
+                  to <span class="font-semibold text-[var(--color-primary)]">{{ currentPageInfo.end }}</span>
+                  of <span class="font-semibold text-[var(--color-primary)]">{{ currentPageInfo.total }}</span> events
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- No Results -->
           <div
@@ -234,6 +344,10 @@ const currentPrice = ref(0);
 const sidebarCategories = ref([]);
 const searchInput = ref("");
 const selectedDate = ref(null);
+
+// Pagination state
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
 const upcomingDates = computed(() => {
   const dates = [];
@@ -325,6 +439,11 @@ watch(
   { immediate: true }
 );
 
+// Reset pagination when filters change
+watch([selectedCategories, currentPrice, searchInput, selectedDate], () => {
+  currentPage.value = 1;
+}, { deep: true });
+
 onMounted(fetchData);
 
 const filteredEvents = computed(() => {
@@ -356,6 +475,23 @@ const filteredEvents = computed(() => {
   });
 });
 
+// Pagination computed properties
+const totalPages = computed(() => {
+  return Math.ceil(filteredEvents.value.length / itemsPerPage.value);
+});
+
+const paginatedEvents = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredEvents.value.slice(start, end);
+});
+
+const currentPageInfo = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value + 1;
+  const end = Math.min(start + itemsPerPage.value - 1, filteredEvents.value.length);
+  return { start, end, total: filteredEvents.value.length };
+});
+
 
 const getCategoryCount = (category) =>
   events.value.filter((event) => event.category === category).length;
@@ -383,7 +519,8 @@ const clearFilters = () => {
   currentPrice.value = 0;
   router.replace({ name: "Events" });
   searchInput.value = "";
-  selectedDate.value = ""
+  selectedDate.value = null;
+  currentPage.value = 1; // Reset to first page when clearing filters
 };
 
 const toggleQuickCategory = (category) => {
@@ -398,6 +535,19 @@ const toggleQuickCategory = (category) => {
 const handleToggleSave = (data) => {
   // Handle bookmark toggle if needed
   console.log("Bookmark toggled:", data);
+};
+
+// Function to get visible page numbers for pagination
+const getVisiblePages = () => {
+  const pages = [];
+  const start = Math.max(1, currentPage.value - 2);
+  const end = Math.min(totalPages.value, currentPage.value + 2);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
 };
 </script>
 

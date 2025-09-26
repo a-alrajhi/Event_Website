@@ -303,15 +303,24 @@ const navigateToTickets = (eventId) => {
   handleBookNow(eventId);
 };
 
-const handleBookNow = (eventId) => {
-  const event = props.events.find((e) => e.id === eventId);
-  const slots = event?.slots || [];
+const handleBookNow = async (eventId) => {
+  try {
+    // Import the API function at the top level
+    const { getEventSlots } = await import("../../apis/EventDetalisApi");
 
-  if (slots.length > 0) {
-    // If event has slots, go to event details page (which contains EventSidebar)
-    navigateToDetails(eventId);
-  } else {
-    // If no slots, go directly to ticket types page
+    // Fetch slots for this event
+    const slots = await getEventSlots(eventId);
+
+    if (slots && slots.length > 0) {
+      // If event has slots, go to event details page (which contains EventSidebar)
+      navigateToDetails(eventId);
+    } else {
+      // If no slots, go directly to ticket types page
+      router.push(`/events/ticket-types/${eventId}`);
+    }
+  } catch (error) {
+    console.error("Error checking event slots:", error);
+    // On error, default to ticket types page
     router.push(`/events/ticket-types/${eventId}`);
   }
 };

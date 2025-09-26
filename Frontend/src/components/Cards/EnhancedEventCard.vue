@@ -51,10 +51,10 @@
         <!-- Save/Like Button -->
         <button
           @click.stop="toggleSaved(event)"
-          :disabled="!authStore.isLoggedIn()"
+          :disabled="!authStore.isLoggedIn"
           :class="[
             'absolute top-3 right-3 p-2 rounded-full transition-all',
-            !authStore.isLoggedIn()
+            !authStore.isLoggedIn
               ? 'bg-gray-300/50 text-gray-400 cursor-not-allowed'
               : savedEvents.includes(event.id)
                 ? 'bg-[var(--color-error)] text-white hover:bg-[var(--color-error)]/80'

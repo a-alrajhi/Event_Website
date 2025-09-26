@@ -9,17 +9,33 @@ const REFRESH_TOKEN_KEY = "refreshToken";
 export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref(localStorage.getItem(ACCESS_TOKEN_KEY) || null);
   const refreshToken = ref(localStorage.getItem(REFRESH_TOKEN_KEY) || null);
-  const isLoggedIn = () => {
-    return isTokenValid();
-  };
   const error = ref(null);
   const loading = ref(false);
   const userData = ref(null); // Store user data here
 
+  // Define isTokenValid function first
+  const isTokenValid = () => {
+    if (!accessToken.value) return false;
+    try {
+      const [, payloadBase64] = accessToken.value.split(".");
+      const payload = JSON.parse(atob(payloadBase64));
+      const now = Math.floor(Date.now() / 1000);
+
+      return payload.exp && payload.exp > now;
+    } catch (e) {
+      console.error("Invalid token:", e);
+      return false;
+    }
+  };
+
+  // Make isLoggedIn a computed property that reactively tracks token changes
+  const isLoggedIn = computed(() => {
+    return isTokenValid();
+  });
+
   const setTokens = (newAccess, newRefresh) => {
     accessToken.value = newAccess;
     refreshToken.value = newRefresh;
-    isLoggedIn.value = !!newAccess;
 
     localStorage.setItem(ACCESS_TOKEN_KEY, newAccess);
     if (newRefresh) {
@@ -33,7 +49,6 @@ export const useAuthStore = defineStore("auth", () => {
   const clearTokens = () => {
     accessToken.value = null;
     refreshToken.value = null;
-    isLoggedIn.value = false;
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     delete axiosClient.defaults.headers.common["Authorization"];
@@ -41,6 +56,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   const logout = () => {
     clearTokens();
+    userData.value = null; // Clear user data on logout
     router.push("/login");
   };
 
@@ -68,7 +84,7 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = null;
 
     try {
-      if (!isLoggedIn()) return null;
+      if (!isLoggedIn.value) return null;
 
       const res = await axiosClient.get("/profile/");
       userData.value = res.data; // Store user data in userData
@@ -87,7 +103,7 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = null;
 
     try {
-      if (!isLoggedIn()) return "Update failed, User must be logged in";
+      if (!isLoggedIn.value) return "Update failed, User must be logged in";
 
       // Add current password to form to verify it in the backend
       const res = await axiosClient.put("/profile/", form);
@@ -105,20 +121,6 @@ export const useAuthStore = defineStore("auth", () => {
     const route = router.currentRoute.value;
     const redirectQuery = route.query.redirect || "/";
     router.push(redirectQuery);
-  };
-
-  const isTokenValid = () => {
-    if (!accessToken.value) return false;
-    try {
-      const [, payloadBase64] = accessToken.value.split(".");
-      const payload = JSON.parse(atob(payloadBase64));
-      const now = Math.floor(Date.now() / 1000);
-
-      return payload.exp && payload.exp > now;
-    } catch (e) {
-      console.error("Invalid token:", e);
-      return false;
-    }
   };
 
   return {

@@ -251,7 +251,6 @@ onMounted(() => {
   }
 });
 
-const authStore = useAuthStore();
 // Methods
 const formatDate = (date) => {
   if (!date) return "TBD";
@@ -265,25 +264,6 @@ const formatDate = (date) => {
   } catch {
     return 'TBD';
   }
-};
-
-const formatPrice = (event) => {
-  if (event.price === 0) return 'FREE';
-
-  // If there's a price range with multiple prices, show range
-  if (event.priceRange && event.priceRange.length > 1) {
-    const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
-    if (prices.length > 1) {
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
-      if (min !== max) {
-        return `SAR ${min} - ${max}`;
-      }
-    }
-  }
-
-  // Default single price display
-  return `SAR ${event.price}`;
 };
 
 const formatPrice = (event) => {

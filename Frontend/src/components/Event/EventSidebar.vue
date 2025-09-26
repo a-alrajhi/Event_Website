@@ -22,7 +22,7 @@ Event Sidebar Component
     <button
       type="button"
       @click="handleBookNow"
-      class="text-gray-100 bg-gradient-to-r from-sky-500 to-cyan-800 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg hover:scale-[1.02] transition-all duration-300"
+      class="text-gray-100 bg-gradient-to-r from-sky-500 to-cyan-800 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg hover:scale-[1.02] transition-all duration-300 cursor-pointer"
     >
       Book Now
 
@@ -133,7 +133,10 @@ function handleBookNow() {
   console.log("Slots length:", props.slots?.length);
 
   if (props.slots && props.slots.length === 1) {
-    console.log("Single slot detected, navigating to ticket page with slot:", props.slots[0]);
+    console.log(
+      "Single slot detected, navigating to ticket page with slot:",
+      props.slots[0]
+    );
     goToTicketPage(props.slots[0]); // go directly to ticket page
   } else if (props.slots && props.slots.length > 1) {
     console.log("Multiple slots detected, showing slot dialog");
@@ -143,7 +146,7 @@ function handleBookNow() {
     // No slots available, go directly to ticket types page
     router.push({
       name: "EventTicketTypes",
-      params: { eventId: String(props.eventId) }
+      params: { eventId: String(props.eventId) },
     });
   }
 }
@@ -157,7 +160,7 @@ function goToTicketPage(selectedSlot) {
     // If no valid slot, go to ticket types page without slot
     router.push({
       name: "EventTicketTypes",
-      params: { eventId: String(props.eventId) }
+      params: { eventId: String(props.eventId) },
     });
     return;
   }

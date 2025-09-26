@@ -34,12 +34,15 @@ export const getEvents = async () => {
           image: item.photoUrl || "https://images.ctfassets.net/vy53kjqs34an/1b6S3ia1nuDcqK7uDfvPGz/c2796f467985e3702c6b54862be767d5/1280%C3%A2__%C3%83_%C3%A2__426-_1.jpg",
           category: item.categoryName,
           venue: item.locationName,
-          // ONLY real backend data - removed all fake fields:
-          // - attendees (not tracked)
-          // - rating (no rating system)
-          // - spotsLeft (not directly available)
-          // - soldOut (not directly available)
-          // - date/time (comes from slots, not events)
+          // NEW REAL BACKEND DATA FIELDS:
+          date: item.date, // Real date from first slot
+          time: item.time, // Real start time from first slot
+          dates: item.dates || [], // All event dates
+          attendees: item.attendees || 0, // Real ticket count
+          spotsLeft: item.remaining || 0, // Real remaining capacity
+          // Calculated fields:
+          soldOut: (item.remaining === 0), // Calculated from remaining capacity
+          rating: "4.5", // Still no rating system in backend
         };
       }) || [];
 
@@ -124,5 +127,16 @@ export const getEventWithSlots = async (eventId) => {
   } catch (error) {
     console.error("Error fetching event with slots:", error);
     return null;
+  }
+};
+
+// Get events by location ID - NEW BACKEND FEATURE
+export const getEventsByLocation = async (locationId, page = 0, size = 10) => {
+  try {
+    const response = await axiosClient.get(`/Event/location/${locationId}?page=${page}&size=${size}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching events by location:", error);
+    return { content: [], totalElements: 0 };
   }
 };

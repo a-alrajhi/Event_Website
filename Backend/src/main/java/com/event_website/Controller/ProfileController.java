@@ -2,6 +2,7 @@ package com.event_website.Controller;
 
 import com.event_website.Dto.EventDtoDetalis;
 import com.event_website.Dto.TicketDTO;
+import com.event_website.Dto.TicketWithSameTypeDTO;
 import com.event_website.Dto.UserDTO;
 import com.event_website.Dto.ErrorDTO;
 import com.event_website.Entity.User;
@@ -76,10 +77,15 @@ public class ProfileController {
         List<EventDtoDetalis> bookmarks = bookmarkService.getAllBookmarksByUser(user.getId())
                 .stream()
                 .map(bookmark -> eventService.getEventDetails(bookmark.getEventId())).toList();
-        List<TicketDTO> tickets = ticketService.getUserTickets(user.getId()).stream().map(TicketDTO::fromEntity).toList();
-        userDTO.setTickets(tickets);
+
         userDTO.setBookmarks(bookmarks);
-        return ResponseEntity.ok(userDTO);
+      List<TicketWithSameTypeDTO> groupedTickets = ticketService.getUserGroupedTickets(user.getId());
+      userDTO.setGroupedTickets(groupedTickets);
+
+      //        List<TicketDTO> tickets = ticketService.getUserTickets(user.getId()).stream().map(TicketDTO::fromEntity).toList();
+      //        userDTO.setTickets(tickets);
+
+      return ResponseEntity.ok(userDTO);
     }
 
     @LogRequest(description = "Updating profile")

@@ -248,7 +248,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                           (ticketQuantities[ticketInfo.id] || 0) >=
                           (remaining[ticketInfo.id] || 0)
                         "
-                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       >
                         <span class="text-gray-900 dark:text-white">-</span>
                       </button>
@@ -267,7 +267,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                           (ticketQuantities[ticketInfo.id] || 0) >=
                           remaining[ticketInfo.id]
                         "
-                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200"
+                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 cursor-pointer"
                       >
                         <span class="text-gray-900 dark:text-white">+</span>
                       </button>
@@ -318,7 +318,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
           <button
             type="button"
             @click="goToEventPage"
-            class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+            class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 cursor-pointer"
           >
             Back To Event
           </button>
@@ -328,7 +328,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
             type="button"
             @click="goToPaymentPage"
             :disabled="totalTickets === 0"
-            class="px-8 py-3 bg-gradient-to-r from-neutral-900 to-sky-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            class="px-8 py-3 bg-gradient-to-r from-neutral-900 to-sky-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
           >
             <div class="flex items-center justify-center space-x-2">
               <span v-if="totalTickets === 0">Select Tickets</span>

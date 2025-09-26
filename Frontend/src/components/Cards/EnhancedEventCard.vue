@@ -51,16 +51,22 @@
         <!-- Save/Like Button -->
         <button
           @click.stop="toggleSaved(event)"
-          :disabled="!authStore.isLoggedIn()"
+          :disabled="!authStore.isLoggedIn"
           :class="[
             'absolute top-3 right-3 p-2 rounded-full transition-all',
-            !authStore.isLoggedIn()
+            !authStore.isLoggedIn
               ? 'bg-gray-300/50 text-gray-400 cursor-not-allowed'
               : savedEvents.includes(event.id)
                 ? 'bg-[var(--color-error)] text-white hover:bg-[var(--color-error)]/80'
-                : 'bg-black/30 text-gray-400 hover:bg-black/50 hover:text-white'
+                : 'bg-black/30 text-gray-400 hover:bg-black/50 hover:text-white',
           ]"
-          :title="!authStore.isLoggedIn ? 'Please login to save events' : (savedEvents.includes(event.id) ? 'Remove from favorites' : 'Add to favorites')"
+          :title="
+            !authStore.isLoggedIn
+              ? 'Please login to save events'
+              : savedEvents.includes(event.id)
+                ? 'Remove from favorites'
+                : 'Add to favorites'
+          "
         >
           <Heart
             :class="[
@@ -71,7 +77,9 @@
         </button>
 
         <!-- Price Badge -->
-        <div class="absolute top-3 left-3 bg-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-bold text-white shadow-lg">
+        <div
+          class="absolute top-3 left-3 bg-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-bold text-white shadow-lg"
+        >
           {{ formatPrice(event) }}
         </div>
 
@@ -262,16 +270,18 @@ const formatDate = (date) => {
       weekday: "short",
     });
   } catch {
-    return 'TBD';
+    return "TBD";
   }
 };
 
 const formatPrice = (event) => {
-  if (event.price === 0) return 'FREE';
+  if (event.price === 0) return "FREE";
 
   // If there's a price range with multiple prices, show range
   if (event.priceRange && event.priceRange.length > 1) {
-    const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
+    const prices = event.priceRange
+      .map((p) => parseFloat(p) || 0)
+      .filter((p) => p > 0);
     if (prices.length > 1) {
       const min = Math.min(...prices);
       const max = Math.max(...prices);
@@ -294,7 +304,7 @@ const navigateToTickets = (eventId) => {
 };
 
 const handleBookNow = (eventId) => {
-  const event = props.events.find(e => e.id === eventId);
+  const event = props.events.find((e) => e.id === eventId);
   const slots = event?.slots || [];
 
   if (slots.length > 0) {
@@ -313,8 +323,10 @@ const toggleSaved = (event) => {
   // Check if user is logged in
   if (!authStore.isLoggedIn) {
     // Show a notification or redirect to login
-    if (confirm('You need to login to save events. Would you like to login now?')) {
-      router.push('/login');
+    if (
+      confirm("You need to login to save events. Would you like to login now?")
+    ) {
+      router.push("/login");
     }
     return;
   }
@@ -329,7 +341,7 @@ const toggleSaved = (event) => {
   }
 
   // Save to localStorage
-  localStorage.setItem('savedEvents', JSON.stringify(savedEvents.value));
+  localStorage.setItem("savedEvents", JSON.stringify(savedEvents.value));
 
   //emit('toggle-save', { event, saved: !isSaved });
 };
@@ -338,7 +350,7 @@ const shareEvent = async (event) => {
   const shareData = {
     title: event.title,
     text: `Check out this event: ${event.title}`,
-    url: `${window.location.origin}/events/${event.id}`
+    url: `${window.location.origin}/events/${event.id}`,
   };
 
   try {

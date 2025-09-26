@@ -34,6 +34,9 @@ public class UserDTO {
     @Schema(description = "User's bookmarked events")
     private List<TicketDTO> tickets;
 
+    @Schema(description = "User's tickets grouped by type")
+    private List<TicketWithSameTypeDTO> groupedTickets;
+
     public static UserDTO fromEntity(User user) {
         if (user == null) return null;
 

@@ -269,24 +269,33 @@
 .admin-modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
-  padding: 5rem;
+  z-index: 9999;
+  padding: 1rem;
 }
 
 .admin-modal {
   border-radius: 0.75rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
   max-width: 56rem;
   width: 100%;
   padding: 1.2rem;
   margin: 0 1rem;
   max-height: 90vh;
   overflow: hidden;
-  background-color: var(--color-card);
+  background: white;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-modal {
+    background: rgb(31, 41, 55);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+  }
 }
 
 .admin-modal-compact {
@@ -438,6 +447,21 @@
 .admin-pagination-btn.active {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
+}
+
+/* Override transparent cards inside dialogs */
+.admin-modal .event-card {
+  background: white !important;
+  border: 1px solid rgba(229, 231, 235, 0.8) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-modal .event-card {
+    background: rgb(55, 65, 81) !important;
+    border: 1px solid rgba(75, 85, 99, 0.8) !important;
+  }
 }
 
 /* Toast/notification styles */

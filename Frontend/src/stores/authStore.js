@@ -9,7 +9,9 @@ const REFRESH_TOKEN_KEY = "refreshToken";
 export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref(localStorage.getItem(ACCESS_TOKEN_KEY) || null);
   const refreshToken = ref(localStorage.getItem(REFRESH_TOKEN_KEY) || null);
-  const isLoggedIn = ref(!!accessToken.value);
+  const isLoggedIn = () => {
+    return isTokenValid();
+  };
   const error = ref(null);
   const loading = ref(false);
   const userData = ref(null); // Store user data here
@@ -25,7 +27,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     axiosClient.defaults.headers.common["Authorization"] =
-        `Bearer ${newAccess}`;
+      `Bearer ${newAccess}`;
   };
 
   const clearTokens = () => {
@@ -50,8 +52,7 @@ export const useAuthStore = defineStore("auth", () => {
       const res = await axiosClient.post(uri, form);
       const { accessToken: newAccess, refreshToken: newRefresh } = res.data;
       setTokens(newAccess, newRefresh || null);
-      isLoggedIn.value = true;
-      router.push("/");
+      redirectToPast();
     } catch (err) {
       error.value = err.response?.data?.message || "Authentication failed";
       clearTokens();
@@ -67,10 +68,10 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = null;
 
     try {
-      if (!isLoggedIn.value) return null;
+      if (!isLoggedIn()) return null;
 
       const res = await axiosClient.get("/profile/");
-      userData.value = res.data;  // Store user data in userData
+      userData.value = res.data; // Store user data in userData
       return res.data;
     } catch (err) {
       error.value = err.response?.data?.message || "Failed to fetch user";
@@ -86,7 +87,7 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = null;
 
     try {
-      if (!isLoggedIn.value) return "Update failed, User must be logged in";
+      if (!isLoggedIn()) return "Update failed, User must be logged in";
 
       // Add current password to form to verify it in the backend
       const res = await axiosClient.put("/profile/", form);
@@ -98,6 +99,12 @@ export const useAuthStore = defineStore("auth", () => {
     } finally {
       loading.value = false;
     }
+  };
+
+  const redirectToPast = () => {
+    const route = router.currentRoute.value;
+    const redirectQuery = route.query.redirect || "/";
+    router.push(redirectQuery);
   };
 
   const isTokenValid = () => {
@@ -114,13 +121,8 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  // Computed property for better reactivity
-  const isAuthenticated = computed(() => {
-    return isLoggedIn.value && isTokenValid();
-  });
-
   return {
-    isLoggedIn: isAuthenticated,
+    isLoggedIn,
     error,
     loading,
     authUser,

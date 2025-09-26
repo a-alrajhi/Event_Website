@@ -13,17 +13,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, onMounted } from "vue";
+import axios from "axios";
 import "leaflet/dist/leaflet.css";
-import * as L from 'leaflet';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import * as L from "leaflet";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import icon from '../../assets/icon.png';
-import { useRouter } from 'vue-router';
-import EventList from '../Misc/EventList.vue';
-import Navbar from '../Navbar/Navbar.vue';
+import icon from "../../assets/icon.png";
+import { useRouter } from "vue-router";
+import EventList from "../Misc/EventList.vue";
+import Navbar from "../Navbar/Navbar.vue";
 
 const router = useRouter();
 const initialMap = ref(null);
@@ -38,49 +38,55 @@ const myIcon = L.icon({
 });
 
 onMounted(() => {
-  initialMap.value = L.map('map', {
+  initialMap.value = L.map("map", {
     zoomControl: true,
     zoom: 10,
     zoomAnimation: false,
     fadeAnimation: true,
-    markerZoomAnimation: true
-  }).setView([24.7136, 46.6753], 10);  // Default view: Riyadh
+    markerZoomAnimation: true,
+  }).setView([24.7136, 46.6753], 10); // Default view: Riyadh
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(initialMap.value);
 
   // Fetch all locations
-  axios.get('http://localhost:8080/locations/All')
-      .then(response => {
-        const locations = response.data;
-        const markers = L.markerClusterGroup();
+  axios
+    .get("http://localhost:8080/locations/All")
+    .then((response) => {
+      const locations = response.data;
+      const markers = L.markerClusterGroup();
 
-        locations.forEach(location => {
-          const each_marker = new L.marker([location.latitude, location.longitude], { icon: myIcon })
-              .bindPopup(`<strong>${location.name}</strong><br>${location.address}`)
-              .on('click', () => {
-                axios.get(`http://localhost:8080/locations/${location.id}/events`)
-                    .then(eventsResponse => {
-                      events.value = eventsResponse.data;
-                      if (events.value.length > 0) {
-                        showEventList.value = true;
-                      }
-                    })
-                    .catch(error => {
-                      console.error('Error loading events:', error);
-                    });
+      locations.forEach((location) => {
+        const each_marker = new L.marker(
+          [location.latitude, location.longitude],
+          { icon: myIcon }
+        )
+          .bindPopup(`<strong>${location.name}</strong><br>${location.address}`)
+          .on("click", () => {
+            axios
+              .get(`http://localhost:8080/locations/${location.id}/events`)
+              .then((eventsResponse) => {
+                events.value = eventsResponse.data;
+                if (events.value.length > 0) {
+                  showEventList.value = true;
+                }
+              })
+              .catch((error) => {
+                console.error("Error loading events:", error);
               });
+          });
 
-          markers.addLayer(each_marker);
-        });
-
-        initialMap.value.addLayer(markers);
-      })
-      .catch(error => {
-        console.error('Error loading locations:', error);
+        markers.addLayer(each_marker);
       });
+
+      initialMap.value.addLayer(markers);
+    })
+    .catch((error) => {
+      console.error("Error loading locations:", error);
+    });
 });
 </script>
 

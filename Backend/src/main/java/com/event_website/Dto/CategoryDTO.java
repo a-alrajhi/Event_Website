@@ -1,10 +1,8 @@
 package com.event_website.Dto;
 
 import com.event_website.Entity.Category;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 /**
  * Data Transfer Object for the {@code Category} entity.
@@ -15,23 +13,36 @@ import lombok.Setter;
  * <p>This DTO includes both English and Arabic names and descriptions, along with an optional
  * photo.
  *
- * @author Abdulrahman Al Rajhi
- * @since 09-09-2025
- * @version 1.0
  */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Represents a category of events, including multilingual support and media")
 public class CategoryDTO {
+
+  @Schema(description = "Unique identifier of the category", example = "1")
   private Integer id;
+
+  @Schema(description = "Category name in English", example = "Music")
   private String name;
+
+  @Schema(description = "Category name in Arabic", example = "موسيقى")
   private String arName;
 
+  @Schema(description = "URL to category photo (optional)", example = "https://example.com/images/music.jpg")
   private String photo;
+
+  @Schema(description = "Category description in English", example = "Live music events and festivals")
   private String description;
+
+  @Schema(description = "Category description in Arabic", example = "حفلات موسيقية ومهرجانات حية")
   private String arDescription;
 
+  /**
+   * Converts this DTO to its corresponding {@link Category} entity.
+   * @return a new Category entity populated with DTO data.
+   */
   public Category toEntity() {
     Category category = new Category();
     category.setId(id);

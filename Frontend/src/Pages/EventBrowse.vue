@@ -123,7 +123,7 @@
                 Events in Saudi Arabia
               </h2>
               <p class="text-gray-600 dark:text-gray-300">
-                <span class="font-medium">{{ filteredEvents.length }}</span>
+                <span class="font-medium">{{ totalElements }}</span>
                 events found
                 <span
                   v-if="selectedCategories.length > 0 || currentPrice > 0"
@@ -208,10 +208,10 @@
                 <!-- Previous Button -->
                 <button
                   @click="currentPage = Math.max(1, currentPage - 1)"
-                  :disabled="currentPage === 1"
+                  :disabled="isFirstPage"
                   :class="[
                     'px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 shadow-sm',
-                    currentPage === 1
+                    isFirstPage
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed opacity-50'
                       : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
                   ]"
@@ -265,10 +265,10 @@
                 <!-- Next Button -->
                 <button
                   @click="currentPage = Math.min(totalPages, currentPage + 1)"
-                  :disabled="currentPage === totalPages"
+                  :disabled="isLastPage"
                   :class="[
                     'px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 shadow-sm',
-                    currentPage === totalPages
+                    isLastPage
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed opacity-50'
                       : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
                   ]"
@@ -293,7 +293,7 @@
 
           <!-- No Results -->
           <div
-            v-if="!isLoading && filteredEvents.length === 0"
+            v-if="!isLoading && events.length === 0"
             class="text-center py-16"
           >
             <div
@@ -330,13 +330,14 @@ import Slider from "primevue/slider";
 import Checkbox from "primevue/checkbox";
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getEvents } from "../apis/EventDetalisApi";
+import { getEvents, getCategories, getPriceRange } from "../apis/EventDetalisApi";
 import DateCard from "../components/Cards/DateCard.vue";
 
 const route = useRoute();
 const router = useRouter();
 
-const events = ref([]);
+const events = ref([]); // Current page events
+const allEvents = ref([]); // All events for filtering
 const isLoading = ref(true);
 const selectedCategories = ref([]);
 const priceRange = ref({ min: 0, max: 200 });
@@ -345,9 +346,13 @@ const sidebarCategories = ref([]);
 const searchInput = ref("");
 const selectedDate = ref(null);
 
-// Pagination state
+// Backend pagination state
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
+const totalElements = ref(0);
+const totalPages = ref(0);
+const isFirstPage = ref(true);
+const isLastPage = ref(true);
 
 const upcomingDates = computed(() => {
   const dates = [];
@@ -363,31 +368,37 @@ const upcomingDates = computed(() => {
 const fetchData = async () => {
   try {
     isLoading.value = true;
-    const eventsData = await getEvents();
-    events.value = eventsData;
-    sidebarCategories.value = [...new Set(eventsData.map(event => event.category))].filter(Boolean);
-    // Calculate price range from all event prices including price ranges
-    const allPrices = [];
-    eventsData.forEach(event => {
-      if (event.priceRange && event.priceRange.length > 0) {
-        // Add all prices from the price range
-        event.priceRange.forEach(p => {
-          const price = parseFloat(p);
-          if (price > 0) allPrices.push(price);
-        });
-      } else if (event.price > 0) {
-        // Fallback to single price
-        allPrices.push(event.price);
-      }
-    });
 
-    priceRange.value = allPrices.length ?
-      { min: 0, max: Math.ceil(Math.max(...allPrices) * 1.2) } :
-      { min: 0, max: 200 };
-    currentPrice.value = 0;
+    // First load: get all events for filtering + categories/price range
+    if (currentPage.value === 1 && !allEvents.value.length) {
+      const [allEventsResponse, categoriesData, priceRangeData] = await Promise.all([
+        getEvents(0, 1000), // Get all events for filtering
+        getCategories(),
+        getPriceRange()
+      ]);
 
-    // Apply category filter from URL query params
-    applyUrlFilters();
+      allEvents.value = allEventsResponse.content || [];
+      sidebarCategories.value = categoriesData;
+      priceRange.value = priceRangeData;
+
+      // Apply URL filters after data is loaded
+      applyUrlFilters();
+    }
+
+    // Apply filters and calculate pagination
+    const filtered = getFilteredEvents();
+
+    // Update pagination based on filtered results
+    totalElements.value = filtered.length;
+    totalPages.value = Math.ceil(filtered.length / itemsPerPage.value);
+    isFirstPage.value = currentPage.value === 1;
+    isLastPage.value = currentPage.value === totalPages.value;
+
+    // Get events for current page
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
+    events.value = filtered.slice(start, end);
+
   } catch (error) {
     console.error("Error fetching data:", error);
   } finally {
@@ -399,10 +410,8 @@ const applyUrlFilters = () => {
   // Check for category in URL query params
   const categoryParam = route.query.category;
   const searchQuery = route.query.q;
-  if (categoryParam && typeof categoryParam === "string") {
-    const categoryName =
-      categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1);
 
+  if (categoryParam && typeof categoryParam === "string") {
     // Find matching category (case insensitive)
     const matchingCategory = sidebarCategories.value.find(
       (cat) => cat.toLowerCase() === categoryParam.toLowerCase()
@@ -411,12 +420,23 @@ const applyUrlFilters = () => {
     if (matchingCategory) {
       selectedCategories.value = [matchingCategory];
     }
+  }
 
-    if (searchQuery && typeof searchQuery === "string") {
-      searchInput.value = searchQuery.trim();
-    }
+  if (searchQuery && typeof searchQuery === "string") {
+    searchInput.value = searchQuery.trim();
   }
 };
+
+// Watch route changes to apply filters
+watch(
+  () => route.query,
+  () => {
+    if (!isLoading.value) {
+      applyUrlFilters();
+    }
+  },
+  { deep: true }
+);
 
 // Watch route changes to apply filters
 watch(
@@ -439,15 +459,24 @@ watch(
   { immediate: true }
 );
 
-// Reset pagination when filters change
+// Reset pagination when filters change and refetch data
 watch([selectedCategories, currentPrice, searchInput, selectedDate], () => {
   currentPage.value = 1;
+  fetchData(); // Refetch data with new filters
 }, { deep: true });
+
+// Refetch data when pagination parameters change (but not when filters change)
+watch([currentPage, itemsPerPage], () => {
+  fetchData();
+});
 
 onMounted(fetchData);
 
-const filteredEvents = computed(() => {
-  return events.value.filter(event => {
+// Function to get filtered events from all events
+const getFilteredEvents = () => {
+  if (!Array.isArray(allEvents.value)) return [];
+
+  return allEvents.value.filter(event => {
     const categoryMatch =
       selectedCategories.value.length === 0 || selectedCategories.value.includes(event.category);
 
@@ -473,33 +502,31 @@ const filteredEvents = computed(() => {
 
     return categoryMatch && priceMatch && searchMatch && dateMatch;
   });
-});
+};
 
-// Pagination computed properties
-const totalPages = computed(() => {
-  return Math.ceil(filteredEvents.value.length / itemsPerPage.value);
+// For sidebar counts (computed property)
+const filteredEvents = computed(() => getFilteredEvents());
+
+// Backend pagination computed properties
+const currentPageInfo = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value + 1;
+  const end = Math.min(start + itemsPerPage.value - 1, totalElements.value);
+  return { start, end, total: totalElements.value };
 });
 
 const paginatedEvents = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-  return filteredEvents.value.slice(start, end);
-});
-
-const currentPageInfo = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value + 1;
-  const end = Math.min(start + itemsPerPage.value - 1, filteredEvents.value.length);
-  return { start, end, total: filteredEvents.value.length };
+  return Array.isArray(events.value) ? events.value : []; // Backend already provides paginated results
 });
 
 
 const getCategoryCount = (category) =>
-  events.value.filter((event) => event.category === category).length;
+  Array.isArray(allEvents.value) ? allEvents.value.filter((event) => event.category === category).length : 0;
 
 const getFilteredByPriceCount = () => {
-  if (currentPrice.value === 0) return events.value.length;
+  if (!Array.isArray(allEvents.value)) return 0;
+  if (currentPrice.value === 0) return allEvents.value.length;
 
-  return events.value.filter(event => {
+  return allEvents.value.filter(event => {
     // For events with price ranges, check if ANY price in the range is within the filter
     if (event.priceRange && event.priceRange.length > 0) {
       const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);

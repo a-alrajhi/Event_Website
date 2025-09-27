@@ -33,7 +33,7 @@
         <img
           src="../../assets/logo.svg"
           alt="Eventura Logo"
-          class="h-16 w-auto object-contain drop-shadow-sm"
+          class="h-12 w-auto object-contain drop-shadow-sm"
         />
         <span class="text-xl md:text-2xl font-bold text-[var(--color-primary)]">
           Eventura

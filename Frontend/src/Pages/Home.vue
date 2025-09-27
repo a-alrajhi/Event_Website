@@ -172,7 +172,8 @@ const isLoading = ref(true);
 const fetchEvents = async () => {
   isLoading.value = true;
   try {
-    events.value = await getEvents();
+    const eventsResponse = await getEvents(0, 6); // Get first 6 events for home page
+    events.value = eventsResponse.content || [];
   } finally {
     isLoading.value = false;
   }

@@ -97,12 +97,35 @@
               </div>
               <div class="flex-1">
                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white">My Bookmarks</h2>
-                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ bookmarks.length }} saved events</p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">
+                  {{ bookmarksLoading ? 'Loading...' : `${bookmarks.length} saved events` }}
+                </p>
               </div>
             </div>
 
+            <!-- Loading State -->
+            <div v-if="bookmarksLoading" class="text-center py-12">
+              <div class="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <div class="w-8 h-8 border-2 border-gray-300 border-t-[var(--color-primary)] rounded-full animate-spin"></div>
+              </div>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Loading your bookmarks...</h3>
+              <p class="text-gray-600 dark:text-gray-400">Please wait while we fetch your saved events</p>
+            </div>
+
+            <!-- Authentication Required State -->
+            <div v-else-if="!authStore.isLoggedIn" class="text-center py-12">
+              <div class="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Heart class="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Login Required</h3>
+              <p class="text-gray-600 dark:text-gray-400 mb-4">Please login to view your bookmarked events</p>
+              <button @click="$router.push('/login')" class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] text-white px-6 py-2 rounded-lg transition-colors">
+                Login Now
+              </button>
+            </div>
+
             <!-- Empty State -->
-            <div v-if="bookmarks.length === 0" class="text-center py-12">
+            <div v-else-if="bookmarks.length === 0" class="text-center py-12">
               <div class="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <Heart class="w-8 h-8 text-gray-400" />
               </div>
@@ -143,6 +166,8 @@ import AppFooter from "../components/AppFooter/AppFooter.vue";
 import UserProfileInput from "../components/Auth/UserProfileInput.vue";
 import BookmarkCard from "../components/Cards/BookmarkCard.vue";
 import { getEvents } from "../apis/EventDetalisApi";
+import { getUserBookmarks, unbookmark } from "../apis/bookmarkapi";
+import { getEventSlotsFromId } from "../apis/eventApi";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -159,8 +184,15 @@ const form = reactive({
 
 const userData = ref(null);
 const bookmarks = ref([]);
+const bookmarksLoading = ref(false);
 
 onMounted(async () => {
+  // Check if user is logged in
+  if (!authStore.isLoggedIn) {
+    router.push('/login');
+    return;
+  }
+
   try {
     const user = await authStore.getUser();
     userData.value = user;
@@ -178,18 +210,58 @@ onMounted(async () => {
 
 const loadBookmarks = async () => {
   try {
-    const savedEventIds = JSON.parse(localStorage.getItem('savedEvents') || '[]');
-    if (savedEventIds.length === 0) {
+    bookmarksLoading.value = true;
+
+    if (!authStore.isLoggedIn) {
+      bookmarks.value = [];
+      return;
+    }
+
+    // Try to get bookmarks from API first
+    let bookmarkedEventIds = [];
+    try {
+      const response = await getUserBookmarks();
+      bookmarkedEventIds = response.data.map(bookmark => bookmark.eventId) || [];
+      // Sync with localStorage
+      localStorage.setItem('savedEvents', JSON.stringify(bookmarkedEventIds));
+    } catch (apiError) {
+      console.warn('Failed to load bookmarks from API, falling back to localStorage:', apiError);
+      // Fallback to localStorage
+      bookmarkedEventIds = JSON.parse(localStorage.getItem('savedEvents') || '[]');
+    }
+
+    if (bookmarkedEventIds.length === 0) {
       bookmarks.value = [];
       return;
     }
 
     // Fetch all events and filter by saved IDs
-    const allEvents = await getEvents();
-    bookmarks.value = allEvents.filter(event => savedEventIds.includes(event.id));
+    const allEventsResponse = await getEvents(0, 100); // Get more events to find bookmarks
+    const allEvents = allEventsResponse.content || allEventsResponse || [];
+
+    // Map events to bookmark format with all API data
+    bookmarks.value = allEvents
+      .filter(event => bookmarkedEventIds.includes(event.id))
+      .map(event => ({
+        id: event.id,
+        title: event.name || event.title,
+        description: event.description || 'No description available',
+        image: event.photoUrl || event.image || 'https://images.ctfassets.net/vy53kjqs34an/1b6S3ia1nuDcqK7uDfvPGz/c2796f467985e3702c6b54862be767d5/1280%C3%A2__%C3%83_%C3%A2__426-_1.jpg',
+        price: event.price || 0,
+        date: event.startDate || event.date || event.createdAt,
+        venue: event.location?.name || event.location || 'Saudi Arabia',
+        category: event.category?.name || event.category || 'Event',
+        // Add more API data
+        endDate: event.endDate,
+        capacity: event.capacity,
+        organizer: event.organizer,
+        status: event.status || 'active'
+      }));
   } catch (error) {
     console.error('Failed to load bookmarks:', error);
     bookmarks.value = [];
+  } finally {
+    bookmarksLoading.value = false;
   }
 };
 
@@ -236,18 +308,57 @@ const handleSubmit = async () => {
   }
 };
 
-const removeBookmark = (id) => {
-  // Remove from local state
-  bookmarks.value = bookmarks.value.filter((b) => b.id !== id);
+const removeBookmark = async (id) => {
+  try {
+    // Remove from API if logged in
+    if (authStore.isLoggedIn) {
+      await unbookmark(id);
+    }
 
-  // Remove from localStorage
-  const savedEventIds = JSON.parse(localStorage.getItem('savedEvents') || '[]');
-  const updatedIds = savedEventIds.filter(eventId => eventId !== id);
-  localStorage.setItem('savedEvents', JSON.stringify(updatedIds));
+    // Remove from local state
+    bookmarks.value = bookmarks.value.filter((b) => b.id !== id);
+
+    // Remove from localStorage
+    const savedEventIds = JSON.parse(localStorage.getItem('savedEvents') || '[]');
+    const updatedIds = savedEventIds.filter(eventId => eventId !== id);
+    localStorage.setItem('savedEvents', JSON.stringify(updatedIds));
+
+    console.log('Bookmark removed successfully');
+  } catch (error) {
+    console.error('Failed to remove bookmark:', error);
+    // Reload bookmarks to sync state
+    await loadBookmarks();
+    alert('Failed to remove bookmark. Please try again.');
+  }
 };
 
-const bookNow = (eventId) => {
-  router.push(`/events/ticket-types/${eventId}`);
+const bookNow = async (eventId) => {
+  try {
+    // First check if there are slots for this event
+    const slots = await getEventSlotsFromId(eventId);
+
+    if (slots && slots.length === 1) {
+      // Single slot - go directly with slot
+      router.push({
+        name: "EventTicketTypes",
+        params: { eventId: String(eventId) },
+        query: { slotId: slots[0].id },
+      });
+    } else if (slots && slots.length > 1) {
+      // Multiple slots - for simplicity, go to event details to let user pick
+      router.push(`/events/${eventId}`);
+    } else {
+      // No slots - go directly to ticket types
+      router.push({
+        name: "EventTicketTypes",
+        params: { eventId: String(eventId) },
+      });
+    }
+  } catch (error) {
+    console.error('Error getting event slots:', error);
+    // Fallback to direct ticket types page
+    router.push(`/events/ticket-types/${eventId}`);
+  }
 };
 </script>
 

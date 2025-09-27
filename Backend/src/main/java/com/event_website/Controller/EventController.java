@@ -106,6 +106,7 @@ public class EventController {
                     existing.setArDescription(dto.getArDescription());
                     existing.setPhotoUrl(dto.getPhotoUrl());
                     existing.setHasAssignedSeating(dto.getHasAssignedSeating());
+                    existing.setLongDescription(dto.getLongDescription());
                     existing.setCategory(category);
 
                     Event updated = eventService.save(existing);

@@ -3,6 +3,8 @@ package com.event_website.Controller;
 import com.event_website.Dto.EventDto;
 import com.event_website.Dto.LocationDTO;
 import com.event_website.Dto.ErrorDTO;
+import com.event_website.Entity.Event;
+import com.event_website.Service.EventService;
 import com.event_website.Service.LocationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,8 @@ import java.util.List;
 public class LocationController {
 
     private final LocationService locationService;
+    @Autowired
+    EventService eventService;
 
     public LocationController(LocationService locationService) {
         this.locationService = locationService;
@@ -144,5 +149,18 @@ public class LocationController {
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Events not found for location with ID: " + id, ex);
         }
+    }
+
+    @GetMapping("/by-event/{eventId}")
+    public ResponseEntity<LocationDTO> getLocationByEventId(@PathVariable Integer eventId) {
+      Event event = eventService.findEventbyId(eventId)
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+
+      if (event.getLocation() == null) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No location assigned for this event");
+      }
+
+      LocationDTO location = locationService.getLocationById(event.getLocation().getId());
+      return ResponseEntity.ok(location);
     }
 }

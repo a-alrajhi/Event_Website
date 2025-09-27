@@ -58,7 +58,7 @@ export async function getEventSlotsFromId(eventId) {
  * @param {*} eventId event id
  */
 export async function getEventLocationFromId(eventId) {
-  const resp = await apis.get(`/locations/${eventId}`);
+  const resp = await apis.get(`/locations/by-event/${eventId}`);
   return resp.data;
 }
 

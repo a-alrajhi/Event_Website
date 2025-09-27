@@ -16,6 +16,7 @@
           <EventMainContent
             :title="eventDetailsFetched.name"
             :subtitle="eventDetailsFetched.description"
+            :longDescription="eventDetailsFetched.longDescription"
           />
           <EventRules :rules="eventDetailsFetched.rules" />
         </div>

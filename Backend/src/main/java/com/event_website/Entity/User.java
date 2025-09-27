@@ -18,12 +18,14 @@ public class User {
         this.password = registerRequest.getPassword();
         this.phoneNumber = registerRequest.getPhoneNumber();
         this.name = registerRequest.getName();
+        this.role = "USER";
     }
     public User(UpdateUserRequest updateUserRequest) {
         this.email = updateUserRequest.getEmail();
         this.password = updateUserRequest.getPassword();
         this.phoneNumber = updateUserRequest.getPhoneNumber();
         this.name = updateUserRequest.getName();
+        this.role = updateUserRequest.getRole();
     }
 
     @Id
@@ -42,4 +44,7 @@ public class User {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "role")
+    private String role;
 }

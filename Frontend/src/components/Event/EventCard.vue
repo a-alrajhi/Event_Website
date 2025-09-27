@@ -1,3 +1,9 @@
+<!--
+ * Slots and Ticket Types API Module
+ * @author: Abdulrahman Al Rajhi
+ * @since: 9/15/2025
+ * @version: 1.0
+ */
 <!-- EventCard.vue -->
 <template>
   <div class="bg-white shadow-md rounded-xl overflow-hidden">

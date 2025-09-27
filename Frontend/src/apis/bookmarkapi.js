@@ -5,5 +5,7 @@ export const bookmark = async (eventId) => {
 };
 
 export const unbookmark = async (eventId) => {
-  const res = axiosClient.delete("/bookmarks/delete", { eventId });
+  return axiosClient.delete("/bookmarks/delete", {
+    data: { eventId },
+  });
 };

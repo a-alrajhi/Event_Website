@@ -1,8 +1,8 @@
 /**
-Event API 
-@author: Abdulrahman Al Rajhi
-@since: 9/15/2025
-@version: 1.0
+ * Slots and Ticket Types API Module
+ * @author: Abdulrahman Al Rajhi
+ * @since: 9/15/2025
+ * @version: 1.0
  */
 import apis from "./axiosClient";
 import { useAuthStore } from "../stores/authStore";

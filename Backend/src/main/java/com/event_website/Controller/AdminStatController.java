@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class AdminStatController {
             }
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminStatsDTO> getAdminDashboardStats() {
         AdminStatsDTO stats = adminStatsService.getDashboardStats();
         return ResponseEntity.ok(stats);
@@ -74,6 +76,7 @@ public class AdminStatController {
             }
     )
     @GetMapping("/monthly-sales")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MonthlyStatDTO>> getMonthlySalesAndRevenue() {
         return ResponseEntity.ok(adminStatsService.getMonthlyRevenueAndSales());
     }
@@ -100,6 +103,7 @@ public class AdminStatController {
             }
     )
     @GetMapping("/monthly-top/{count}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EventSimpleStatDTO>> getMonthlySalesAndRevenue(@PathVariable int count) {
         return ResponseEntity.ok(adminStatsService.getTopEventsThisMonth(count));
     }

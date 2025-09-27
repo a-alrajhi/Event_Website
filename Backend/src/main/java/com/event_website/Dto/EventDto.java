@@ -43,7 +43,12 @@ public class EventDto {
     @Schema(description = "ID of the category this event belongs to", example = "3")
     private Integer categoryId;
 
-    /**
+  @Schema(description = "Detailed long description of the event",
+      example = "A full-day festival with workshops, live music, and food trucks.")
+    private String longDescription;
+
+
+  /**
      * Maps an Event entity to a DTO.
      *
      * @param event the entity to map
@@ -60,8 +65,9 @@ public class EventDto {
         dto.setArDescription(event.getArDescription());
         dto.setPhotoUrl(event.getPhotoUrl());
         dto.setHasAssignedSeating(event.getHasAssignedSeating());
+      dto.setLongDescription(event.getLongDescription());
 
-        if (event.getCategory() != null) {
+      if (event.getCategory() != null) {
             dto.setCategoryId(event.getCategory().getId());
         }
         return dto;
@@ -82,6 +88,7 @@ public class EventDto {
         event.setArDescription(this.arDescription);
         event.setPhotoUrl(this.photoUrl);
         event.setHasAssignedSeating(this.hasAssignedSeating);
+        event.setLongDescription(this.longDescription);
 
         if (category != null) {
             event.setCategory(category);

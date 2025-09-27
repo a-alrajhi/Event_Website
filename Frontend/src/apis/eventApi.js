@@ -1,8 +1,8 @@
 /**
-Event API 
-@author: Abdulrahman Al Rajhi
-@since: 9/15/2025
-@version: 1.0
+ * Event API Module
+ * @author: Abdulrahman Al Rajhi
+ * @since: 9/15/2025
+ * @version: 1.0
  */
 import apis from "./axiosClient";
 
@@ -58,7 +58,7 @@ export async function getEventSlotsFromId(eventId) {
  * @param {*} eventId event id
  */
 export async function getEventLocationFromId(eventId) {
-  const resp = await apis.get(`/locations/${eventId}`);
+  const resp = await apis.get(`/locations/by-event/${eventId}`);
   return resp.data;
 }
 

@@ -514,7 +514,7 @@ Ticket Component
             <!-- Download Button -->
             <button
               @click="handleDownload"
-              class="group relative bg-blue-600/80 backdrop-blur-sm hover:bg-blue-700/80 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-blue-500/30"
+              class="group relative bg-blue-600/80 backdrop-blur-sm hover:bg-blue-700/80 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-blue-500/30 cursor-pointer"
             >
               <div
                 class="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -538,7 +538,7 @@ Ticket Component
             <!-- Share Button -->
             <button
               @click="handleShare"
-              class="group relative bg-green-600/80 backdrop-blur-sm hover:bg-green-700/80 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-green-500/30"
+              class="group relative bg-green-600/80 backdrop-blur-sm hover:bg-green-700/80 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-green-500/30 cursor-pointer"
             >
               <div
                 class="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"

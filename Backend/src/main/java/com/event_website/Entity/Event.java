@@ -47,4 +47,7 @@ public class Event {
     @JoinColumn(name = "location_id")
     private Location location;  // Many-to-One relationship with Location entity
 
+  @Column(name = "long_description", length = Integer.MAX_VALUE)
+  private String longDescription;
+
 }

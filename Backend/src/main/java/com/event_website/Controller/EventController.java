@@ -1,10 +1,6 @@
 package com.event_website.Controller;
 
 import com.event_website.Dto.*;
-import com.event_website.Dto.EventDtoDetalis;
-import com.event_website.Entity.*;
-import com.event_website.Repository.CategoryRepo;
-import com.event_website.Request.CompositeCreateCapacity;
 import com.event_website.Request.CompositeCreateEvent;
 import com.event_website.Request.CompositeCreateCapacity;
 import com.event_website.Service.CompositeEventService;
@@ -29,9 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Event")
@@ -112,6 +106,7 @@ public class EventController {
                     existing.setArDescription(dto.getArDescription());
                     existing.setPhotoUrl(dto.getPhotoUrl());
                     existing.setHasAssignedSeating(dto.getHasAssignedSeating());
+                    existing.setLongDescription(dto.getLongDescription());
                     existing.setCategory(category);
 
                     Event updated = eventService.save(existing);
@@ -235,7 +230,9 @@ public class EventController {
             }
     )
     @PostMapping("/create-composite")
-    public ResponseEntity<CreateCompositeEventDTO> createComposite(@RequestBody CompositeCreateEvent request) {
+    public ResponseEntity<CreateCompositeEventDTO> createComposite(
+            @Parameter(description = "Composite event creation request payload") @RequestBody CompositeCreateEvent request
+    ) {
         CreateCompositeEventDTO dto = compositeEventService.createCompositeEvent(request);
         return ResponseEntity.ok(dto);
     }
@@ -305,6 +302,7 @@ public class EventController {
                     )
             }
     )
+    @LogRequest(description = "Get all Events composite")
     @GetMapping("/get-composite")
     public ResponseEntity<List<DetailedEventDto>> getAllComposite() {
         List<DetailedEventDto> dto = compositeEventService.getAllComposite();

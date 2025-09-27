@@ -6,14 +6,16 @@ Event Sidebar Component
 -->
 <template>
   <div
-    class="max-w-sm p-6 bg-white border rounded-lg shadow-sm bg-gradient-to-r from-neutral-900 to-sky-900 border-gray-700 hover:scale-[1.02] transition-all duration-500"
+    class="max-w-sm p-6 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/30 dark:border-gray-700/30 rounded-xl shadow-xl hover:scale-[1.02] transition-all duration-500"
   >
-    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-200">
+    <h5
+      class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+    >
       <!-- update this once backend is ready -->
       Starting from {{ startingPrice }} SAR!
     </h5>
 
-    <p class="mb-3 font-normal text-gray-300">
+    <p class="mb-3 font-normal text-gray-600 dark:text-gray-300">
       Price may vary depending on the event and availability.
     </p>
 
@@ -22,7 +24,7 @@ Event Sidebar Component
     <button
       type="button"
       @click="handleBookNow"
-      class="text-gray-100 bg-gradient-to-r from-sky-500 to-cyan-800 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+      class="text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] hover:from-[var(--color-hover)] hover:to-[var(--color-primary)] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 inline-flex items-center px-4 py-3 text-sm font-medium text-center rounded-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer shadow-lg"
     >
       Book Now
 
@@ -56,19 +58,19 @@ Event Sidebar Component
     />
 
     <!-- horizontal line -->
-    <hr class="my-6 border-gray-600" />
+    <hr class="my-6 border-gray-200 dark:border-gray-600" />
 
     <!-- Event's Date section -->
     <div class="mt-6 flex justify-between items-center w-full">
       <div class="flex items-center">
-        <span class="text-sm text-gray-500">
+        <span class="text-sm text-gray-500 dark:text-gray-400">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6 text-gray-400"
+            class="size-6 text-[var(--color-primary)]"
           >
             <path
               stroke-linecap="round"
@@ -77,21 +79,21 @@ Event Sidebar Component
             />
           </svg>
         </span>
-        <span class="ml-2 font-medium text-gray-100">
+        <span class="ml-2 font-medium text-gray-900 dark:text-white">
           {{ eventDate }}
         </span>
       </div>
 
       <!-- Event starting time section -->
       <div class="flex items-center">
-        <span class="text-sm text-gray-500">
+        <span class="text-sm text-gray-500 dark:text-gray-400">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6 text-gray-400"
+            class="size-6 text-[var(--color-primary)]"
           >
             <path
               stroke-linecap="round"
@@ -100,7 +102,7 @@ Event Sidebar Component
             />
           </svg>
         </span>
-        <span class="ml-2 font-medium text-gray-100">
+        <span class="ml-2 font-medium text-gray-900 dark:text-white">
           {{ eventTime }}
         </span>
       </div>

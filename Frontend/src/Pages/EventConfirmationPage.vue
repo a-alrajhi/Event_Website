@@ -171,7 +171,7 @@ Event Confirmation Page
               <!-- msg -->
               <div class="text-center">
                 <h2
-                  class="text-4xl font-black mb-4 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"
+                  class="text-4xl font-black mb-4 bg-gradient-to-r from-green-600 to-[var(--color-primary)] bg-clip-text text-transparent"
                 >
                   🎉 Thank You for Your Purchase! 🎉
                 </h2>

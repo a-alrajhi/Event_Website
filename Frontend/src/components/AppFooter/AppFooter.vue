@@ -5,22 +5,23 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
         <!-- Brand Section -->
         <div class="lg:col-span-2">
-          <router-link to="/" class="flex items-center mb-4">
-            <div class="w-10 h-10 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-hover)] rounded-xl flex items-center justify-center mr-3 shadow-lg">
-              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17 12h-5v5h5v-5zM16 6V4l-2-2h-4L8 4v2H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-3zM10 4h4v2h-4V4zm9 15H5V8h14v11z"/>
-                <circle cx="9" cy="12" r="1"/>
-                <circle cx="15" cy="15" r="1"/>
-              </svg>
-            </div>
-            <span class="text-2xl font-bold text-[var(--color-primary)] drop-shadow-lg">
-              EventVision
-            </span>
-          </router-link>
-          <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-md leading-relaxed">
-            Discover and experience the best events in Saudi Arabia. From concerts and festivals to workshops and cultural experiences, EventVision connects you with unforgettable moments.
-          </p>
-
+      <!-- Logo -->
+      <router-link
+        to="/"
+        class="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+      >
+        <img
+          src="../../assets/logo.svg"
+          alt="Eventura Logo"
+          class="h-16 w-auto object-contain drop-shadow-sm"
+        />
+        <span class="text-xl md:text-2xl font-bold text-[var(--color-primary)]">
+          Eventura
+        </span>
+      </router-link>
+      <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-md leading-relaxed">
+        Discover and experience the best events in Saudi Arabia. From concerts and festivals to workshops and cultural experiences, Eventura connects you with unforgettable moments.
+      </p>
           <!-- Newsletter Signup -->
           <div class="space-y-3">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Stay Updated</h3>

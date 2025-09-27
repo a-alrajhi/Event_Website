@@ -2,7 +2,7 @@
 Event Similar Events Component
 @author: Abdulrahman Al Rajhi
 @since: 9/15/2025
-@version: 1.1 - Fixed light/dark mode classes
+@version: 1.1
 -->
 <template>
   <div class="my-8">

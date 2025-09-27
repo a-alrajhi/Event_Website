@@ -1,3 +1,10 @@
+<!--
+Slots Picker Dialog Component
+@author: Abdulrahman Al Rajhi
+@since: 9/27/2025
+@version: 1.0
+-->
+
 <template>
   <!-- if showSlotDialog is true, show this Dialog -->
 
@@ -14,7 +21,7 @@
         >
           <!-- Modal Header -->
           <div
-            class="bg-gradient-to-r from-neutral-900 to-sky-900 px-6 py-4 text-white"
+            class="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] px-6 py-4 text-white"
           >
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-bold">Select Your Time Slot</h2>
@@ -55,8 +62,8 @@
                   class="p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-md"
                   :class="[
                     selectedDate === date
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-md'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700',
+                      ? 'border-[var(--color-primary)] bg-blue-50 dark:bg-blue-900/30 text-[var(--color-primary)] dark:text-blue-300 shadow-md'
+                      : 'border-gray-200 dark:border-gray-600 hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] hover:bg-gray-50 dark:hover:bg-gray-700',
                   ]"
                   @click="selectDate(date)"
                 >
@@ -85,13 +92,13 @@
                 <div class="grid grid-cols-2 gap-2">
                   <!-- Time slot button -->
                   <button
-                    class="p-3 text-left border-2 rounded-lg transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    class="p-3 text-left border-2 rounded-lg transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-50"
                     v-for="slot in groupedSlots[selectedDate]"
                     :key="slot.id"
                     :class="[
                       selectedSlot && selectedSlot.id === slot.id
-                        ? 'border-green-500 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 shadow-md'
-                        : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700',
+                        ? 'border-[var(--color-primary)] bg-green-50 dark:bg-green-900/30 text-[var(--color-primary)] dark:text-green-300 shadow-md'
+                        : 'border-gray-200 dark:border-gray-600 hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] hover:bg-gray-50 dark:hover:bg-gray-700',
                     ]"
                     @click="selectSlot(slot)"
                   >
@@ -141,7 +148,7 @@
               <button
                 :disabled="!selectedSlot"
                 @click="confirm"
-                class="px-6 py-2 bg-gradient-to-r from-neutral-900 to-sky-900 text-white font-medium rounded-lg shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sky-900 focus:ring-opacity-50 cursor-pointer"
+                class="px-6 py-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] hover:from-[var(--color-hover)] hover:to-[var(--color-primary)] text-white font-medium rounded-lg shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
               >
                 <span v-if="selectedSlot">Confirm Booking</span>
                 <span v-else>Select a Time Slot</span>

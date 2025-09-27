@@ -33,7 +33,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
             <!-- Step 1: Ticket Selection (Active) -->
             <div class="flex flex-col items-center">
               <div
-                class="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-lg relative"
+                class="w-16 h-16 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] rounded-full flex items-center justify-center shadow-lg relative"
               >
                 <svg class="w-8 h-8 text-white" viewBox="0 0 32 32">
                   <path
@@ -53,7 +53,9 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                 <h3 class="font-bold text-gray-900 dark:text-white text-lg">
                   Ticket Selection
                 </h3>
-                <p class="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                <p
+                  class="text-sm text-[var(--color-primary)] dark:text-blue-400 font-medium"
+                >
                   Current Step
                 </p>
               </div>
@@ -123,7 +125,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
           <!-- Mobile Version -->
           <div class="md:hidden text-center">
             <div
-              class="w-20 h-20 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-lg mx-auto mb-4"
+              class="w-20 h-20 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] rounded-full flex items-center justify-center shadow-lg mx-auto mb-4"
             >
               <svg
                 class="w-10 h-10 text-white"
@@ -142,7 +144,9 @@ Event Ticket Types Component - Handles ticket selection and quantity management
             <h3 class="font-bold text-gray-900 dark:text-white text-xl mb-2">
               Ticket Selection
             </h3>
-            <p class="text-sm text-blue-600 dark:text-blue-400 font-medium">
+            <p
+              class="text-sm text-[var(--color-primary)] dark:text-blue-400 font-medium"
+            >
               Step 1 of 3
             </p>
           </div>
@@ -154,7 +158,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
         <!-- Loading State -->
         <div v-if="loading" class="flex justify-center items-center py-16">
           <div
-            class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
+            class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-primary)]"
           ></div>
         </div>
 
@@ -189,7 +193,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                     <!-- Ticket Icon -->
                     <div class="flex-shrink-0">
                       <div
-                        class="w-12 h-12 bg-gradient-to-r from-neutral-900 to-sky-900 rounded-xl flex items-center justify-center"
+                        class="w-12 h-12 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] rounded-xl flex items-center justify-center"
                       >
                         <!-- SVG ticket icon -->
                         <!-- NEW custom ticket icon -->
@@ -221,7 +225,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                       <!-- Ticket Price -->
                       <div class="flex items-center space-x-4">
                         <span
-                          class="text-2xl font-bold text-blue-600 dark:text-blue-400"
+                          class="text-2xl font-bold text-[var(--color-primary)] dark:text-blue-400"
                           >{{ formatCurrency(ticketInfo.price) }}</span
                         >
                       </div>
@@ -248,7 +252,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                           (ticketQuantities[ticketInfo.id] || 0) >=
                           (remaining[ticketInfo.id] || 0)
                         "
-                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       >
                         <span class="text-gray-900 dark:text-white">-</span>
                       </button>
@@ -267,7 +271,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                           (ticketQuantities[ticketInfo.id] || 0) >=
                           remaining[ticketInfo.id]
                         "
-                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 cursor-pointer"
+                        class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 cursor-pointer"
                       >
                         <span class="text-gray-900 dark:text-white">+</span>
                       </button>
@@ -328,7 +332,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
             type="button"
             @click="goToPaymentPage"
             :disabled="totalTickets === 0"
-            class="px-8 py-3 bg-gradient-to-r from-neutral-900 to-sky-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
+            class="px-8 py-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] hover:from-[var(--color-hover)] hover:to-[var(--color-primary)] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
           >
             <div class="flex items-center justify-center space-x-2">
               <span v-if="totalTickets === 0">Select Tickets</span>

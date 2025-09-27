@@ -51,7 +51,7 @@ Event Payment Page - Handles payment processing and order summary
           <!-- Step 2: Payment (Active) -->
           <div class="flex flex-col items-center">
             <div
-              class="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-lg relative"
+              class="w-16 h-16 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] rounded-full flex items-center justify-center shadow-lg relative"
             >
               <svg
                 class="w-8 h-8 text-white"
@@ -67,14 +67,16 @@ Event Payment Page - Handles payment processing and order summary
                 ></path>
               </svg>
               <div
-                class="absolute inset-0 rounded-full bg-blue-600 animate-ping opacity-25"
+                class="absolute inset-0 rounded-full bg-[var(--color-primary)] animate-ping opacity-25"
               ></div>
             </div>
             <div class="mt-4 text-center">
               <h3 class="font-bold text-gray-900 dark:text-white text-lg">
                 Payment
               </h3>
-              <p class="text-sm text-blue-600 dark:text-blue-400 font-medium">
+              <p
+                class="text-sm text-[var(--color-primary)] dark:text-blue-400 font-medium"
+              >
                 Current Step
               </p>
             </div>
@@ -118,7 +120,7 @@ Event Payment Page - Handles payment processing and order summary
         <!-- Mobile Version -->
         <div class="md:hidden text-center">
           <div
-            class="w-20 h-20 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-lg mx-auto mb-4"
+            class="w-20 h-20 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-hover)] rounded-full flex items-center justify-center shadow-lg mx-auto mb-4"
           >
             <svg
               class="w-10 h-10 text-white"
@@ -137,7 +139,9 @@ Event Payment Page - Handles payment processing and order summary
           <h3 class="font-bold text-gray-900 dark:text-white text-xl mb-2">
             Payment
           </h3>
-          <p class="text-sm text-blue-600 dark:text-blue-400 font-medium">
+          <p
+            class="text-sm text-[var(--color-primary)] dark:text-blue-400 font-medium"
+          >
             Step 2 of 3
           </p>
         </div>

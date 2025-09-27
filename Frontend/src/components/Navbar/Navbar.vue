@@ -10,7 +10,7 @@
     <div
       class="max-w-screen-xl flex flex-col sm:flex-row sm:items-center justify-between mx-auto p-4 gap-4"
     >
-      <!-- Logo -->
+      <!-- Logo
       <router-link to="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
         <div class="w-8 h-8 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-hover)] rounded-lg flex items-center justify-center shadow-lg">
           <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
@@ -23,6 +23,21 @@
           class="text-xl md:text-2xl font-bold text-[var(--color-primary)] drop-shadow-md"
           >EventVision</span
         >
+      </router-link> -->
+
+      <!-- Logo -->
+      <router-link
+        to="/"
+        class="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+      >
+        <img
+          src="../../assets/logo.svg"
+          alt="Eventura Logo"
+          class="h-16 w-auto object-contain drop-shadow-sm"
+        />
+        <span class="text-xl md:text-2xl font-bold text-[var(--color-primary)]">
+          Eventura
+        </span>
       </router-link>
 
       <!-- Right Side: Search + Profile Photo -->
@@ -39,7 +54,7 @@
               @click="showDropdown = !showDropdown"
               class="w-10 h-10 rounded-full border-2 border-[var(--color-primary)] hover:border-[var(--color-hover)] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 bg-[var(--color-primary)] flex items-center justify-center"
             >
-         <User class="w-6 h-6 text-white" />
+              <User class="w-6 h-6 text-white" />
             </button>
 
             <!-- Dropdown Menu -->
@@ -111,9 +126,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/authStore';
+import { ref, onMounted, onUnmounted } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/authStore";
 import SearchBar from "../SearchBar/SearchBar.vue";
 import {
   Home,
@@ -124,7 +139,7 @@ import {
   Star,
   Users,
   LogOut,
-  ShieldUser
+  ShieldUser,
 } from "lucide-vue-next";
 
 const router = useRouter();
@@ -154,18 +169,18 @@ const handleLogout = () => {
 // Close dropdown when clicking outside
 const handleClickOutside = (event) => {
   // Check if the click is outside the profile dropdown container
-  const profileContainer = event.target.closest('.relative.z-50');
+  const profileContainer = event.target.closest(".relative.z-50");
   if (!profileContainer && showDropdown.value) {
     showDropdown.value = false;
   }
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
+  document.addEventListener("click", handleClickOutside);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+  document.removeEventListener("click", handleClickOutside);
 });
 </script>
 

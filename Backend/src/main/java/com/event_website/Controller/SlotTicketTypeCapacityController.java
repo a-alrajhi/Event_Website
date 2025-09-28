@@ -82,18 +82,36 @@ public class SlotTicketTypeCapacityController {
         return ResponseEntity.ok(SlotTicketTypeCapacityDTO.fromEntity(capacity));
     }
 
-      @GetMapping("/slot/capacity")
-  public ResponseEntity<SlotTicketTypeCapacityDTO> getCapacityForTicketType(
-      @RequestParam Integer slotId, @RequestParam Integer ticketTypeId) {
+//      @GetMapping("/slot/capacity")
+//  public ResponseEntity<SlotTicketTypeCapacityDTO> getCapacityForTicketType(
+//      @RequestParam Integer slotId, @RequestParam Integer ticketTypeId) {
+//
+//    SlotTicketTypeCapacity entity =
+//        capacityService.getBySlotAndTicketTypeOrThrow(slotId, ticketTypeId);
+//
+//    SlotTicketTypeCapacityDTO dto = SlotTicketTypeCapacityDTO.fromEntity(entity);
+//
+//    int remaining = capacityService.getRemainingCapacity(slotId, ticketTypeId);
+//    dto.setRemainingTickets(remaining);
+//
+//    return ResponseEntity.ok(dto);
+//  }
 
-    SlotTicketTypeCapacity entity =
-        capacityService.getBySlotAndTicketTypeOrThrow(slotId, ticketTypeId);
+    @GetMapping("/slot/capacity")
+    public ResponseEntity<List<SlotTicketTypeCapacityDTO>> getCapacityForSlot(
+            @RequestParam Integer slotId) {
 
-    SlotTicketTypeCapacityDTO dto = SlotTicketTypeCapacityDTO.fromEntity(entity);
+        List<SlotTicketTypeCapacity> entities = capacityService.getBySlotOrThrow(slotId);
 
-    int remaining = capacityService.getRemainingCapacity(slotId, ticketTypeId);
-    dto.setRemainingTickets(remaining);
+        List<SlotTicketTypeCapacityDTO> dtoList = entities.stream()
+                .map(SlotTicketTypeCapacityDTO::fromEntity)
+                .peek(dto -> {
+                    int remainingCapacity = capacityService.getRemainingCapacity(dto.getSlotId(), dto.getTicketTypeId());
+                    dto.setRemainingTickets(remainingCapacity);
+                })
+                .toList();
 
-    return ResponseEntity.ok(dto);
-  }
+        return ResponseEntity.ok(dtoList);
+    }
+
 }

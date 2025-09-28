@@ -1,6 +1,9 @@
 package com.event_website.Dto;
 
 import com.event_website.Entity.Ticket;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -63,7 +66,6 @@ public class TicketWithSameTypeDTO {
   private SlotTicketTypeCapacityDTO slotTicketTypeCapacityDTO;
   private Integer userId;
   private String userName;
-
   private Integer ticketCapacity;
 
   /**

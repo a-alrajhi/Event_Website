@@ -66,8 +66,25 @@
       </div>
     </section>
 
-    <!-- Why Choose EventVision Section -->
-    <section
+    <!-- Slider / Featured Events -->
+    <div class="mt-8">
+      <SlliderSection :events="events" :is-loading="isLoading" />
+    </div>
+
+    <!-- Best Events Section -->
+    <div class="mt-8 mb-8">
+      <h2
+        class="text-3xl font-bold text-center text-[var(--color-primary)] drop-shadow-[0_0_10px_var(--color-primary)]"
+      >
+        Best Events
+      </h2>
+      <div class="px-6 mt-6">
+        <EnhancedEventCard :events="bestEvents" :is-loading="isLoading" />
+      </div>
+    </div>
+
+ <!-- Why Choose EventVision Section -->
+     <section
       class="px-6 py-16 bg-gradient-to-br from-white/50 to-gray-50 dark:from-gray-800/50 dark:to-gray-900 mt-8"
     >
       <div class="max-w-6xl mx-auto">
@@ -146,7 +163,8 @@
           </div>
         </div>
 
-        <!-- Stats Section -->
+
+    <!-- Stats Section -->
         <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div class="text-center">
             <div
@@ -194,23 +212,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Slider / Featured Events -->
-    <div class="mt-8">
-      <SlliderSection :events="events" :is-loading="isLoading" />
-    </div>
-
-    <!-- Best Events Section -->
-    <div class="mt-8 mb-8">
-      <h2
-        class="text-3xl font-bold text-center text-[var(--color-primary)] drop-shadow-[0_0_10px_var(--color-primary)]"
-      >
-        Best Events
-      </h2>
-      <div class="px-6 mt-6">
-        <EnhancedEventCard :events="bestEvents" :is-loading="isLoading" />
-      </div>
-    </div>
 
     <!-- Footer -->
     <AppFooter />

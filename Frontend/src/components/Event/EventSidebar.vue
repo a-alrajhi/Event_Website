@@ -115,6 +115,7 @@ import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import SlotsPickerDialog from "../Slots/SlotsPickerDialog.vue";
+import { useAuthStore } from "../../stores/authStore";
 
 const props = defineProps({
   slots: { type: Array, required: true },
@@ -127,12 +128,17 @@ const props = defineProps({
 
 const router = useRouter();
 const showSlotDialog = ref(false);
+const authStore = useAuthStore();
 
 function handleBookNow() {
   console.log("handleBookNow called");
   console.log("Event ID:", props.eventId);
   console.log("Slots:", props.slots);
   console.log("Slots length:", props.slots?.length);
+  if (!authStore.isLoggedIn) {
+    router.push(`/login?redirect=/events/${props.eventId}`);
+    return;
+  }
 
   if (props.slots && props.slots.length === 1) {
     console.log(

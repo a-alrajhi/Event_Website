@@ -7,6 +7,7 @@
   --color-hover: oklch(0.41 0.26 275);
   --color-error: oklch(0.595 0.257 29.2);
   --font-poppins: "Poppins", sans-serif;
+  --color-darkgray-600: #1e2838;
 }
 
 /* USE THIS FOR ANY CARD COMP */

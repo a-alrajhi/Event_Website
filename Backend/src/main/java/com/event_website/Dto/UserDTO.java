@@ -35,7 +35,7 @@ public class UserDTO {
     private List<TicketDTO> tickets;
 
     @Schema(description = "User's tickets grouped by type")
-    private List<TicketWithSameTypeDTO> groupedTickets;
+    private List<DetailedTicketWithSameTypeDTO> groupedTickets;
 
     @Schema(description = "User role", example = "USER")
     private String role;

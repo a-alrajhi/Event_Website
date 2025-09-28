@@ -115,7 +115,7 @@ public class EventService {
         eventDtoDetalis.setPrices(ticketTypes.stream().map(TicketType::getPrice).collect(Collectors.toList()));
         eventDtoDetalis.setAttendees(attendees);
         eventDtoDetalis.setRemaining( firstSlot != null && !ticketTypes.isEmpty() ?
-                slotCapacityService.getRemainingCapacity(firstSlot.getId(), ticketTypes.getFirst().getId()) : null);
+                slotCapacityService.getRemainingCapacity(firstSlot.getId(), slotCapacityService.getBySlotId(firstSlot.getId()).getFirst().getTicketType().getId()) : null);
         return eventDtoDetalis;
     }
 }

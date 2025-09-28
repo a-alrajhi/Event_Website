@@ -1,10 +1,6 @@
 package com.event_website.Controller;
 
-import com.event_website.Dto.EventDtoDetalis;
-import com.event_website.Dto.TicketDTO;
-import com.event_website.Dto.TicketWithSameTypeDTO;
-import com.event_website.Dto.UserDTO;
-import com.event_website.Dto.ErrorDTO;
+import com.event_website.Dto.*;
 import com.event_website.Entity.User;
 import com.event_website.Logging.LogRequest;
 import com.event_website.Request.UpdateUserRequest;
@@ -79,7 +75,7 @@ public class ProfileController {
                 .map(bookmark -> eventService.getEventDetails(bookmark.getEventId())).toList();
 
         userDTO.setBookmarks(bookmarks);
-      List<TicketWithSameTypeDTO> groupedTickets = ticketService.getUserGroupedTickets(user.getId());
+      List<DetailedTicketWithSameTypeDTO> groupedTickets = ticketService.getDetailedUserGroupedTickets(user.getId());
       userDTO.setGroupedTickets(groupedTickets);
 
       //        List<TicketDTO> tickets = ticketService.getUserTickets(user.getId()).stream().map(TicketDTO::fromEntity).toList();

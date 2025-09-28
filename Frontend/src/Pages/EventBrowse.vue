@@ -60,7 +60,10 @@
           </div>
 
           <!-- Price Filter -->
-          <div v-if="!isLoading && priceRange.max > 0" class="event-card/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10">
+          <div
+            v-if="!isLoading && priceRange.max > 0"
+            class="event-card/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[var(--color-primary)]/10"
+          >
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                 Price Range
@@ -131,7 +134,10 @@
                 >
                   (filtered)
                 </span>
-                <span v-if="totalPages > 1" class="text-gray-500 dark:text-gray-400">
+                <span
+                  v-if="totalPages > 1"
+                  class="text-gray-500 dark:text-gray-400"
+                >
                   • Page {{ currentPage }} of {{ totalPages }}
                 </span>
               </p>
@@ -139,7 +145,9 @@
 
             <div class="flex items-center gap-4">
               <div class="flex items-center gap-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Show:
                 </label>
                 <select
@@ -151,7 +159,9 @@
                   <option value="10">10</option>
                   <option value="20">20</option>
                 </select>
-                <span class="text-sm text-gray-600 dark:text-gray-300">per page</span>
+                <span class="text-sm text-gray-600 dark:text-gray-300"
+                  >per page</span
+                >
               </div>
               <div class="text-sm text-gray-600 dark:text-gray-300">
                 Price range: SAR 0 - SAR {{ priceRange.max }}
@@ -177,17 +187,23 @@
           </div>
 
           <div v-if="!isLoading" class="event-card/90 mb-6">
-            <div class="flex flex-wrap gap-y-3 overflow-x-auto scrollbar-hide justify-between">
+            <div
+              class="flex flex-wrap gap-y-3 overflow-x-auto scrollbar-hide justify-between"
+            >
               <DateCard
                 v-for="date in upcomingDates"
                 :key="date.toISOString()"
                 :date="date"
                 :model-value="selectedDate"
-                @select="(date) => {
-                  selectedDate = selectedDate && selectedDate.toDateString() === date.toDateString() 
-                    ? null 
-                    : date
-                }"
+                @select="
+                  (date) => {
+                    selectedDate =
+                      selectedDate &&
+                      selectedDate.toDateString() === date.toDateString()
+                        ? null
+                        : date;
+                  }
+                "
               />
             </div>
           </div>
@@ -202,7 +218,9 @@
           <!-- Pagination -->
           <div v-if="!isLoading && totalPages > 1" class="mt-12">
             <!-- Pagination Container -->
-            <div class="event-card/80 backdrop-blur-sm rounded-2xl p-6 mx-auto max-w-fit shadow-lg border border-[var(--color-primary)]/20">
+            <div
+              class="event-card/80 backdrop-blur-sm rounded-2xl p-6 mx-auto max-w-fit shadow-lg border border-[var(--color-primary)]/20"
+            >
               <!-- Pagination Controls -->
               <div class="flex items-center justify-center gap-3">
                 <!-- Previous Button -->
@@ -213,11 +231,21 @@
                     'px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 shadow-sm',
                     isFirstPage
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed opacity-50'
-                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
+                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105',
                   ]"
                 >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    ></path>
                   </svg>
                   <span class="hidden sm:inline">Previous</span>
                 </button>
@@ -232,7 +260,11 @@
                     >
                       1
                     </button>
-                    <span v-if="currentPage > 4" class="px-1 text-gray-400 dark:text-gray-500 font-medium">•••</span>
+                    <span
+                      v-if="currentPage > 4"
+                      class="px-1 text-gray-400 dark:text-gray-500 font-medium"
+                      >•••</span
+                    >
                   </template>
 
                   <!-- Visible page range -->
@@ -244,7 +276,7 @@
                       'w-11 h-11 rounded-xl font-semibold transition-all duration-300 shadow-sm',
                       currentPage === page
                         ? 'bg-[var(--color-primary)] text-white shadow-lg scale-110 ring-2 ring-[var(--color-primary)]/30'
-                        : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
+                        : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105',
                     ]"
                   >
                     {{ page }}
@@ -252,7 +284,11 @@
 
                   <!-- Last page and ellipsis -->
                   <template v-if="currentPage < totalPages - 2">
-                    <span v-if="currentPage < totalPages - 3" class="px-1 text-gray-400 dark:text-gray-500 font-medium">•••</span>
+                    <span
+                      v-if="currentPage < totalPages - 3"
+                      class="px-1 text-gray-400 dark:text-gray-500 font-medium"
+                      >•••</span
+                    >
                     <button
                       @click="currentPage = totalPages"
                       class="w-11 h-11 rounded-xl font-semibold transition-all duration-300 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105 shadow-sm"
@@ -270,12 +306,22 @@
                     'px-4 py-2.5 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 shadow-sm',
                     isLastPage
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed opacity-50'
-                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105'
+                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-[var(--color-primary)] hover:text-white hover:shadow-lg hover:scale-105',
                   ]"
                 >
                   <span class="hidden sm:inline">Next</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    ></path>
                   </svg>
                 </button>
               </div>
@@ -283,9 +329,19 @@
               <!-- Pagination Info -->
               <div class="mt-4 text-center">
                 <div class="text-sm text-gray-600 dark:text-gray-300">
-                  Showing <span class="font-semibold text-[var(--color-primary)]">{{ currentPageInfo.start }}</span>
-                  to <span class="font-semibold text-[var(--color-primary)]">{{ currentPageInfo.end }}</span>
-                  of <span class="font-semibold text-[var(--color-primary)]">{{ currentPageInfo.total }}</span> events
+                  Showing
+                  <span class="font-semibold text-[var(--color-primary)]">{{
+                    currentPageInfo.start
+                  }}</span>
+                  to
+                  <span class="font-semibold text-[var(--color-primary)]">{{
+                    currentPageInfo.end
+                  }}</span>
+                  of
+                  <span class="font-semibold text-[var(--color-primary)]">{{
+                    currentPageInfo.total
+                  }}</span>
+                  events
                 </div>
               </div>
             </div>
@@ -330,7 +386,11 @@ import Slider from "primevue/slider";
 import Checkbox from "primevue/checkbox";
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getEvents, getCategories, getPriceRange } from "../apis/EventDetalisApi";
+import {
+  getEvents,
+  getCategories,
+  getPriceRange,
+} from "../apis/EventDetalisApi";
 import DateCard from "../components/Cards/DateCard.vue";
 
 const route = useRoute();
@@ -371,11 +431,12 @@ const fetchData = async () => {
 
     // First load: get all events for filtering + categories/price range
     if (currentPage.value === 1 && !allEvents.value.length) {
-      const [allEventsResponse, categoriesData, priceRangeData] = await Promise.all([
-        getEvents(0, 1000), // Get all events for filtering
-        getCategories(),
-        getPriceRange()
-      ]);
+      const [allEventsResponse, categoriesData, priceRangeData] =
+        await Promise.all([
+          getEvents(0, 1000), // Get all events for filtering
+          getCategories(),
+          getPriceRange(),
+        ]);
 
       allEvents.value = allEventsResponse.content || [];
       sidebarCategories.value = categoriesData;
@@ -398,7 +459,6 @@ const fetchData = async () => {
     const start = (currentPage.value - 1) * itemsPerPage.value;
     const end = start + itemsPerPage.value;
     events.value = filtered.slice(start, end);
-
   } catch (error) {
     console.error("Error fetching data:", error);
   } finally {
@@ -460,10 +520,14 @@ watch(
 );
 
 // Reset pagination when filters change and refetch data
-watch([selectedCategories, currentPrice, searchInput, selectedDate], () => {
-  currentPage.value = 1;
-  fetchData(); // Refetch data with new filters
-}, { deep: true });
+watch(
+  [selectedCategories, currentPrice, searchInput, selectedDate],
+  () => {
+    currentPage.value = 1;
+    fetchData(); // Refetch data with new filters
+  },
+  { deep: true }
+);
 
 // Refetch data when pagination parameters change (but not when filters change)
 watch([currentPage, itemsPerPage], () => {
@@ -476,9 +540,10 @@ onMounted(fetchData);
 const getFilteredEvents = () => {
   if (!Array.isArray(allEvents.value)) return [];
 
-  return allEvents.value.filter(event => {
+  return allEvents.value.filter((event) => {
     const categoryMatch =
-      selectedCategories.value.length === 0 || selectedCategories.value.includes(event.category);
+      selectedCategories.value.length === 0 ||
+      selectedCategories.value.includes(event.category);
 
     const searchMatch =
       !searchInput.value ||
@@ -487,20 +552,31 @@ const getFilteredEvents = () => {
     let priceMatch = true;
     if (currentPrice.value > 0) {
       if (event.priceRange && event.priceRange.length > 0) {
-        const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
-        priceMatch = prices.length ? Math.min(...prices) <= currentPrice.value : true;
+        const prices = event.priceRange
+          .map((p) => parseFloat(p) || 0)
+          .filter((p) => p > 0);
+        priceMatch = prices.length
+          ? Math.min(...prices) <= currentPrice.value
+          : true;
       } else {
         priceMatch = event.price <= currentPrice.value;
       }
     }
 
-    let dateMatch = true;
+    let dateMatch = false;
     if (selectedDate.value && event.dates && event.dates.length > 0) {
       const selectedStr = selectedDate.value.toDateString();
-      dateMatch = event.dates.some(d => new Date(d).toDateString() === selectedStr);
+      dateMatch = event.dates.some(
+        (d) => new Date(d).toDateString() === selectedStr
+      );
     }
 
-    return categoryMatch && priceMatch && searchMatch && dateMatch;
+    return (
+      categoryMatch &&
+      priceMatch &&
+      searchMatch &&
+      (dateMatch || !selectedDate.value)
+    );
   });
 };
 
@@ -518,18 +594,21 @@ const paginatedEvents = computed(() => {
   return Array.isArray(events.value) ? events.value : []; // Backend already provides paginated results
 });
 
-
 const getCategoryCount = (category) =>
-  Array.isArray(allEvents.value) ? allEvents.value.filter((event) => event.category === category).length : 0;
+  Array.isArray(allEvents.value)
+    ? allEvents.value.filter((event) => event.category === category).length
+    : 0;
 
 const getFilteredByPriceCount = () => {
   if (!Array.isArray(allEvents.value)) return 0;
   if (currentPrice.value === 0) return allEvents.value.length;
 
-  return allEvents.value.filter(event => {
+  return allEvents.value.filter((event) => {
     // For events with price ranges, check if ANY price in the range is within the filter
     if (event.priceRange && event.priceRange.length > 0) {
-      const prices = event.priceRange.map(p => parseFloat(p) || 0).filter(p => p > 0);
+      const prices = event.priceRange
+        .map((p) => parseFloat(p) || 0)
+        .filter((p) => p > 0);
       if (prices.length > 0) {
         return Math.min(...prices) <= currentPrice.value;
       }

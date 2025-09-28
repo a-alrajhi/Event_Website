@@ -55,6 +55,7 @@ public class SecurityConfig {
                         "/trainer/{id}",
                         "/classes/all",
                         "/Event/**",
+                        "/locations/**",
                         "/profile/",
                         "/classes/**",
                         "/capacities/**",

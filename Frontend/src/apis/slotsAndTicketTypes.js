@@ -81,3 +81,10 @@ export async function getSlotTicketCapacity(slotId, ticketTypeId) {
   });
   return response.data; // { id, slotId, ticketTypeId, capacity, remainingTickets }
 }
+
+export async function getSlotCapacities(slotId) {
+  const response = await apis.get(`/capacities/slot/capacity`, {
+    params: { slotId },
+  });
+  return response.data; // { id, slotId, ticketTypeId, capacity, remainingTickets }
+}

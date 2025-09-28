@@ -354,7 +354,7 @@ import { getAllTicketTypesForEvent } from "../../apis/eventApi";
 import { getFullEventDetails } from "../../apis/eventApi";
 import { usePaymentStore } from "../../stores/paymentStore";
 import AppFooter from "../AppFooter/AppFooter.vue";
-import { getSlotTicketCapacity } from "../../apis/slotsAndTicketTypes";
+import { getSlotCapacities } from "../../apis/slotsAndTicketTypes";
 
 const route = useRoute();
 const paymentStore = usePaymentStore();
@@ -388,10 +388,11 @@ onMounted(async () => {
 
     console.log("fetched ticket types:", ticketTypes.value);
 
+    const capacites = await getSlotCapacities(slotId);
     // getting remaining
-    for (const t of ticketTypes.value) {
-      const cap = await getSlotTicketCapacity(slotId, t.id);
-      remaining.value[t.id] = cap.remainingTickets || cap.remaining || 50;
+    for (const capacity of capacites) {
+      remaining.value[capacity.ticketTypeId] =
+        capacity.remainingTickets || capacity.remaining || 50;
     }
     console.log("Remaining tickets per type:", remaining.value);
   } catch (err) {

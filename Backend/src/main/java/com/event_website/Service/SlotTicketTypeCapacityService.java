@@ -102,4 +102,9 @@ public class SlotTicketTypeCapacityService {
         .findBySlot_IdAndTicketType_Id(slotId, ticketTypeId)
         .orElseThrow(() -> new ResourceNotFoundException("Capacity record not found"));
   }
+
+  public List<SlotTicketTypeCapacity> getBySlotOrThrow(Integer slotId) {
+    return capacityRepo
+            .findBySlot_Id(slotId);
+  }
 }

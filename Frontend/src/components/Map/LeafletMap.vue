@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import axiosClient from "../../apis/axiosClient";
 import "leaflet/dist/leaflet.css";
 import * as L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -53,8 +53,8 @@ onMounted(() => {
   }).addTo(initialMap.value);
 
   // Fetch all locations
-  axios
-    .get("http://localhost:8080/locations/All")
+  axiosClient
+    .get("/locations/All")
     .then((response) => {
       const locations = response.data;
       const markers = L.markerClusterGroup();
@@ -66,8 +66,8 @@ onMounted(() => {
         )
           .bindPopup(`<strong>${location.name}</strong><br>${location.address}`)
           .on("click", () => {
-            axios
-              .get(`http://localhost:8080/locations/${location.id}/events`)
+            axiosClient
+              .get(`/locations/${location.id}/events`)
               .then((eventsResponse) => {
                 events.value = eventsResponse.data;
                 if (events.value.length > 0) {

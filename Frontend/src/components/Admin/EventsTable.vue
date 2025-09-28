@@ -5,7 +5,7 @@ import AdminDialog from "./AdminDialog.vue";
 import ConfirmOperationDialog from "./ConfirmOperationDialog.vue";
 import BasicInfoForm from "./BasicInfoForm.vue";
 import LocationForm from "./LocationForm.vue";
-import SlotForm from "./slotForm.vue";
+import SlotForm from "./SlotForm.vue";
 
 const eventStore = useCreateEventStore();
 

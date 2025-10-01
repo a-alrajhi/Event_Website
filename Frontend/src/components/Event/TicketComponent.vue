@@ -307,8 +307,11 @@ Ticket Component
                   <p
                     class="text-lg font-black text-emerald-950 dark:text-emerald-200"
                   >
-                    {{ ticketType?.ticketType?.price || "N/A" }} SAR ×
+                    <!-- {{ ticketType?.ticketType?.price || "N/A" }} SAR ×
                     {{ groupedTickets.count }}
+                    {{ groupedTickets.price }} -->
+                    x{{ groupedTickets.count }}
+                    {{ sumTotalPrice(groupedTickets) }} SAR
                   </p>
                 </div>
               </div>
@@ -627,6 +630,10 @@ function handleDownload() {
   link.href = document.querySelector("canvas").toDataURL("image/jpg");
   link.download = "ticket.jpg";
   link.click();
+}
+
+function sumTotalPrice(groupedTickets) {
+  return (groupedTickets.price || 0) * (groupedTickets.count || 1);
 }
 </script>
 

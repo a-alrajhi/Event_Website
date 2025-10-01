@@ -35,24 +35,16 @@ public class BatchTicketService {
    * @return a list of new Ticket DTO (generated tickets)
    */
   @Transactional
-  public List<TicketDTO> generateTickets(List<BatchTicketRequest> batchTicketRequests) {
-    List<TicketDTO> createdTickets = new ArrayList<>();
+  public List<DetailedTicketWithSameTypeDTO> generateTickets(List<BatchTicketRequest> batchTicketRequests) {
     List<Ticket> createdTicketsList = new ArrayList<>();
 
-    // for all reqs, get how many tickets and generate them
     for (BatchTicketRequest req : batchTicketRequests) {
-      // make sure user exists
-      User user =
-          userRepo
-              .findById(req.getUserId())
-              .orElseThrow(() -> new RuntimeException("User not found"));
+      User user = userRepo.findById(req.getUserId())
+          .orElseThrow(() -> new RuntimeException("User not found"));
 
-      // ensuring slotId && ticket type exist
-      SlotTicketTypeCapacity capacity =
-          slotTicketTypeCapacityRepo
-              .findBySlot_IdAndTicketType_Id(req.getSlotId(), req.getTicketTypeId())
-              .orElseThrow(
-                  () -> new ResourceNotFoundException("Slot Id or  Ticket Type Id not found"));
+      SlotTicketTypeCapacity capacity = slotTicketTypeCapacityRepo
+          .findBySlot_IdAndTicketType_Id(req.getSlotId(), req.getTicketTypeId())
+          .orElseThrow(() -> new ResourceNotFoundException("Slot Id or Ticket Type Id not found"));
 
       long issued = ticketRepo.countTicketsBySlotAndType(req.getSlotId(), req.getTicketTypeId());
       int remaining = capacity.getCapacity() - (int) issued;
@@ -61,9 +53,6 @@ public class BatchTicketService {
         throw new RuntimeException("Not enough tickets available");
       }
 
-      // should be all good here
-
-      // generating new tickets
       for (int i = 0; i < req.getQuantity(); i++) {
         Ticket ticket = new Ticket();
         ticket.setUser(user);
@@ -71,20 +60,14 @@ public class BatchTicketService {
         ticket.setTicketCode(TicketCodeGenerator.generateTicketCode());
         ticket.setCheckedIn(false);
 
-        ticket = ticketRepo.save(ticket);
-        createdTicketsList.add(ticket);
-        createdTickets.add(TicketDTO.fromEntity(ticket));
+        createdTicketsList.add(ticketRepo.save(ticket));
       }
-
-//      try {
-//        emailService.sendTicketEmail(user.getId(), generateGroup(createdTicketsList));
-//      } catch (Exception e) {
-//        // Log or handle email failure, but don’t interrupt ticket generation
-//        System.err.println("Failed to send email to user " + user.getEmail() + ": " + e.getMessage());
-//      }
     }
-    return createdTickets;
+
+    // ⬅ return grouped instead of raw tickets
+    return generateGroup(createdTicketsList);
   }
+
 
   public List<DetailedTicketWithSameTypeDTO> generateGroup(List<Ticket> tickets) {
     Map<String, List<Ticket>> groupedTickets = tickets.stream()

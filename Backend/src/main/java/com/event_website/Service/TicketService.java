@@ -1,9 +1,8 @@
 package com.event_website.Service;
 
+import com.event_website.Dto.DetailedTicketWithSameTypeDTO;
 import com.event_website.Dto.TicketWithSameTypeDTO;
-import com.event_website.Entity.SlotTicketTypeCapacity;
-import com.event_website.Entity.Ticket;
-import com.event_website.Entity.User;
+import com.event_website.Entity.*;
 import com.event_website.Exception.ResourceNotFoundException;
 import com.event_website.Repository.*;
 import com.event_website.Request.CreateTicketRequest;
@@ -57,6 +56,28 @@ public class TicketService {
                     t -> t.getSlotTicketTypeCapacity().getTicketType().getName()));
 
     return groupedTicket.values().stream().map(TicketWithSameTypeDTO::fromEntity).toList();
+  }
+
+  public List<DetailedTicketWithSameTypeDTO> getDetailedUserGroupedTickets(Integer userId) {
+    userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+    List<Ticket> tickets = ticketRepo.findByUserId(userId);
+
+    Map<String, List<Ticket>> groupedTickets = tickets.stream()
+            .collect(Collectors.groupingBy(t -> {
+              int ticketTypeId = t.getSlotTicketTypeCapacity().getTicketType().getId();
+              int slotId = t.getSlotTicketTypeCapacity().getSlot().getId();
+              return ticketTypeId + "-" + slotId; // Composite key as String
+            }));
+
+    return groupedTickets.values().stream().map(ts -> {
+      Ticket t = ts.getFirst();
+      SlotTicketTypeCapacity slotTicketTypeCapacity = t.getSlotTicketTypeCapacity();
+      Slot slot = slotTicketTypeCapacity.getSlot();
+      TicketType tt = slotTicketTypeCapacity.getTicketType();
+      Event event = slot.getEvent();
+        return DetailedTicketWithSameTypeDTO.fromEntity(ts, event, slot, tt);
+    }).toList();
   }
 
   public List<Ticket> getAllTickets() {

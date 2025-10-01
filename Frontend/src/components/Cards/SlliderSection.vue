@@ -8,7 +8,21 @@
         Featured Events
       </h2>
 
+      <!-- Loading State -->
+      <div v-if="isLoading" class="rounded-2xl shadow-[0_0_25px_var(--color-primary)/50] px-5 sm:px-10 pb-6">
+        <div class="event-card border border-gray-300/30 dark:border-gray-600/30 rounded-2xl overflow-hidden animate-pulse">
+          <div class="h-64 bg-gray-200 dark:bg-gray-700"></div>
+          <div class="p-6 space-y-3">
+            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Events Slider -->
       <Swiper
+        v-else
         :modules="[Pagination, Navigation]"
         :slides-per-view="1"
         :space-between="20"
@@ -17,7 +31,6 @@
         class="rounded-2xl shadow-[0_0_25px_var(--color-primary)/50] px-5 sm:px-10 pb-6"
       >
         <SwiperSlide
-
           v-for="event in featuredEvents"
           :key="event.id"
           class="event-card border border-gray-300/30 dark:border-gray-600/30 rounded-2xl overflow-hidden shadow-[0_10px_25px_var(--color-primary)/40] transition duration-300"
@@ -62,16 +75,33 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { computed } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Pagination, Navigation } from "swiper/modules";
 import { MapPin, Calendar } from "lucide-vue-next";
-import { getEvents } from "../../apis/EventDetalisApi";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const featuredEvents = ref([]);
+const props = defineProps({
+  events: {
+    type: Array,
+    default: () => []
+  },
+  isLoading: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const featuredEvents = computed(() => {
+  if (!Array.isArray(props.events)) return [];
+  return props.events.slice(0, 5).map((e) => ({
+    ...e,
+    location: "Saudi Arabia",
+    date: e.date || "2025-10-15",
+  }));
+});
 
 const formatDate = (date) => {
   return date
@@ -82,15 +112,6 @@ const formatDate = (date) => {
       })
     : "TBD";
 };
-
-onMounted(async () => {
-  const events = await getEvents();
-  featuredEvents.value = events.slice(0, 5).map((e) => ({
-    ...e,
-    location: "Saudi Arabia",
-    date: e.date || "2025-10-15",
-  }));
-});
 </script>
 
 <style scoped>

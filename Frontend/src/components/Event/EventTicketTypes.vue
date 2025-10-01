@@ -248,10 +248,7 @@ Event Ticket Types Component - Handles ticket selection and quantity management
                       <!-- Decrease Button -->
                       <button
                         @click="decrease(ticketInfo)"
-                        :disabled="
-                          (ticketQuantities[ticketInfo.id] || 0) >=
-                          (remaining[ticketInfo.id] || 0)
-                        "
+                  
                         class="w-10 h-10 rounded-full bg-white dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-500 flex items-center justify-center hover:border-[var(--color-primary)] dark:hover:border-[var(--color-primary)] hover:bg-blue-50 dark:hover:bg-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       >
                         <span class="text-gray-900 dark:text-white">-</span>
@@ -354,7 +351,7 @@ import { getAllTicketTypesForEvent } from "../../apis/eventApi";
 import { getFullEventDetails } from "../../apis/eventApi";
 import { usePaymentStore } from "../../stores/paymentStore";
 import AppFooter from "../AppFooter/AppFooter.vue";
-import { getSlotTicketCapacity } from "../../apis/slotsAndTicketTypes";
+import { getSlotCapacities } from "../../apis/slotsAndTicketTypes";
 
 const route = useRoute();
 const paymentStore = usePaymentStore();
@@ -388,10 +385,11 @@ onMounted(async () => {
 
     console.log("fetched ticket types:", ticketTypes.value);
 
+    const capacites = await getSlotCapacities(slotId);
     // getting remaining
-    for (const t of ticketTypes.value) {
-      const cap = await getSlotTicketCapacity(slotId, t.id);
-      remaining.value[t.id] = cap.remainingTickets || cap.remaining || 50;
+    for (const capacity of capacites) {
+      remaining.value[capacity.ticketTypeId] =
+        capacity.remainingTickets || capacity.remaining || 50;
     }
     console.log("Remaining tickets per type:", remaining.value);
   } catch (err) {

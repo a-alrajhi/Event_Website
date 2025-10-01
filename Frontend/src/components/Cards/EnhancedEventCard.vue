@@ -36,17 +36,6 @@
           @error="handleImageError"
         />
 
-        <!-- Overlay with single View Details button -->
-        <div
-          class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-        >
-          <button
-            @click.stop="navigateToDetails(event.id)"
-            class="bg-[var(--color-primary)] hover:bg-[var(--color-hover)] px-6 py-3 rounded-lg font-medium transition-colors text-white"
-          >
-            View Details
-          </button>
-        </div>
 
         <!-- Save/Like Button -->
         <button

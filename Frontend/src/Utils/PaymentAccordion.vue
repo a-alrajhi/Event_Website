@@ -12,7 +12,7 @@
         <img class="h-6 w-auto" src="../assets/Visa_Logo.svg" alt="Visa" />
         <img
           class="h-6 w-auto"
-          src="../assets/Mastercard_Logo.svg"
+          src="../assets/Mastercard_logo.svg"
           alt="Mastercard"
         />
       </template>
@@ -64,7 +64,7 @@
       <template #logo>
         <img
           class="h-9 w-auto"
-          src="../assets/Apple_Pay_Logo.svg"
+          src="../assets/Apple_Pay_logo.svg"
           alt="Apple Pay"
         />
       </template>

@@ -12,11 +12,43 @@ jobs:
       - name: run cowsay
         run: cowsay -f dragon "RAAAWR!" | tee dragon.txt
 
+      - name: upload dragon
+        uses: actions/upload-artifact@v4
+        with:
+          name: dragon-artifact
+          path: dragon.txt
+
+  test_job:
+    needs: ascii_job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: dragon-artifact
+
       - name: check text
         run: |
           ls -la
           if [ -f dragon.txt ]; then 
-            cat dragon.txt
+              cat dragon.txt
           else
-            echo 'file not found'
+              echo 'FATAL: file not found'
+              exit 1
           fi
+
+  deploy_job:
+    needs: test_job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: dragon-artifact
+      - name: awake the dragon
+        run: echo "WHO DARES AWAKE ME FROM MY SLUMBER!!!!"
+      - name: unleash the dragon
+        run: |
+          for n in {0..5}
+          do
+              echo "ATTACK $n"
+              cat dragon.txt
+          done

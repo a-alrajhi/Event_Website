@@ -15,7 +15,7 @@ jobs:
         run: echo 'first'
 
       - name: lists files
-        run: ls -l
+        run: ls -la
 
       - name: read gitignore
-        run: cat .gitignore
+        run: cat README.md

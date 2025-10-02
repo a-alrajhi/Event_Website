@@ -13,7 +13,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y cowsay
 
       - name: run cowsay
-        run: cowsay -f dragon "RAAAWR! ${env.cow-name}" | tee dragon.txt
+        run: cowsay -f dragon "RAAAWR! $env.cow-name" | tee dragon.txt
 
       - name: upload dragon
         uses: actions/upload-artifact@v4

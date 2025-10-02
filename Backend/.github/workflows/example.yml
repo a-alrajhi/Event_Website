@@ -1,0 +1,16 @@
+name: my first workflow
+
+on: push
+
+jobs:
+  first:
+    runs-on: ubuntu-latest
+    steps:
+      - name: prints first
+        run: echo 'first'
+
+      - name: lists files
+        run: ls -l
+
+      - name: read gitignore
+        run: cat .gitignore

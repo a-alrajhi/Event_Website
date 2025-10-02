@@ -1,21 +1,21 @@
-name: my first workflow
+# name: my first workflow
 
-on: push
+# on: push
 
-jobs:
-  first:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v5
-        with:
-          ref: omar
+# jobs:
+#   first:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: checkout
+#         uses: actions/checkout@v5
+#         with:
+#           ref: omar
 
-      - name: prints first
-        run: echo 'first'
+#       - name: prints first
+#         run: echo 'first'
 
-      - name: lists files
-        run: ls -la
+#       - name: lists files
+#         run: ls -la
 
-      - name: read gitignore
-        run: cat README.md
+#       - name: read gitignore
+#         run: cat README.md

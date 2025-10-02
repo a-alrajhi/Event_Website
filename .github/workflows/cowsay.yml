@@ -1,0 +1,22 @@
+name: Ascii animal
+
+on: push
+
+jobs:
+  ascii_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install cowsay
+        run: sudo apt-get update && sudo apt-get install -y cowsay
+
+      - name: run cowsay
+        run: cowsay -f dragon "RAAAWR!" | tee dragon.txt
+
+      - name: check text
+        run: |
+          ls -la
+          if [ -f dragon.txt ]; then 
+            cat dragon.txt
+          else
+            echo 'file not found'
+          fi
